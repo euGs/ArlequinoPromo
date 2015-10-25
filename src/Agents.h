@@ -8,7 +8,7 @@
 
 class Agents {
 public:
-    void setup (unique_ptr<AgentSource> agentSource, unique_ptr<VisualisationSource> visualisationSource, int maxAgents){
+    void setup (unique_ptr<AgentSource> agentSource, unique_ptr<VisualisationSource> visualisationSource, int maxAgents){        
         while (visualisationSource->hasMoreVisualisations() && agents.size() < maxAgents){
             unique_ptr<Agent> agent = move(agentSource->getAgent());
             unique_ptr<Visualisation> visualisation = move(visualisationSource->getVisualisation());

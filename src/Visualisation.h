@@ -13,7 +13,7 @@ public:
         sphere.setRadius(10.f);
     }
     
-    void draw(ofVec3f position, float normalisedSpeed){
+    virtual void draw(ofVec3f position, float normalisedSpeed){
         ofPushStyle();
         sphere.setPosition(position);
         ofSetColor(ofMap(normalisedSpeed, 0.f, 1.f, 255.f, 100.f), 100, ofMap(normalisedSpeed, 0.f, 1.f, 100.f, 255.f), 255);
@@ -27,12 +27,12 @@ protected:
 
 class SpriteVisualisation : public Visualisation {
 public:
-    void setup(ofPlanePrimitive plane, ofImage texture){
+    virtual void setup(ofPlanePrimitive plane, ofImage texture){
         this->plane = plane;
         this->texture = texture;
     }
 
-    void draw(ofVec3f position, float normalisedSpeed){
+    virtual void draw(ofVec3f position, float normalisedSpeed){
         plane.setPosition(position);
         texture.getTexture().bind();
         plane.draw();
@@ -45,4 +45,19 @@ protected:
 };
 
 class TornPaperVisualisation : public SpriteVisualisation {
+public:
+    virtual void setup(ofPlanePrimitive plane, ofImage texture){
+        SpriteVisualisation::setup(plane, texture);
+        
+        ofMesh & mesh = this->plane.getMesh();
+        float maxDisplacement = plane.getWidth() * .7f;
+
+        for (size_t i=0; i<mesh.getNumVertices(); i++){
+            ofVec3f displacement(ofRandom(maxDisplacement), ofRandom(maxDisplacement), ofRandom(maxDisplacement));
+            ofVec3f vertex = mesh.getVertex(i);
+            vertex += displacement;
+
+            mesh.setVertex(i, vertex);
+        }
+    }
 };

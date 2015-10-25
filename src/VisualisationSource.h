@@ -4,6 +4,9 @@
 
 class VisualisationSource {
 public:
+    virtual void setup(){
+    }
+    
     virtual unique_ptr<Visualisation> getVisualisation() = 0;
     virtual bool hasMoreVisualisations() = 0;
 };
@@ -21,7 +24,7 @@ public:
 
 class SpriteVisualisationSource : public VisualisationSource {
 public:
-    SpriteVisualisationSource(){
+    virtual void setup(){
         ofImage source;
         
         source.load("Cover01.jpg");
@@ -93,7 +96,7 @@ protected:
 
 class TornPaperVisualisationSource : public SpriteVisualisationSource {
     virtual void addVisualisation(ofPlanePrimitive & plane, ofImage & texture){
-        unique_ptr<SpriteVisualisation> visualisation = make_unique<TornPaperVisualisation>();
+        unique_ptr<TornPaperVisualisation> visualisation = make_unique<TornPaperVisualisation>();
         visualisation->setup(plane, texture);
         
         visualisations.push_back(move(visualisation));
