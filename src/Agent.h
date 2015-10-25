@@ -11,11 +11,9 @@ public:
     }
     
     virtual void update(float noiseValue1, float noiseValue2, float globalScaling = 1.f) = 0;
-    virtual void draw(){
-        visualisation->draw();
-    }
+    virtual void draw() = 0;
     
-private:
+protected:
     unique_ptr<Visualisation> visualisation;
 };
 
@@ -107,7 +105,6 @@ public:
         angleY = 0.f;
         directionalAngle = ofRandom(TWO_PI);
         sphereRadius = 200.f;
-        ball.setRadius(10.f);
         minSpeed = 0.5f;
         maxSpeed = 10.f;
     }
@@ -121,7 +118,7 @@ public:
     }
     
     virtual void draw(){
-        drawGeometry(calculatePosition());
+        visualisation->draw(calculatePosition(), ofMap(speed, minSpeed, maxSpeed, 0.f, 1.f));
     }
     
     virtual ofVec3f calculatePosition(){
@@ -134,37 +131,6 @@ public:
         return v;
     }
     
-    virtual void drawGeometry(ofVec3f position){
-        ofPushStyle();
-        ball.setPosition(position);
-        ofSetColor(ofMap(speed, minSpeed, maxSpeed, 255, 100), 100, ofMap(speed, minSpeed, maxSpeed, 100, 255), 255);
-        ball.draw();
-        ofPopStyle();
-    }
-    
     float angleZ, angleY, directionalAngle, sphereRadius;
     float minSpeed, maxSpeed, speed;
-    ofSpherePrimitive ball;
 };
-
-//class RovingTearOnSphere : public RovingAgentOnSphere {
-//public:
-//    void setTear(ofPlanePrimitive tear){
-//        this->tear = tear;
-//    }
-//    
-//    void setTexture(ofImage texture){
-//        this->texture = texture;
-//    }
-//    
-//    virtual void drawGeometry(ofVec3f position){
-//        tear.setPosition(position);
-//        texture.getTexture().bind();
-//        tear.draw();
-//        texture.getTexture().unbind();
-//    }
-//    
-//private:
-//    ofImage texture;
-//    ofPlanePrimitive tear;
-//};

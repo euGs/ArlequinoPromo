@@ -14,6 +14,7 @@ public:
         
         while (agent != nullptr && visualisation != nullptr && agents.size() < maxAgents){
             agent->setVisualisation(move(visualisation));
+            agent->setup();
             agents.push_back(move(agent));
 
             agent = move(agentSource->getAgent());
@@ -21,7 +22,7 @@ public:
         }
     }
 
-    void update(float globalScaling){
+    void update(float scalingFactor){
         // Generate noise values.
         float noiseScale = ofMap(ofGetMouseX(), 0, ofGetWidth(), 0, 1.f);
         float noiseVel = ofGetElapsedTimef();
@@ -29,7 +30,7 @@ public:
         for (int i=0; i<agents.size(); i++){
             float noiseValue1 = ofNoise(i * noiseScale, 1 * noiseScale, noiseVel);
             float noiseValue2 = ofNoise(i * noiseScale, 1000 * noiseScale, noiseVel);
-            agents[i]->update(noiseValue1, noiseValue2, .1f + globalScaling * 8.f);
+            agents[i]->update(noiseValue1, noiseValue2, .1f + scalingFactor * 8.f);
         }
     }
     
@@ -39,7 +40,6 @@ public:
         }
     }
     
-private:
+protected:
     vector< unique_ptr<Agent> > agents;
-
 };
