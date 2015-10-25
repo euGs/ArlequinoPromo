@@ -1,18 +1,27 @@
 #pragma once
 
 #include "ofMain.h"
-#include "Geometry.h"
+#include "Visualisation.h"
 
 class Agent {
 public:
     virtual void setup() = 0;
+    virtual void setVisualisation(unique_ptr<Visualisation> visualisation){
+        this->visualisation = std::move(visualisation);
+    }
+    
     virtual void update(float noiseValue1, float noiseValue2, float globalScaling = 1.f) = 0;
-    virtual void draw() = 0;
+    virtual void draw(){
+        visualisation->draw();
+    }
+    
+private:
+    unique_ptr<Visualisation> visualisation;
 };
 
 class StationaryRotatingAgentOnPlane : public Agent {
 public:
-    void setup(GeometrySource geometry){
+    void setup(){
         ori = 0.f;
         float margin = 120.f;
         pos.x = ofRandom(-ofGetWidth()/2 + margin, ofGetWidth()/2 - margin);
@@ -38,7 +47,7 @@ public:
     ofPoint pos;
 };
 
-class RovingAgentOnPlane : public Agent {
+class PlaneRovingAgent : public Agent {
 public:
     void setup(){
         ori = 0.f;
@@ -86,11 +95,12 @@ public:
     float minSpeed, maxSpeed, speed;
 };
 
+// An agent that roves on a sphere, e.g. globe.
 // angleZ and angleY give the position on the surface of the sphere.
 // directionalAngle gives the orientation of the point on the surface
 // of the sphere, i.e. the direction in which it is moving. Equivalent
 // to ori in RovingAgent above.
-class RovingAgentOnSphere : public Agent {
+class SphereRovingAgent : public Agent {
 public:
     virtual void setup(){
         angleZ = 0.f;
@@ -137,24 +147,24 @@ public:
     ofSpherePrimitive ball;
 };
 
-class RovingTearOnSphere : public RovingAgentOnSphere {
-public:
-    void setTear(ofPlanePrimitive tear){
-        this->tear = tear;
-    }
-    
-    void setTexture(ofImage texture){
-        this->texture = texture;
-    }
-    
-    virtual void drawGeometry(ofVec3f position){
-        tear.setPosition(position);
-        texture.getTexture().bind();
-        tear.draw();
-        texture.getTexture().unbind();
-    }
-    
-private:
-    ofImage texture;
-    ofPlanePrimitive tear;
-};
+//class RovingTearOnSphere : public RovingAgentOnSphere {
+//public:
+//    void setTear(ofPlanePrimitive tear){
+//        this->tear = tear;
+//    }
+//    
+//    void setTexture(ofImage texture){
+//        this->texture = texture;
+//    }
+//    
+//    virtual void drawGeometry(ofVec3f position){
+//        tear.setPosition(position);
+//        texture.getTexture().bind();
+//        tear.draw();
+//        texture.getTexture().unbind();
+//    }
+//    
+//private:
+//    ofImage texture;
+//    ofPlanePrimitive tear;
+//};

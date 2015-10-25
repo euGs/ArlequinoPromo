@@ -1,15 +1,17 @@
 #pragma once
 
 #include "ofMain.h"
+#include "Agents.h"
+#include "AgentSource.h"
 #include "Agent.h"
+#include "VisualisationSource.h"
+#include "Visualisation.h"
 #include "Music.h"
-#include "Geometry.h"
 
 class ofApp : public ofBaseApp{
     
 public:
     void setup();
-    void loadTears();
     void update();
     void draw();
     
@@ -25,8 +27,7 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-    vector< unique_ptr<Agent> > agents;
-    
     ofEasyCam cam;
+    Agents agents;
     Music music;
 };
