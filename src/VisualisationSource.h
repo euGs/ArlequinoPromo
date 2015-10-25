@@ -34,14 +34,20 @@ public:
 
         for (int col=0; col<cols; col++){
             for (int row=0; row<rows; row++){
-                ofImage texture;
-                fillTexture(texture, source, col, row);
-                createSprite(texture, col, row);
+                createSprite(source, col, row);
             }
         }
     }
     
-    void fillTexture(ofImage & texture, ofImage & source, int col, int row){
+    void createSprite(ofImage & source, int col, int row){
+        ofImage texture;
+        setUpTexture(texture, source, col, row);
+        ofPlanePrimitive plane;
+        setUpPlane(plane, texture, col, row);
+        addVisualisation(plane, texture);
+    }
+    
+    void setUpTexture(ofImage & texture, ofImage & source, int col, int row){
         ofPixels & sourcePixels = source.getPixels();
         
         texture.allocate(colWidth, rowHeight, OF_IMAGE_COLOR);
@@ -57,13 +63,13 @@ public:
         texture.update();
     }
     
-    void createSprite(ofImage & texture, int col, int row){
-        ofPlanePrimitive plane;
-        
+    void setUpPlane(ofPlanePrimitive & plane, ofImage & texture, int col, int row){
         plane.set(colWidth, rowHeight, 2, 2);
         plane.mapTexCoords(0, 0, texture.getWidth(), texture.getHeight());
         plane.setPosition((col-cols/2.f) * texture.getWidth(), (row-rows/2.f) * texture.getHeight(), 0);
-        
+    }
+    
+    virtual void addVisualisation(ofPlanePrimitive & plane, ofImage & texture){
         unique_ptr<SpriteVisualisation> visualisation = make_unique<SpriteVisualisation>();
         visualisation->setup(plane, texture);
         
@@ -85,7 +91,6 @@ protected:
     vector< unique_ptr<SpriteVisualisation> > visualisations;
 };
 
-// class TornPaperVisualisationSource : public SpriteVisualisationSource
-
-// as spritevs
-// except returned type is TornPaperVisualisation
+class TornPaperVisualisationSource : public SpriteVisualisationSource {
+    
+};

@@ -8,6 +8,7 @@ void ofApp::setup(){
 
     agents.setup(move(agentSource), move(visualisationSource), maxAgents);
     music.setup("ArTeaser_Edit04.wav");
+    ofBackground(255);
 }
 
 //--------------------------------------------------------------

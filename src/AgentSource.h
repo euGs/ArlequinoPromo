@@ -7,10 +7,7 @@ public:
     virtual unique_ptr<Agent> getAgent() = 0;
 };
 
-// class PlaneBoundAgentSource
-
-// get
-// return new
+// class PlaneRovingAgentSource
 
 class SphereRovingAgentSource : public AgentSource {
 public:

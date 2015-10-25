@@ -27,7 +27,7 @@ public:
         for (int i=0; i<agents.size(); i++){
             float noiseValue1 = ofNoise(i * noiseScale, 1 * noiseScale, noiseVel);
             float noiseValue2 = ofNoise(i * noiseScale, 1000 * noiseScale, noiseVel);
-            agents[i]->update(noiseValue1, noiseValue2, .1f + scalingFactor * 8.f);
+            agents[i]->update(noiseValue1, noiseValue2, .05f + scalingFactor * 8.f);
         }
     }
     
