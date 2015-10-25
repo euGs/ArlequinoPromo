@@ -45,6 +45,7 @@
 /* Begin PBXFileReference section */
 		C3C56DA91BDBA1EC00BB6132 /* Agent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Agent.h; sourceTree = "<group>"; };
 		C3C56DAA1BDBA60100BB6132 /* Music.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Music.h; sourceTree = "<group>"; };
+		C3C56DB01BDC331300BB6132 /* Geometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Geometry.h; sourceTree = "<group>"; };
 		C3C5B5821BD0E62700A9326C /* Blur.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Blur.cpp; sourceTree = "<group>"; };
 		C3C5B5831BD0E62700A9326C /* Blur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Blur.h; sourceTree = "<group>"; };
 		C3C5B5881BD0E67100A9326C /* gaussianBlur.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = gaussianBlur.frag; sourceTree = "<group>"; };
@@ -145,6 +146,7 @@
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
 				C3C56DAA1BDBA60100BB6132 /* Music.h */,
+				C3C56DB01BDC331300BB6132 /* Geometry.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;

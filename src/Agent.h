@@ -1,5 +1,7 @@
 #pragma once
+
 #include "ofMain.h"
+#include "Geometry.h"
 
 class Agent {
 public:
@@ -10,7 +12,7 @@ public:
 
 class StationaryRotatingAgentOnPlane : public Agent {
 public:
-    void setup(){
+    void setup(GeometrySource geometry){
         ori = 0.f;
         float margin = 120.f;
         pos.x = ofRandom(-ofGetWidth()/2 + margin, ofGetWidth()/2 - margin);
@@ -90,7 +92,7 @@ public:
 // to ori in RovingAgent above.
 class RovingAgentOnSphere : public Agent {
 public:
-    void setup(){
+    virtual void setup(){
         angleZ = 0.f;
         angleY = 0.f;
         directionalAngle = ofRandom(TWO_PI);
@@ -100,7 +102,7 @@ public:
         maxSpeed = 10.f;
     }
     
-    void update(float noiseValue1, float noiseValue2, float globalScaling = 1.f){
+    virtual void update(float noiseValue1, float noiseValue2, float globalScaling = 1.f){
         speed = ofMap(noiseValue2, 0.f, 1.f, minSpeed, maxSpeed);
         directionalAngle += (noiseValue1 - .5f) * PI / 32;
         angleZ += sin(directionalAngle) * PI / 16.f * speed;
@@ -108,14 +110,23 @@ public:
         sphereRadius = 200.f * globalScaling + noiseValue2 * 20.f;
     }
     
-    void draw(){
-        ofPushStyle();
+    virtual void draw(){
+        drawGeometry(calculatePosition());
+    }
+    
+    virtual ofVec3f calculatePosition(){
         ofVec3f v(1, 0, 0);
         
         v.rotate(angleZ, ofVec3f(0, 0, 1));
         v.rotate(angleY, ofVec3f(0, 1, 0));
         v.scale(sphereRadius);
-        ball.setPosition(v);
+        
+        return v;
+    }
+    
+    virtual void drawGeometry(ofVec3f position){
+        ofPushStyle();
+        ball.setPosition(position);
         ofSetColor(ofMap(speed, minSpeed, maxSpeed, 255, 100), 100, ofMap(speed, minSpeed, maxSpeed, 100, 255), 255);
         ball.draw();
         ofPopStyle();
@@ -124,4 +135,26 @@ public:
     float angleZ, angleY, directionalAngle, sphereRadius;
     float minSpeed, maxSpeed, speed;
     ofSpherePrimitive ball;
+};
+
+class RovingTearOnSphere : public RovingAgentOnSphere {
+public:
+    void setTear(ofPlanePrimitive tear){
+        this->tear = tear;
+    }
+    
+    void setTexture(ofImage texture){
+        this->texture = texture;
+    }
+    
+    virtual void drawGeometry(ofVec3f position){
+        tear.setPosition(position);
+        texture.getTexture().bind();
+        tear.draw();
+        texture.getTexture().unbind();
+    }
+    
+private:
+    ofImage texture;
+    ofPlanePrimitive tear;
 };

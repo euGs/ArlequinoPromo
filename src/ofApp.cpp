@@ -5,15 +5,45 @@ void ofApp::setup(){
     ofSetColor(111);
     ofSetLineWidth(60);
     
-    int numAgents = 200;
+    loadTears();
     
-    for (int i=0; i<numAgents; i++){
-        unique_ptr<Agent> agent = make_unique<RovingAgentOnSphere>();
-        agent->setup();
-        agents.push_back(std::move(agent));
-    }
+//    int numAgents = 200;
+    
+    
+    
+//    while (geometry.areMoreElements()){
+//        unique_ptr<Agent> agent = make_unique<RovingTearOnSphere>();
+//        agent->setup();
+//        
+//        agents.push_back(std::move(agent));
+//    }
     
     music.setup("ArTeaser_Edit02.wav");
+}
+
+//--------------------------------------------------------------
+void ofApp::loadTears(){
+    int rows = 10;
+    int cols = 10;
+    
+    for (int x=0; x<cols; x++){
+        for (int y=0; y<rows; y++){
+            ofPlanePrimitive tear;
+            tear.set(80, 60, 2, 2);
+            
+            ofImage image;
+            image.load("section_" + to_string(x) + "_" + to_string(y) + ".png");
+            tear.mapTexCoords(0, 0, image.getWidth(), image.getHeight());
+            tear.setPosition((x-cols/2.f) * image.getWidth(), (y-rows/2.f) * image.getHeight(), 0);
+            
+            unique_ptr<RovingTearOnSphere> agent = make_unique<RovingTearOnSphere>();
+            agent->setTear(tear);
+            agent->setTexture(image);
+            agent->setup();
+            
+            agents.push_back(std::move(agent));
+        }
+    }
 }
 
 //--------------------------------------------------------------

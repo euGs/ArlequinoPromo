@@ -3,11 +3,13 @@
 #include "ofMain.h"
 #include "Agent.h"
 #include "Music.h"
+#include "Geometry.h"
 
 class ofApp : public ofBaseApp{
     
 public:
     void setup();
+    void loadTears();
     void update();
     void draw();
     
@@ -24,6 +26,7 @@ public:
     void gotMessage(ofMessage msg);
     
     vector< unique_ptr<Agent> > agents;
+    
     ofEasyCam cam;
     Music music;
 };
