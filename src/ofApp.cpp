@@ -3,8 +3,8 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     unique_ptr<AgentSource> agentSource = make_unique<SphereRovingAgentSource>();
-    unique_ptr<VisualisationSource> visualisationSource = make_unique<SphereVisualisationSource>();
-    int maxAgents = 100;
+    unique_ptr<VisualisationSource> visualisationSource = make_unique<SpriteVisualisationSource>();
+    int maxAgents = 1000;
 
     agents.setup(move(agentSource), move(visualisationSource), maxAgents);
     music.setup("ArTeaser_Edit04.wav");

@@ -5,21 +5,87 @@
 class VisualisationSource {
 public:
     virtual unique_ptr<Visualisation> getVisualisation() = 0;
+    virtual bool hasMoreVisualisations() = 0;
 };
 
 class SphereVisualisationSource : public VisualisationSource {
-    virtual unique_ptr<Visualisation> getVisualisation(){
-        return std::move(make_unique<SphereVisualisation>());
+public:
+    unique_ptr<Visualisation> getVisualisation(){
+        return move(make_unique<SphereVisualisation>());
+    }
+    
+    bool hasMoreVisualisations(){
+        return true;
     }
 };
 
-// class SpriteVisualisationSource
+class SpriteVisualisationSource : public VisualisationSource {
+public:
+    SpriteVisualisationSource(){
+        ofImage source;
+        
+        source.load("Cover01.jpg");
+        
+        cols = 30, rows = 20;
+        colWidth = source.getWidth() / cols;
+        rowHeight = source.getHeight() / rows;
+        
+        visualisations.reserve(cols * rows);
 
-// setup
-// load image
-// cut up and cache pieces for get method
+        for (int col=0; col<cols; col++){
+            for (int row=0; row<rows; row++){
+                ofImage texture;
+                fillTexture(texture, source, col, row);
+                createSprite(texture, col, row);
+            }
+        }
+    }
+    
+    void fillTexture(ofImage & texture, ofImage & source, int col, int row){
+        ofPixels & sourcePixels = source.getPixels();
+        
+        texture.allocate(colWidth, rowHeight, OF_IMAGE_COLOR);
+        ofPixels & texturePixels = texture.getPixels();
+        
+        for (int i=0; i<colWidth; i++){
+            for (int j=0; j<rowHeight; j++){
+                ofColor c = sourcePixels.getColor(colWidth*col + i, rowHeight*row + j);
+                texturePixels.setColor(i, j, c);
+            }
+        }
+        
+        texture.update();
+    }
+    
+    void createSprite(ofImage & texture, int col, int row){
+        ofPlanePrimitive plane;
+        
+        plane.set(colWidth, rowHeight, 2, 2);
+        plane.mapTexCoords(0, 0, texture.getWidth(), texture.getHeight());
+        plane.setPosition((col-cols/2.f) * texture.getWidth(), (row-rows/2.f) * texture.getHeight(), 0);
+        
+        unique_ptr<SpriteVisualisation> visualisation = make_unique<SpriteVisualisation>();
+        visualisation->setup(plane, texture);
+        
+        visualisations.push_back(move(visualisation));
+    }
+    
+    virtual unique_ptr<Visualisation> getVisualisation(){
+        return move(visualisations[index++]);
+    }
+    
+    bool hasMoreVisualisations(){
+        return index < visualisations.size();
+    }
+    
+protected:
+    int index;
+    int cols, rows, colWidth, rowHeight;
+    
+    vector< unique_ptr<SpriteVisualisation> > visualisations;
+};
 
-// class TornPaperVisualisationSource : public spritevs
+// class TornPaperVisualisationSource : public SpriteVisualisationSource
 
 // as spritevs
 // except returned type is TornPaperVisualisation

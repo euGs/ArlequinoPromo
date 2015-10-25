@@ -9,16 +9,13 @@
 class Agents {
 public:
     void setup (unique_ptr<AgentSource> agentSource, unique_ptr<VisualisationSource> visualisationSource, int maxAgents){
-        unique_ptr<Agent> agent = move(agentSource->getAgent());
-        unique_ptr<Visualisation> visualisation = move(visualisationSource->getVisualisation());
-        
-        while (agent != nullptr && visualisation != nullptr && agents.size() < maxAgents){
+        while (visualisationSource->hasMoreVisualisations() && agents.size() < maxAgents){
+            unique_ptr<Agent> agent = move(agentSource->getAgent());
+            unique_ptr<Visualisation> visualisation = move(visualisationSource->getVisualisation());
+
             agent->setVisualisation(move(visualisation));
             agent->setup();
             agents.push_back(move(agent));
-
-            agent = move(agentSource->getAgent());
-            visualisation = move(visualisationSource->getVisualisation());
         }
     }
 

@@ -25,50 +25,21 @@ private:
     ofSpherePrimitive sphere;
 };
 
-//class Sprite : public Visualisation {
-//public:
-//    void setTear(ofPlanePrimitive tear){
-//        this->tear = tear;
-//    }
-//
-//    void setTexture(ofImage texture){
-//        this->texture = texture;
-//    }
-//
-//    virtual void drawGeometry(ofVec3f position){
-//        tear.setPosition(position);
-//        texture.getTexture().bind();
-//        tear.draw();
-//        texture.getTexture().unbind();
-//    }
-//
-//private:
-//    ofImage texture;
-//    ofPlanePrimitive tear;
-//};
+class SpriteVisualisation : public Visualisation {
+public:
+    void setup(ofPlanePrimitive plane, ofImage texture){
+        this->plane = plane;
+        this->texture = texture;
+    }
 
-/*
- void setup(){
- int rows = 10;
- int cols = 10;
- images.reserve(cols * rows);
- tears.reserve(cols * rows);
- 
- for (int x=0; x<cols; x++){
- for (int y=0; y<rows; y++){
- shared_ptr<ofPlanePrimitive> tear = make_shared<ofPlanePrimitive>();
- tear->set(80, 60, 2, 2);
- 
- shared_ptr<ofImage> image = make_shared<ofImage>();
- image->load("section_" + to_string(x) + "_" + to_string(y) + ".png");
- tear->mapTexCoords(0, 0, image->getWidth(), image->getHeight());
- tear->setPosition((x-cols/2.f) * image->getWidth(), (y-rows/2.f) * image->getHeight(), 0);
- images.push_back(image);
- 
- tears.push_back(tear);
- }
- }
- 
- resetGetter();
- }
-*/
+    void draw(ofVec3f position, float normalisedSpeed){
+        plane.setPosition(position);
+        texture.getTexture().bind();
+        plane.draw();
+        texture.getTexture().unbind();
+    }
+
+private:
+    ofImage texture;
+    ofPlanePrimitive plane;
+};
