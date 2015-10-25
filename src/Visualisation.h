@@ -21,7 +21,7 @@ public:
         ofPopStyle();
     }
     
-private:
+protected:
     ofSpherePrimitive sphere;
 };
 
@@ -39,7 +39,10 @@ public:
         texture.getTexture().unbind();
     }
 
-private:
+protected:
     ofImage texture;
     ofPlanePrimitive plane;
+};
+
+class TornPaperVisualisation : public SpriteVisualisation {
 };

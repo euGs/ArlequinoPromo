@@ -92,5 +92,10 @@ protected:
 };
 
 class TornPaperVisualisationSource : public SpriteVisualisationSource {
-    
+    virtual void addVisualisation(ofPlanePrimitive & plane, ofImage & texture){
+        unique_ptr<SpriteVisualisation> visualisation = make_unique<TornPaperVisualisation>();
+        visualisation->setup(plane, texture);
+        
+        visualisations.push_back(move(visualisation));
+    }
 };
