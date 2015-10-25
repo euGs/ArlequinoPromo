@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    unique_ptr<AgentSource> agentSource = make_unique<SphereRovingAgentSource>();
+    unique_ptr<AgentSource> agentSource = make_unique<PivotingSphereRovingAgentSource>();
     unique_ptr<VisualisationSource> visualisationSource = make_unique<TornPaperVisualisationSource>();
     visualisationSource->setup();
     int maxAgents = 1000;

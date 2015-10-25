@@ -29,9 +29,10 @@ public:
         
         source.load("Cover01.jpg");
         
-        cols = 30, rows = 20;
+        cols = 40, rows = 29;
         colWidth = source.getWidth() / cols;
         rowHeight = source.getHeight() / rows;
+        planeResolution = 4;
         
         visualisations.reserve(cols * rows);
 
@@ -67,7 +68,7 @@ public:
     }
     
     void setUpPlane(ofPlanePrimitive & plane, ofImage & texture, int col, int row){
-        plane.set(colWidth, rowHeight, 2, 2);
+        plane.set(colWidth, rowHeight, planeResolution, planeResolution);
         plane.mapTexCoords(0, 0, texture.getWidth(), texture.getHeight());
         plane.setPosition((col-cols/2.f) * texture.getWidth(), (row-rows/2.f) * texture.getHeight(), 0);
     }
@@ -90,6 +91,7 @@ public:
 protected:
     int index;
     int cols, rows, colWidth, rowHeight;
+    int planeResolution;
     
     vector< unique_ptr<SpriteVisualisation> > visualisations;
 };

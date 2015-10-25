@@ -15,3 +15,10 @@ public:
         return move(make_unique<SphereRovingAgent>());
     }
 };
+
+class PivotingSphereRovingAgentSource : public AgentSource {
+public:
+    unique_ptr<Agent> getAgent(){
+        return move(make_unique<PivotingSphereRovingAgent>());
+    }
+};

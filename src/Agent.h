@@ -10,7 +10,7 @@ public:
         this->visualisation = std::move(visualisation);
     }
     
-    virtual void update(float noiseValue1, float noiseValue2, float globalScaling = 1.f) = 0;
+    virtual void update(float noiseValue1, float noiseValue2, float noiseValue3, float globalScaling = 1.f) = 0;
     virtual void draw() = 0;
     
 protected:
@@ -26,7 +26,7 @@ public:
         pos.y = ofRandom(-ofGetHeight()/2 + margin, ofGetHeight()/2 - margin);
     }
     
-    void update(float noiseValue1, float noiseValue2, float globalScaling = 1.f){
+    void update(float noiseValue1, float noiseValue2, float noiseValue3, float globalScaling = 1.f){
         // Adjust orientation to noise value
         ori += (noiseValue1 - .5f) * PI / 16;
     }
@@ -56,7 +56,7 @@ public:
         maxSpeed = 10.f;
     }
     
-    void update(float noiseValue1, float noiseValue2, float globalScaling = 1.f){
+    void update(float noiseValue1, float noiseValue2, float noiseValue3, float globalScaling = 1.f){
         // Adjust orientation to noise value
         ori += (noiseValue1 - .5f) * PI / 32;
         speed = ofMap(noiseValue2, 0.f, 1.f, minSpeed, maxSpeed);
@@ -107,18 +107,20 @@ public:
         sphereRadius = 200.f;
         minSpeed = 0.5f;
         maxSpeed = 10.f;
+        orientationEuler = ofVec3f(0, 0, 0);
     }
     
-    virtual void update(float noiseValue1, float noiseValue2, float globalScaling = 1.f){
+    virtual void update(float noiseValue1, float noiseValue2, float noiseValue3, float globalScaling = 1.f){
         speed = ofMap(noiseValue2, 0.f, 1.f, minSpeed, maxSpeed);
         directionalAngle += (noiseValue1 - .5f) * PI / 32;
         angleZ += sin(directionalAngle) * PI / 16.f * speed;
         angleY += cos(directionalAngle) * PI / 16.f * speed;
         sphereRadius = 200.f * globalScaling + noiseValue2 * 20.f;
+        calculatePosition();
     }
     
     virtual void draw(){
-        visualisation->draw(calculatePosition(), ofMap(speed, minSpeed, maxSpeed, 0.f, 1.f));
+        visualisation->draw(position, orientationEuler, ofMap(speed, minSpeed, maxSpeed, 0.f, 1.f));
     }
     
     virtual ofVec3f calculatePosition(){
@@ -128,9 +130,23 @@ public:
         v.rotate(angleY, ofVec3f(0, 1, 0));
         v.scale(sphereRadius);
         
-        return v;
+        position = v;
     }
     
+protected:
     float angleZ, angleY, directionalAngle, sphereRadius;
     float minSpeed, maxSpeed, speed;
+    ofVec3f position, orientationEuler;
+};
+
+class PivotingSphereRovingAgent : public SphereRovingAgent {
+    virtual void setup(){
+        SphereRovingAgent::setup();
+    }
+    virtual void update(float noiseValue1, float noiseValue2, float noiseValue3, float globalScaling = 1.f){
+        SphereRovingAgent::update(noiseValue1, noiseValue2, noiseValue3, globalScaling);
+        orientationEuler.x += (noiseValue1 - .5f) * PI / 32;
+        orientationEuler.y = angleY;
+        orientationEuler.z = angleZ;
+    }
 };

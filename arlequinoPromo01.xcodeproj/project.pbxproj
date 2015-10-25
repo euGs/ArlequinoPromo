@@ -46,7 +46,6 @@
 		C3C56DA91BDBA1EC00BB6132 /* Agent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Agent.h; sourceTree = "<group>"; };
 		C3C56DAA1BDBA60100BB6132 /* Music.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Music.h; sourceTree = "<group>"; };
 		C3C56DB11BDD031600BB6132 /* Agents.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Agents.h; sourceTree = "<group>"; };
-		C3C56DB21BDD035300BB6132 /* AgentVisualisation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgentVisualisation.h; sourceTree = "<group>"; };
 		C3C56DB31BDD03E400BB6132 /* AgentSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgentSource.h; sourceTree = "<group>"; };
 		C3C56DB71BDD0C0900BB6132 /* VisualisationSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VisualisationSource.h; sourceTree = "<group>"; };
 		C3C56DB81BDD1AF700BB6132 /* Visualisation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Visualisation.h; sourceTree = "<group>"; };
@@ -146,7 +145,6 @@
 				C3C56DA91BDBA1EC00BB6132 /* Agent.h */,
 				C3C56DB11BDD031600BB6132 /* Agents.h */,
 				C3C56DB31BDD03E400BB6132 /* AgentSource.h */,
-				C3C56DB21BDD035300BB6132 /* AgentVisualisation.h */,
 				C3C5B5821BD0E62700A9326C /* Blur.cpp */,
 				C3C5B5831BD0E62700A9326C /* Blur.h */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
