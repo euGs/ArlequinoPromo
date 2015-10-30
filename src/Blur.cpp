@@ -26,15 +26,8 @@ void Blur::begin(){
     }
     
     // Source geometry will be drawn into buffer1.
-//    buffer1.begin();
-    blurShader.begin();
-    blurShader.setUniform2f("direction", 0.f, 1.f);
-    blurShader.setUniform1f("kernelSize", kernelSize);
-    blurShader.setUniform1f("distribution", distribution);
-    blurShader.setUniform1f("brightness", brightness);
-
+    buffer1.begin();
     ofClear(0);
-    ofBackground(0, 0, 255);
 }
 
 void Blur::end(){
@@ -43,19 +36,19 @@ void Blur::end(){
         return;
     }
     
-//    buffer1.end();
+    buffer1.end();
     
     // buffer2 will store the results of the vertical pass of the blur shader.
 //    buffer2.begin();
-    ofClear(0, 0, 255);
+//    ofClear(0, 0, 255);
     // Draw buffer1 one through the blur shader with a vertical pass.
 //    blurShader.begin();
 //    blurShader.setUniform2f("direction", 0.f, 1.f);
 //    blurShader.setUniform1f("kernelSize", kernelSize);
 //    blurShader.setUniform1f("distribution", distribution);
 //    blurShader.setUniform1f("brightness", brightness);
-//    buffer1.draw(0, 0);
-    blurShader.end();
+    buffer1.draw(0, 0);
+//    blurShader.end();
 //    buffer2.end();
     
     // Draw buffer2 through the blur shader with a horizontal pass.

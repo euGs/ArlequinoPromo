@@ -29,7 +29,7 @@ public:
         
         source.load("Cover01.jpg");
         
-        cols = 40, rows = 29;
+        cols = 20, rows = 15;
         colWidth = source.getWidth() / cols;
         rowHeight = source.getHeight() / rows;
         planeResolution = 4;
@@ -99,6 +99,15 @@ protected:
 class TornPaperVisualisationSource : public SpriteVisualisationSource {
     virtual void addVisualisation(ofPlanePrimitive & plane, ofImage & texture){
         unique_ptr<TornPaperVisualisation> visualisation = make_unique<TornPaperVisualisation>();
+        visualisation->setup(plane, texture);
+        
+        visualisations.push_back(move(visualisation));
+    }
+};
+
+class TornPaperWithParticlesVisualisationSource : public TornPaperVisualisationSource {
+    virtual void addVisualisation(ofPlanePrimitive & plane, ofImage & texture){
+        unique_ptr<TornPaperWithParticlesVisualisation> visualisation = make_unique<TornPaperWithParticlesVisualisation>();
         visualisation->setup(plane, texture);
         
         visualisations.push_back(move(visualisation));

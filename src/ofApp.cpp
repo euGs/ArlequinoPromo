@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    unique_ptr<AgentSource> agentSource = make_unique<PivotingSphereRovingAgentSource>();
+    unique_ptr<AgentSource> agentSource = make_unique<SphereRovingAgentSource>();
     unique_ptr<VisualisationSource> visualisationSource = make_unique<TornPaperVisualisationSource>();
     visualisationSource->setup();
     int maxAgents = 1000;
@@ -10,6 +10,8 @@ void ofApp::setup(){
     agents.setup(move(agentSource), move(visualisationSource), maxAgents);
     music.setup("ArTeaser_Edit04.wav");
     ofBackground(255);
+    
+    blur.setup(0, 0, ofGetWidth(), ofGetHeight());
 }
 
 //--------------------------------------------------------------

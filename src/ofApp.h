@@ -7,6 +7,7 @@
 #include "VisualisationSource.h"
 #include "Visualisation.h"
 #include "Music.h"
+#include "Blur.h"
 
 class ofApp : public ofBaseApp{
     
@@ -30,4 +31,5 @@ public:
     ofEasyCam cam;
     Agents agents;
     Music music;
+    Blur blur;
 };
