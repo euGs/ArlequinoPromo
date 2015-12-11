@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C3C5B5841BD0E62700A9326C /* Blur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3C5B5821BD0E62700A9326C /* Blur.cpp */; };
+		C3E3BF7E1BE4185600F0897A /* Blur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3E3BF7C1BE4185600F0897A /* Blur.cpp */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1D0A3A1BDC003C02F2 /* main.cpp */; };
 		E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */; };
@@ -49,11 +49,11 @@
 		C3C56DB31BDD03E400BB6132 /* AgentSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgentSource.h; sourceTree = "<group>"; };
 		C3C56DB71BDD0C0900BB6132 /* VisualisationSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VisualisationSource.h; sourceTree = "<group>"; };
 		C3C56DB81BDD1AF700BB6132 /* Visualisation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Visualisation.h; sourceTree = "<group>"; };
-		C3C5B5821BD0E62700A9326C /* Blur.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Blur.cpp; sourceTree = "<group>"; };
-		C3C5B5831BD0E62700A9326C /* Blur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Blur.h; sourceTree = "<group>"; };
 		C3C5B5881BD0E67100A9326C /* gaussianBlur.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = gaussianBlur.frag; sourceTree = "<group>"; };
 		C3C5B58A1BD0E67100A9326C /* gaussianBlur.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = gaussianBlur.frag; sourceTree = "<group>"; };
 		C3C5B58B1BD0E67100A9326C /* passThrough.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = passThrough.vert; sourceTree = "<group>"; };
+		C3E3BF7C1BE4185600F0897A /* Blur.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Blur.cpp; sourceTree = "<group>"; };
+		C3E3BF7D1BE4185600F0897A /* Blur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Blur.h; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E4B69B5B0A3A1756003C02F2 /* arlequinoPromo01Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = arlequinoPromo01Debug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B69E1D0A3A1BDC003C02F2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
@@ -144,9 +144,9 @@
 			children = (
 				C3C56DA91BDBA1EC00BB6132 /* Agent.h */,
 				C3C56DB11BDD031600BB6132 /* Agents.h */,
+				C3E3BF7C1BE4185600F0897A /* Blur.cpp */,
+				C3E3BF7D1BE4185600F0897A /* Blur.h */,
 				C3C56DB31BDD03E400BB6132 /* AgentSource.h */,
-				C3C5B5821BD0E62700A9326C /* Blur.cpp */,
-				C3C5B5831BD0E62700A9326C /* Blur.h */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				C3C56DAA1BDBA60100BB6132 /* Music.h */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
@@ -253,7 +253,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C3C5B5841BD0E62700A9326C /* Blur.cpp in Sources */,
+				C3E3BF7E1BE4185600F0897A /* Blur.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 			);
@@ -348,6 +348,7 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)Debug";
+				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -371,6 +372,7 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 				baseConfigurationReference = E4EB6923138AFD0F00A09F29;
 			};

@@ -1,20 +1,38 @@
 #pragma once
 
-#include "ofMain.h"
+#include "ofShader.h"
+#include "ofFbo.h"
 
 class Blur {
 public:
-    void setup(float x, float y, float width, float height);
-    void begin();
-    void end();
+    Blur();
+    virtual void setup(float width = 0.f, float height = 0.f);
+    virtual void setBlurStrength(float normalisedStrength);
+    virtual void begin();
+    virtual void end();
+    virtual void draw(float x, float y);
+    virtual bool isSetup();
+    virtual void resize(float width, float height);
     
-    float x, y;
-    float backgroundColor;
+protected:
+    float left, top, width, height;
     float distribution;
     float kernelSize;
-    float brightness;
     
-private:
+    float minDistribution, maxDistribution, minKernelSize, maxKernelSize;
     ofShader blurShader;
     ofFbo buffer1, buffer2;
+};
+
+class RandomBlur : public Blur {
+public:
+    virtual void setup(float width = 0.f, float height = 0.f);
+    virtual void begin();
+    virtual void end();
+    virtual void draw(float width, float height);
+    
+protected:
+    float blurOnMin, blurOnMax, blurOffMin, blurOffMax, blurEnd;
+    float lastBlurEndTime, thisBlurStartTime;
+    bool isBlurring;
 };

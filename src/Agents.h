@@ -6,6 +6,8 @@
 #include "Agent.h"
 #include "Visualisation.h"
 
+// Handles setting up agents (with their visualisations) and transitioning all agents
+// from one type to another.
 class Agents {
 public:
     void setup (unique_ptr<AgentSource> agentSource, unique_ptr<VisualisationSource> visualisationSource, int maxAgents){        

@@ -31,5 +31,5 @@ public:
     ofEasyCam cam;
     Agents agents;
     Music music;
-    Blur blur;
+    unique_ptr<Blur> blur;
 };

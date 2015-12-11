@@ -93,34 +93,52 @@ public:
     float minSpeed, maxSpeed, speed;
 };
 
+class BasicMovementsAgent : public Agent {
+public:
+    virtual void setup(){
+        minSpeed = 0.5f;
+        maxSpeed = 10.f;
+        orientationEuler = ofVec3f(0, 0, 0);
+        position = ofVec3f(0, 0, 0);
+    }
+    
+    virtual void update(float noiseValue1, float noiseValue2, float noiseValue3, float globalScaling = 1.f){
+        speed = ofMap(noiseValue2, 0.f, 1.f, minSpeed, maxSpeed);
+    }
+    
+    virtual void draw(){
+        visualisation->draw(position, orientationEuler, ofMap(speed, minSpeed, maxSpeed, 0.f, 1.f));
+    }
+    
+protected:
+    float minSpeed, maxSpeed, speed;
+    ofVec3f position, orientationEuler;
+};
+
 // An agent that roves on a sphere, e.g. globe.
 // angleZ and angleY give the position on the surface of the sphere.
 // directionalAngle gives the orientation of the point on the surface
 // of the sphere, i.e. the direction in which it is moving. Equivalent
 // to ori in RovingAgent above.
-class SphereRovingAgent : public Agent {
+class SphereRovingAgent : public BasicMovementsAgent {
 public:
     virtual void setup(){
+        BasicMovementsAgent::setup();
+        
         angleZ = 0.f;
         angleY = 0.f;
         directionalAngle = ofRandom(TWO_PI);
         sphereRadius = 200.f;
-        minSpeed = 0.5f;
-        maxSpeed = 10.f;
-        orientationEuler = ofVec3f(0, 0, 0);
     }
     
     virtual void update(float noiseValue1, float noiseValue2, float noiseValue3, float globalScaling = 1.f){
-        speed = ofMap(noiseValue2, 0.f, 1.f, minSpeed, maxSpeed);
+        BasicMovementsAgent::update(noiseValue1, noiseValue2, noiseValue3, globalScaling);
+        
         directionalAngle += (noiseValue1 - .5f) * PI / 32;
         angleZ += sin(directionalAngle) * PI / 16.f * speed;
         angleY += cos(directionalAngle) * PI / 16.f * speed;
         sphereRadius = 200.f * globalScaling + noiseValue2 * 20.f;
         calculatePosition();
-    }
-    
-    virtual void draw(){
-        visualisation->draw(position, orientationEuler, ofMap(speed, minSpeed, maxSpeed, 0.f, 1.f));
     }
     
     virtual ofVec3f calculatePosition(){
@@ -132,21 +150,70 @@ public:
         
         position = v;
     }
-    
+
 protected:
     float angleZ, angleY, directionalAngle, sphereRadius;
-    float minSpeed, maxSpeed, speed;
-    ofVec3f position, orientationEuler;
 };
 
 class PivotingSphereRovingAgent : public SphereRovingAgent {
     virtual void setup(){
         SphereRovingAgent::setup();
     }
+    
     virtual void update(float noiseValue1, float noiseValue2, float noiseValue3, float globalScaling = 1.f){
         SphereRovingAgent::update(noiseValue1, noiseValue2, noiseValue3, globalScaling);
         orientationEuler.x += (noiseValue1 - .5f) * PI / 32;
         orientationEuler.y = angleY;
         orientationEuler.z = angleZ;
     }
+};
+
+// An agent that roves around the vertices in a mesh.
+class MeshRovingAgent : public BasicMovementsAgent {
+public:
+    void setMinimumDistance(const float minimumDistance){
+        this->MinimumDistance = minimumDistance;
+    }
+    
+    void setMesh(shared_ptr<const ofMesh> mesh){
+        this->mesh = mesh;
+    }
+    
+    virtual void setup(){
+        BasicMovementsAgent::setup();
+        
+        position = getRandomVertex();
+        target = getRandomVertex();
+    }
+    
+    virtual void update(float noiseValue1, float noiseValue2, float noiseValue3, float globalScaling = 1.f){
+        if (mesh == nullptr){
+            return;
+        }
+        
+        BasicMovementsAgent::update(noiseValue1, noiseValue2, noiseValue3, globalScaling);
+
+        float distance = position.distance(target);
+        
+        if (distance < MinimumDistance){
+            target = getRandomVertex();
+        }
+        
+        position = position + speed * (target - position).getNormalized();
+    }
+    
+    virtual void draw(){
+        visualisation->draw(position, orientationEuler, 1.f);
+    }
+    
+protected:
+    ofVec3f getRandomVertex(){
+        auto numVertices = mesh->getNumVertices();
+        auto randomIndex = ofRandom(numVertices);
+        return mesh->getVertex(randomIndex);
+    }
+    
+    shared_ptr<const ofMesh> mesh;
+    float MinimumDistance;
+    ofVec3f target;
 };
