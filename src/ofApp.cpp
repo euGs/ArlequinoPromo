@@ -3,7 +3,7 @@ ofTrueTypeFont font;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    unique_ptr<AgentSource> agentSource = make_unique<MeshRovingAgentSource>();
+    unique_ptr<AgentSource> agentSource = make_unique<TextRovingAgentSource>();
     unique_ptr<VisualisationSource> visualisationSource = make_unique<TornPaperVisualisationSource>();
     agentSource->setup();
     visualisationSource->setup();

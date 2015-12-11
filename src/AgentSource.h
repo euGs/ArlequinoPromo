@@ -30,7 +30,7 @@ public:
     }
 };
 
-class MeshRovingAgentSource : public AgentSource {
+class TextRovingAgentSource : public AgentSource {
 public:
     void setup(){
         ofTrueTypeFont font;
