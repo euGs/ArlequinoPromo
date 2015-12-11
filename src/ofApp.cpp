@@ -3,13 +3,13 @@ ofTrueTypeFont font;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    unique_ptr<AgentSource> agentSource = make_unique<TextRovingAgentSource>();
-    unique_ptr<VisualisationSource> visualisationSource = make_unique<TornPaperVisualisationSource>();
-    agentSource->setup();
-    visualisationSource->setup();
+    TextRovingAgentSource agentSource;
+    TornPaperVisualisationSource visualisationSource;
+    agentSource.setup();
+    visualisationSource.setup();
     int maxAgents = 1000;
 
-    agents.setup(move(agentSource), move(visualisationSource), maxAgents);
+    agents.setup(agentSource, visualisationSource, maxAgents);
     music.setup("ArTeaser_Edit04.wav");
     ofBackground(255);
     
