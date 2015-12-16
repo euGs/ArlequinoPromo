@@ -195,22 +195,24 @@ protected:
     ofVec3f target;
 };
 
-// Translates from a source position to a destination position. Doesn't take MoveData
-// into account; rather a time duration for the movement.
-class TranslatingAgent {
+// Linearly interpolates position from a start position, end position and a lerp
+// value passed in via MoveData.
+class LerpingAgent : public Agent {
 public:
-    void setup(ofVec3f startPosition, ofVec3f endPosition, float durationOfMove){
+    void setStartPosition(ofVec3f startPosition){
+        this->startPosition = startPosition;
     }
     
-    void update(){
+    void setEndPosition(ofVec3f endPosition){
+        this->endPosition = endPosition;
     }
     
-    virtual void draw(){
-        visualisation->draw(position, orientationEuler);
+    virtual void update(MoveData &moveData) override{
+        position = (endPosition - startPosition) * moveData.normalisedValue1;
     }
     
 protected:
-    unique_ptr<Visualisation> visualisation;
-    ofVec3f position, startPosition, endPosition, orientationEuler;
+    ofVec3f startPosition;
+    ofVec3f endPosition;
     float startTime, endTime;
 };

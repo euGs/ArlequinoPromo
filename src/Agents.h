@@ -10,9 +10,14 @@
 // values for agents in the update loop and transitioning all agents from one type to another.
 class Agents {
 public:
-    void setup (AgentSource &agentSource, VisualisationSource &visualisationSource, int maxAgents){
+    void setup(AgentSource &agentSource, VisualisationSource &visualisationSource, int maxAgents){
         while (visualisationSource.hasMoreVisualisations() && agents.size() < maxAgents){
-            unique_ptr<Agent> agent = move(agentSource.getAgent());
+            unique_ptr<Agent> agent = make_unique<LerpingAgent>();
+            ofVec3f startPosition {0.f, 0.f, 0.f};
+            ofVec3f endPosition {10.f, 10.f, 10.f};
+            float durationMilliseconds = 2000.f;
+            ((LerpingAgent*)agent.get())->setStartPosition(startPosition);
+            ((LerpingAgent*)agent.get())->setEndPosition(endPosition);
 
             agent->setVisualisation(move(visualisationSource.getVisualisation()));
             agent->setup();
@@ -21,7 +26,7 @@ public:
     }
 
     void update(float scalingFactor){
-        // Generate noise values.
+        // Generate noise values for move data.
         float noiseScale = ofMap(ofGetMouseX(), 0, ofGetWidth(), 0, 1.f);
         float noiseVel = ofGetElapsedTimef();
 
