@@ -3,22 +3,19 @@
 #include "ofMain.h"
 #include "Visualisation.h"
 
+// Move data for agents to use as they wish.
 struct MoveData {
-    float noiseValue1;
-    float noiseValue2;
-    float noiseValue3;
+    float normalisedValue1;
+    float normalisedValue2;
     float globalScaling = 1.f;
 };
 
 // Agent base class. Owns a visualisation and position, orientation and speed values.
-// Calculates its speed from a noise value, tells its visualisation to draw in
-// the draw loop. Derived classes further specialise calculations for position
-// and orientation based on noise values input to update function.
+// Derived classes define calculations for position and orientation based on
+// values input to update function.
 class Agent {
 public:
     virtual void setup(){
-        minSpeed = 0.5f;
-        maxSpeed = 10.f;
         orientationEuler = ofVec3f(0, 0, 0);
         position = ofVec3f(0, 0, 0);
     }
@@ -31,15 +28,20 @@ public:
         return std::move(this->visualisation);
     }
     
-    virtual void update(MoveData &moveData){
-        speed = ofMap(moveData.noiseValue2, 0.f, 1.f, minSpeed, maxSpeed);
+    virtual void update(MoveData &moveData) = 0;
+    
+    virtual void setSpeed(float normalisedValue){
+        speed = ofMap(normalisedValue, 0.f, 1.f, MinSpeed, MaxSpeed);
     }
 
     virtual void draw(){
-        visualisation->draw(position, orientationEuler, ofMap(speed, minSpeed, maxSpeed, 0.f, 1.f));
+        visualisation->draw(position, orientationEuler);
     }
     
 protected:
+    constexpr static float MinSpeed = .5f;
+    constexpr static float MaxSpeed = 10.f;
+
     unique_ptr<Visualisation> visualisation;
     float minSpeed, maxSpeed, speed;
     ofVec3f position, orientationEuler;
@@ -59,8 +61,8 @@ public:
     
     void update(MoveData &moveData){
         // Adjust orientation to noise value
-        ori += (moveData.noiseValue1 - .5f) * PI / 32;
-        speed = ofMap(moveData.noiseValue2, 0.f, 1.f, minSpeed, maxSpeed);
+        ori += (moveData.normalisedValue1 - .5f) * PI / 32;
+        speed = ofMap(moveData.normalisedValue2, 0.f, 1.f, minSpeed, maxSpeed);
         pos += ofPoint(sin(ori), cos(ori)) * speed;
         
         if (pos.x < -ofGetWidth()/2){
@@ -111,12 +113,11 @@ public:
     }
     
     virtual void update(MoveData &moveData) override{
-        Agent::update(moveData);
-        
-        directionalAngle += (moveData.noiseValue1 - .5f) * PI / 32;
+        setSpeed(moveData.normalisedValue2);
+        directionalAngle += (moveData.normalisedValue1 - .5f) * PI / 32;
         angleZ += sin(directionalAngle) * PI / 16.f * speed;
         angleY += cos(directionalAngle) * PI / 16.f * speed;
-        sphereRadius = 200.f * moveData.globalScaling + moveData.noiseValue2 * 20.f;
+        sphereRadius = 200.f * moveData.globalScaling + moveData.normalisedValue2 * 20.f;
         calculatePosition();
     }
     
@@ -142,7 +143,7 @@ class PivotingSphereRovingAgent : public SphereRovingAgent {
     
     virtual void update(MoveData &moveData) override{
         SphereRovingAgent::update(moveData);
-        orientationEuler.x += (moveData.noiseValue1 - .5f) * PI / 32;
+        orientationEuler.x += (moveData.normalisedValue1 - .5f) * PI / 32;
         orientationEuler.y = angleY;
         orientationEuler.z = angleZ;
     }
@@ -171,7 +172,7 @@ public:
             return;
         }
         
-        Agent::update(moveData);
+        setSpeed(moveData.normalisedValue2);
 
         float distance = position.distance(target);
         
@@ -180,10 +181,6 @@ public:
         }
         
         position = position + speed * (target - position).getNormalized();
-    }
-    
-    virtual void draw() override{
-        visualisation->draw(position, orientationEuler, 1.f);
     }
     
 protected:
@@ -196,4 +193,24 @@ protected:
     shared_ptr<const ofMesh> mesh;
     float MinimumDistance;
     ofVec3f target;
+};
+
+// Translates from a source position to a destination position. Doesn't take MoveData
+// into account; rather a time duration for the movement.
+class TranslatingAgent {
+public:
+    void setup(ofVec3f startPosition, ofVec3f endPosition, float durationOfMove){
+    }
+    
+    void update(){
+    }
+    
+    virtual void draw(){
+        visualisation->draw(position, orientationEuler);
+    }
+    
+protected:
+    unique_ptr<Visualisation> visualisation;
+    ofVec3f position, startPosition, endPosition, orientationEuler;
+    float startTime, endTime;
 };

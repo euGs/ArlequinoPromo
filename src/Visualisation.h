@@ -4,7 +4,7 @@
 
 class Visualisation {
 public:
-    virtual void draw(ofVec3f position, ofVec3f orientationEuler, float normalisedSpeed) = 0;
+    virtual void draw(ofVec3f position, ofVec3f orientationEuler) = 0;
 };
 
 class SphereVisualisation : public Visualisation {
@@ -13,11 +13,10 @@ public:
         sphere.setRadius(10.f);
     }
     
-    virtual void draw(ofVec3f position, ofVec3f orientationEuler, float normalisedSpeed){
+    virtual void draw(ofVec3f position, ofVec3f orientationEuler){
         ofPushStyle();
         sphere.setPosition(position);
         sphere.setOrientation(orientationEuler);
-        ofSetColor(ofMap(normalisedSpeed, 0.f, 1.f, 255.f, 100.f), 100, ofMap(normalisedSpeed, 0.f, 1.f, 100.f, 255.f), 255);
         sphere.draw();
         ofPopStyle();
     }
@@ -33,7 +32,7 @@ public:
         this->texture = texture;
     }
 
-    virtual void draw(ofVec3f position, ofVec3f orientationEuler, float normalisedSpeed){
+    virtual void draw(ofVec3f position, ofVec3f orientationEuler){
         plane.setPosition(position);
         plane.setOrientation(orientationEuler);
         texture.getTexture().bind();
@@ -81,8 +80,8 @@ public:
         }
     }
     
-    virtual void draw(ofVec3f position, ofVec3f orientationEuler, float normalisedSpeed){
-        TornPaperVisualisation::draw(position, orientationEuler, normalisedSpeed);
+    virtual void draw(ofVec3f position, ofVec3f orientationEuler){
+        TornPaperVisualisation::draw(position, orientationEuler);
         
         if (plane.getPosition().y > ofGetHeight()/2){
             return;
