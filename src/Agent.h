@@ -3,11 +3,16 @@
 #include "ofMain.h"
 #include "Visualisation.h"
 
+// Abstract base class. Agent owns a visualisation. Derived classes calculate movements based
+// on noise values (supplied to update function).
 class Agent {
 public:
     virtual void setup() = 0;
     virtual void setVisualisation(unique_ptr<Visualisation> visualisation){
         this->visualisation = std::move(visualisation);
+    }
+    virtual unique_ptr<Visualisation> getVisualisation(){
+        return std::move(this->visualisation);
     }
     
     virtual void update(float noiseValue1, float noiseValue2, float noiseValue3, float globalScaling = 1.f) = 0;
@@ -17,34 +22,30 @@ protected:
     unique_ptr<Visualisation> visualisation;
 };
 
-class StationaryRotatingAgentOnPlane : public Agent {
+// Base class holding common functionality for other classes.
+class BasicMovementsAgent : public Agent {
 public:
-    void setup(){
-        ori = 0.f;
-        float margin = 120.f;
-        pos.x = ofRandom(-ofGetWidth()/2 + margin, ofGetWidth()/2 - margin);
-        pos.y = ofRandom(-ofGetHeight()/2 + margin, ofGetHeight()/2 - margin);
+    virtual void setup(){
+        minSpeed = 0.5f;
+        maxSpeed = 10.f;
+        orientationEuler = ofVec3f(0, 0, 0);
+        position = ofVec3f(0, 0, 0);
     }
     
-    void update(float noiseValue1, float noiseValue2, float noiseValue3, float globalScaling = 1.f){
-        // Adjust orientation to noise value
-        ori += (noiseValue1 - .5f) * PI / 16;
+    virtual void update(float noiseValue1, float noiseValue2, float noiseValue3, float globalScaling = 1.f){
+        speed = ofMap(noiseValue2, 0.f, 1.f, minSpeed, maxSpeed);
     }
     
-    void draw(){
-        float arrowLength = 100.f;
-        
-        ofPoint arrow(sin(ori), cos(ori));
-        arrow *= arrowLength;
-        
-        ofPoint arrowTip(pos + arrow);
-        ofDrawLine(pos.x, pos.y, pos.z, arrowTip.x, arrowTip.y, arrowTip.z);
+    virtual void draw(){
+        visualisation->draw(position, orientationEuler, ofMap(speed, minSpeed, maxSpeed, 0.f, 1.f));
     }
     
-    float ori;
-    ofPoint pos;
+protected:
+    float minSpeed, maxSpeed, speed;
+    ofVec3f position, orientationEuler;
 };
 
+// Roves around a plane.
 class PlaneRovingAgent : public Agent {
 public:
     void setup(){
@@ -93,28 +94,6 @@ public:
     float minSpeed, maxSpeed, speed;
 };
 
-class BasicMovementsAgent : public Agent {
-public:
-    virtual void setup(){
-        minSpeed = 0.5f;
-        maxSpeed = 10.f;
-        orientationEuler = ofVec3f(0, 0, 0);
-        position = ofVec3f(0, 0, 0);
-    }
-    
-    virtual void update(float noiseValue1, float noiseValue2, float noiseValue3, float globalScaling = 1.f){
-        speed = ofMap(noiseValue2, 0.f, 1.f, minSpeed, maxSpeed);
-    }
-    
-    virtual void draw(){
-        visualisation->draw(position, orientationEuler, ofMap(speed, minSpeed, maxSpeed, 0.f, 1.f));
-    }
-    
-protected:
-    float minSpeed, maxSpeed, speed;
-    ofVec3f position, orientationEuler;
-};
-
 // An agent that roves on a sphere, e.g. globe.
 // angleZ and angleY give the position on the surface of the sphere.
 // directionalAngle gives the orientation of the point on the surface
@@ -155,6 +134,7 @@ protected:
     float angleZ, angleY, directionalAngle, sphereRadius;
 };
 
+// As SphereRovingAgent but also orients towards the direction of motion.
 class PivotingSphereRovingAgent : public SphereRovingAgent {
     virtual void setup(){
         SphereRovingAgent::setup();
