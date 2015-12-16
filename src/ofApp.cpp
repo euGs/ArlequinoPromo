@@ -3,7 +3,7 @@ ofTrueTypeFont font;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    TextRovingAgentSource agentSource;
+    SphereRovingAgentSource agentSource;
     TornPaperVisualisationSource visualisationSource;
     agentSource.setup();
     visualisationSource.setup();

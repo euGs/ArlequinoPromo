@@ -3,27 +3,18 @@
 #include "ofMain.h"
 #include "Visualisation.h"
 
-// Abstract base class. Agent owns a visualisation. Derived classes calculate movements based
-// on noise values (supplied to update function).
-class Agent {
-public:
-    virtual void setup() = 0;
-    virtual void setVisualisation(unique_ptr<Visualisation> visualisation){
-        this->visualisation = std::move(visualisation);
-    }
-    virtual unique_ptr<Visualisation> getVisualisation(){
-        return std::move(this->visualisation);
-    }
-    
-    virtual void update(float noiseValue1, float noiseValue2, float noiseValue3, float globalScaling = 1.f) = 0;
-    virtual void draw() = 0;
-    
-protected:
-    unique_ptr<Visualisation> visualisation;
+struct MoveData {
+    float noiseValue1;
+    float noiseValue2;
+    float noiseValue3;
+    float globalScaling = 1.f;
 };
 
-// Base class holding common functionality for other classes.
-class BasicMovementsAgent : public Agent {
+// Base class. Agent owns a visualisation, position, orientation and speed values.
+// Calculates its speed from a noise value, tells its visualisation to draw in
+// the draw loop. Derived classes further specialise calculations for position
+// and orientation based on noise values input to update function.
+class Agent {
 public:
     virtual void setup(){
         minSpeed = 0.5f;
@@ -32,18 +23,50 @@ public:
         position = ofVec3f(0, 0, 0);
     }
     
-    virtual void update(float noiseValue1, float noiseValue2, float noiseValue3, float globalScaling = 1.f){
-        speed = ofMap(noiseValue2, 0.f, 1.f, minSpeed, maxSpeed);
+    virtual void setVisualisation(unique_ptr<Visualisation> visualisation){
+        this->visualisation = std::move(visualisation);
     }
     
+    virtual unique_ptr<Visualisation> getVisualisation(){
+        return std::move(this->visualisation);
+    }
+    
+    virtual void update(MoveData &moveData){
+        speed = ofMap(moveData.noiseValue2, 0.f, 1.f, minSpeed, maxSpeed);
+    }
+
     virtual void draw(){
         visualisation->draw(position, orientationEuler, ofMap(speed, minSpeed, maxSpeed, 0.f, 1.f));
     }
     
 protected:
+    unique_ptr<Visualisation> visualisation;
     float minSpeed, maxSpeed, speed;
     ofVec3f position, orientationEuler;
 };
+
+// Base class holding common functionality for other classes.
+//class BasicMovementsAgent : public Agent {
+//public:
+//    virtual void setup(){
+//        minSpeed = 0.5f;
+//        maxSpeed = 10.f;
+//        orientationEuler = ofVec3f(0, 0, 0);
+//        position = ofVec3f(0, 0, 0);
+//    }
+//    
+//    virtual void update(float noiseValue1, float noiseValue2, float noiseValue3, float globalScaling = 1.f){
+//        speed = ofMap(noiseValue2, 0.f, 1.f, minSpeed, maxSpeed);
+//    }
+//    
+//    virtual void draw(){
+//        visualisation->draw(position, orientationEuler, ofMap(speed, minSpeed, maxSpeed, 0.f, 1.f));
+//    }
+//    
+//protected:
+//    float minSpeed, maxSpeed, speed;
+//    ofVec3f position, orientationEuler;
+//};
 
 // Roves around a plane.
 class PlaneRovingAgent : public Agent {
@@ -57,10 +80,10 @@ public:
         maxSpeed = 10.f;
     }
     
-    void update(float noiseValue1, float noiseValue2, float noiseValue3, float globalScaling = 1.f){
+    void update(MoveData &moveData){
         // Adjust orientation to noise value
-        ori += (noiseValue1 - .5f) * PI / 32;
-        speed = ofMap(noiseValue2, 0.f, 1.f, minSpeed, maxSpeed);
+        ori += (moveData.noiseValue1 - .5f) * PI / 32;
+        speed = ofMap(moveData.noiseValue2, 0.f, 1.f, minSpeed, maxSpeed);
         pos += ofPoint(sin(ori), cos(ori)) * speed;
         
         if (pos.x < -ofGetWidth()/2){
@@ -99,10 +122,10 @@ public:
 // directionalAngle gives the orientation of the point on the surface
 // of the sphere, i.e. the direction in which it is moving. Equivalent
 // to ori in RovingAgent above.
-class SphereRovingAgent : public BasicMovementsAgent {
+class SphereRovingAgent : public Agent {
 public:
-    virtual void setup(){
-        BasicMovementsAgent::setup();
+    virtual void setup() override{
+        Agent::setup();
         
         angleZ = 0.f;
         angleY = 0.f;
@@ -110,13 +133,13 @@ public:
         sphereRadius = 200.f;
     }
     
-    virtual void update(float noiseValue1, float noiseValue2, float noiseValue3, float globalScaling = 1.f){
-        BasicMovementsAgent::update(noiseValue1, noiseValue2, noiseValue3, globalScaling);
+    virtual void update(MoveData &moveData) override{
+        Agent::update(moveData);
         
-        directionalAngle += (noiseValue1 - .5f) * PI / 32;
+        directionalAngle += (moveData.noiseValue1 - .5f) * PI / 32;
         angleZ += sin(directionalAngle) * PI / 16.f * speed;
         angleY += cos(directionalAngle) * PI / 16.f * speed;
-        sphereRadius = 200.f * globalScaling + noiseValue2 * 20.f;
+        sphereRadius = 200.f * moveData.globalScaling + moveData.noiseValue2 * 20.f;
         calculatePosition();
     }
     
@@ -136,20 +159,20 @@ protected:
 
 // As SphereRovingAgent but also orients towards the direction of motion.
 class PivotingSphereRovingAgent : public SphereRovingAgent {
-    virtual void setup(){
+    virtual void setup() override{
         SphereRovingAgent::setup();
     }
     
-    virtual void update(float noiseValue1, float noiseValue2, float noiseValue3, float globalScaling = 1.f){
-        SphereRovingAgent::update(noiseValue1, noiseValue2, noiseValue3, globalScaling);
-        orientationEuler.x += (noiseValue1 - .5f) * PI / 32;
+    virtual void update(MoveData &moveData) override{
+        SphereRovingAgent::update(moveData);
+        orientationEuler.x += (moveData.noiseValue1 - .5f) * PI / 32;
         orientationEuler.y = angleY;
         orientationEuler.z = angleZ;
     }
 };
 
 // An agent that roves around the vertices in a mesh.
-class MeshRovingAgent : public BasicMovementsAgent {
+class MeshRovingAgent : public Agent {
 public:
     void setMinimumDistance(const float minimumDistance){
         this->MinimumDistance = minimumDistance;
@@ -159,19 +182,19 @@ public:
         this->mesh = mesh;
     }
     
-    virtual void setup(){
-        BasicMovementsAgent::setup();
+    virtual void setup() override{
+        Agent::setup();
         
         position = getRandomVertex();
         target = getRandomVertex();
     }
     
-    virtual void update(float noiseValue1, float noiseValue2, float noiseValue3, float globalScaling = 1.f){
+    virtual void update(MoveData &moveData) override{
         if (mesh == nullptr){
             return;
         }
         
-        BasicMovementsAgent::update(noiseValue1, noiseValue2, noiseValue3, globalScaling);
+        Agent::update(moveData);
 
         float distance = position.distance(target);
         
@@ -182,7 +205,7 @@ public:
         position = position + speed * (target - position).getNormalized();
     }
     
-    virtual void draw(){
+    virtual void draw() override{
         visualisation->draw(position, orientationEuler, 1.f);
     }
     
