@@ -10,7 +10,7 @@ struct MoveData {
     float globalScaling = 1.f;
 };
 
-// Base class. Agent owns a visualisation, position, orientation and speed values.
+// Agent base class. Owns a visualisation and position, orientation and speed values.
 // Calculates its speed from a noise value, tells its visualisation to draw in
 // the draw loop. Derived classes further specialise calculations for position
 // and orientation based on noise values input to update function.
@@ -44,29 +44,6 @@ protected:
     float minSpeed, maxSpeed, speed;
     ofVec3f position, orientationEuler;
 };
-
-// Base class holding common functionality for other classes.
-//class BasicMovementsAgent : public Agent {
-//public:
-//    virtual void setup(){
-//        minSpeed = 0.5f;
-//        maxSpeed = 10.f;
-//        orientationEuler = ofVec3f(0, 0, 0);
-//        position = ofVec3f(0, 0, 0);
-//    }
-//    
-//    virtual void update(float noiseValue1, float noiseValue2, float noiseValue3, float globalScaling = 1.f){
-//        speed = ofMap(noiseValue2, 0.f, 1.f, minSpeed, maxSpeed);
-//    }
-//    
-//    virtual void draw(){
-//        visualisation->draw(position, orientationEuler, ofMap(speed, minSpeed, maxSpeed, 0.f, 1.f));
-//    }
-//    
-//protected:
-//    float minSpeed, maxSpeed, speed;
-//    ofVec3f position, orientationEuler;
-//};
 
 // Roves around a plane.
 class PlaneRovingAgent : public Agent {
