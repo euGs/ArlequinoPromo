@@ -38,6 +38,14 @@ public:
         visualisation->draw(position, orientationEuler);
     }
     
+    ofVec3f getPosition(){
+        return position;
+    }
+    
+    ofVec3f getOrientationEuler(){
+        return orientationEuler;
+    }
+    
 protected:
     constexpr static float MinSpeed = .5f;
     constexpr static float MaxSpeed = 10.f;

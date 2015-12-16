@@ -11,13 +11,10 @@
 class Agents {
 public:
     void setup(AgentSource &agentSource, VisualisationSource &visualisationSource, int maxAgents){
+        isTransitioning = false;
+        
         while (visualisationSource.hasMoreVisualisations() && agents.size() < maxAgents){
-            unique_ptr<Agent> agent = make_unique<LerpingAgent>();
-            ofVec3f startPosition {0.f, 0.f, 0.f};
-            ofVec3f endPosition {10.f, 10.f, 10.f};
-            float durationMilliseconds = 2000.f;
-            ((LerpingAgent*)agent.get())->setStartPosition(startPosition);
-            ((LerpingAgent*)agent.get())->setEndPosition(endPosition);
+            unique_ptr<Agent> agent = move(agentSource.getAgent());
 
             agent->setVisualisation(move(visualisationSource.getVisualisation()));
             agent->setup();
@@ -26,18 +23,47 @@ public:
     }
 
     void update(float scalingFactor){
-        // Generate noise values for move data.
-        float noiseScale = ofMap(ofGetMouseX(), 0, ofGetWidth(), 0, 1.f);
-        float noiseVel = ofGetElapsedTimef();
+        if (!isTransitioning){
+            // Generate noise values for move data.
+            float noiseScale = ofMap(ofGetMouseX(), 0, ofGetWidth(), 0, 1.f);
+            float noiseVel = ofGetElapsedTimef();
 
-        for (int i=0; i<agents.size(); i++){
-            MoveData md;
+            for (int i=0; i<agents.size(); i++){
+                MoveData md;
+                
+                md.normalisedValue1 = ofNoise(i * noiseScale, 1 * noiseScale, noiseVel);
+                md.normalisedValue2 = ofNoise(i * noiseScale, 1000 * noiseScale, noiseVel);
+                md.globalScaling = .05f + scalingFactor * 8.f;
+                agents[i]->update(md);
+            }
+        } else {
+            for (int i=0; i<lerpingAgents.size(); i++){
+                MoveData md;
+                md.normalisedValue1 = ofGetElapsedTimef() * (endTransitionTime - startTransitionTime);
+                lerpingAgents[i].update(md);
+            }
             
-            md.normalisedValue1 = ofNoise(i * noiseScale, 1 * noiseScale, noiseVel);
-            md.normalisedValue2 = ofNoise(i * noiseScale, 1000 * noiseScale, noiseVel);
-            md.globalScaling = .05f + scalingFactor * 8.f;
-            agents[i]->update(md);
+            if (ofGetElapsedTimef() > endTransitionTime){
+                isTransitioning = false;
+            }
         }
+    }
+    
+    void transitionAgents(AgentSource &agentSource, float durationMilliseconds){
+        lerpingAgents.clear();
+        
+        for (size_t i = 0; i < agents.size(); i++){
+            LerpingAgent lerpingAgent;
+            lerpingAgent.setStartPosition(agents[i]->getPosition());
+            unique_ptr<Agent> newAgent = move(agentSource.getAgent());
+            lerpingAgent.setEndPosition(newAgent->getPosition());
+            lerpingAgents.push_back(move(lerpingAgent));
+            agents[i] = move(newAgent);
+        }
+        
+        startTransitionTime = ofGetElapsedTimef();
+        endTransitionTime = startTransitionTime + durationMilliseconds;
+        isTransitioning = true;
     }
     
     void draw(){
@@ -48,4 +74,7 @@ public:
     
 protected:
     vector< unique_ptr<Agent> > agents;
+    vector< LerpingAgent > lerpingAgents;
+    bool isTransitioning;
+    float startTransitionTime, endTransitionTime;
 };
