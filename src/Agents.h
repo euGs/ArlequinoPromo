@@ -23,20 +23,20 @@ public:
     }
 
     void update(float scalingFactor){
-        if (!isTransitioning){
-            // Generate noise values for move data.
-            float noiseScale = ofMap(ofGetMouseX(), 0, ofGetWidth(), 0, 1.f);
-            float noiseVel = ofGetElapsedTimef();
+        // Generate noise values for move data.
+        float noiseScale = ofMap(ofGetMouseX(), 0, ofGetWidth(), 0, 1.f);
+        float noiseVel = ofGetElapsedTimef();
 
-            for (int i=0; i<agents.size(); i++){
-                MoveData md;
-                
-                md.normalisedValue1 = ofNoise(i * noiseScale, 1 * noiseScale, noiseVel);
-                md.normalisedValue2 = ofNoise(i * noiseScale, 1000 * noiseScale, noiseVel);
-                md.globalScaling = .05f + scalingFactor * 8.f;
-                agents[i]->update(md);
-            }
-        } else {
+        for (int i=0; i<agents.size(); i++){
+            MoveData md;
+            
+            md.normalisedValue1 = ofNoise(i * noiseScale, 1 * noiseScale, noiseVel);
+            md.normalisedValue2 = ofNoise(i * noiseScale, 1000 * noiseScale, noiseVel);
+            md.globalScaling = .05f + scalingFactor * 8.f;
+            agents[i]->update(md);
+        }
+
+        if (isTransitioning){
             // Calculate lerp value for LerpingAgent - as normalised time from start (zerp) to end (one)
             // of the transition time.
             float normalisedTime = (ofGetElapsedTimef() - startTransitionTime) / (endTransitionTime - startTransitionTime);
@@ -44,6 +44,8 @@ public:
             for (int i=0; i<lerpingAgents.size(); i++){
                 MoveData md;
                 md.normalisedValue1 = normalisedTime;
+                // End position could be constantly moving so keep updating the lerping agent here.
+                lerpingAgents[i].setEndPosition(agents[i]->getPosition());
                 lerpingAgents[i].update(md);
             }
             
@@ -65,7 +67,6 @@ public:
             lerpingAgent.setStartPosition(agents[i]->getPosition());
             unique_ptr<Agent> newAgent = move(agentSource.getAgent());
             newAgent->setup();
-            lerpingAgent.setEndPosition(newAgent->getPosition());
             lerpingAgent.setVisualisation(agents[i]->getVisualisation());
             lerpingAgents.push_back(move(lerpingAgent));
             agents[i] = move(newAgent);

@@ -47,9 +47,9 @@ void ofApp::keyPressed(int key){
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
     if (key == 't'){
-        agents.transitionAgents(textRovingAgentSource, 2);
+        agents.transitionAgents(textRovingAgentSource, 1);
     }else if (key == 's'){
-        agents.transitionAgents(sphereRovingAgentSource, 2);
+        agents.transitionAgents(sphereRovingAgentSource, 1);
     }
 }
 
