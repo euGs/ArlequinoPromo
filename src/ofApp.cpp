@@ -3,13 +3,12 @@ ofTrueTypeFont font;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    SphereRovingAgentSource agentSource;
     TornPaperVisualisationSource visualisationSource;
-    agentSource.setup();
+    sphereRovingAgentSource.setup();
     visualisationSource.setup();
     int maxAgents = 1000;
 
-    agents.setup(agentSource, visualisationSource, maxAgents);
+    agents.setup(sphereRovingAgentSource, visualisationSource, maxAgents);
     music.setup("ArTeaser_Edit04.wav");
     
     textRovingAgentSource.setup();
@@ -47,10 +46,10 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-    if (key == '1'){
-    }else if (key == '2'){
-    }else if (key == 't'){
+    if (key == 't'){
         agents.transitionAgents(textRovingAgentSource, 2);
+    }else if (key == 's'){
+        agents.transitionAgents(sphereRovingAgentSource, 2);
     }
 }
 

@@ -30,6 +30,7 @@ public:
     
     ofEasyCam cam;
     Agents agents;
+    SphereRovingAgentSource sphereRovingAgentSource;
     TextRovingAgentSource textRovingAgentSource;
     Music music;
     unique_ptr<Blur> blur;
