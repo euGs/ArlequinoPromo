@@ -11,12 +11,16 @@ void ofApp::setup(){
 
     agents.setup(agentSource, visualisationSource, maxAgents);
     music.setup("ArTeaser_Edit04.wav");
+    
+    textRovingAgentSource.setup();
+    
     ofBackground(255);
     
     blur = make_unique<RandomBlur>();
     blur->setup(ofGetWidth(), ofGetHeight());
 
     font.load("Ubuntu-R.ttf", 600, true, false, true);
+    cam.setDistance(1500);
 }
 
 //--------------------------------------------------------------
@@ -27,18 +31,13 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    blur->begin();
-
     cam.begin();
     agents.draw();
     ofPushStyle();
-    ofSetColor(126, 46, 23);
+    ofSetColor(126, 46, 23, 30);
     font.drawString("ARLEQUINO", 0.f, 0.f);
     ofPopStyle();
     cam.end();
-    blur->end();
-    
-    blur->draw(0.f, 0.f);
 }
 
 //--------------------------------------------------------------
@@ -49,7 +48,9 @@ void ofApp::keyPressed(int key){
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
     if (key == '1'){
-    } else if (key == '2') {
+    }else if (key == '2'){
+    }else if (key == 't'){
+        agents.transitionAgents(textRovingAgentSource, 2);
     }
 }
 

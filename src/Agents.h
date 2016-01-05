@@ -37,38 +37,54 @@ public:
                 agents[i]->update(md);
             }
         } else {
+            // Calculate lerp value for LerpingAgent - as normalised time from start (zerp) to end (one)
+            // of the transition time.
+            float normalisedTime = (ofGetElapsedTimef() - startTransitionTime) / (endTransitionTime - startTransitionTime);
+            
             for (int i=0; i<lerpingAgents.size(); i++){
                 MoveData md;
-                md.normalisedValue1 = ofGetElapsedTimef() * (endTransitionTime - startTransitionTime);
+                md.normalisedValue1 = normalisedTime;
                 lerpingAgents[i].update(md);
             }
             
             if (ofGetElapsedTimef() > endTransitionTime){
                 isTransitioning = false;
+
+                for (size_t i = 0; i < agents.size(); i++){
+                    agents[i]->setVisualisation(lerpingAgents[i].getVisualisation());
+                }
             }
         }
     }
     
-    void transitionAgents(AgentSource &agentSource, float durationMilliseconds){
+    void transitionAgents(AgentSource &agentSource, float durationSeconds){
         lerpingAgents.clear();
         
         for (size_t i = 0; i < agents.size(); i++){
             LerpingAgent lerpingAgent;
             lerpingAgent.setStartPosition(agents[i]->getPosition());
             unique_ptr<Agent> newAgent = move(agentSource.getAgent());
+            newAgent->setup();
             lerpingAgent.setEndPosition(newAgent->getPosition());
+            lerpingAgent.setVisualisation(agents[i]->getVisualisation());
             lerpingAgents.push_back(move(lerpingAgent));
             agents[i] = move(newAgent);
         }
         
         startTransitionTime = ofGetElapsedTimef();
-        endTransitionTime = startTransitionTime + durationMilliseconds;
+        endTransitionTime = startTransitionTime + durationSeconds;
         isTransitioning = true;
     }
     
     void draw(){
-        for (int i=0; i<agents.size(); i++){
-            agents[i]->draw();
+        if (!isTransitioning){
+            for (int i=0; i<agents.size(); i++){
+                agents[i]->draw();
+            }
+        }else{
+            for (int i=0; i<lerpingAgents.size(); i++){
+                lerpingAgents[i].draw();
+            }
         }
     }
     

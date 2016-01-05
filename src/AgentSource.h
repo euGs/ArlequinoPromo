@@ -45,6 +45,10 @@ public:
     }
     
     unique_ptr<Agent> getAgent(){
+        if (letterMeshes.size() == 0){
+            ofLogWarning() << "TextRovingAgentSource::letterMeshes.size() == 0. Probably forgot to call TextRovingAgentSource::setup()" << endl;
+        }
+        
         unique_ptr<MeshRovingAgent> agent = make_unique<MeshRovingAgent>();
         agent->setMesh(letterMeshes[ofRandom(letterMeshes.size())]);
         agent->setMinimumDistance(10.f);

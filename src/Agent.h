@@ -203,8 +203,8 @@ protected:
     ofVec3f target;
 };
 
-// Linearly interpolates position from a start position, end position and a lerp
-// value passed in via MoveData.
+// Linearly interpolates position from a start position to an end position.
+// Expects the normalised lerp value to be MoveData::normalisedValue1
 class LerpingAgent : public Agent {
 public:
     void setStartPosition(ofVec3f startPosition){
@@ -216,7 +216,7 @@ public:
     }
     
     virtual void update(MoveData &moveData) override{
-        position = (endPosition - startPosition) * moveData.normalisedValue1;
+        position = startPosition + (endPosition - startPosition) * moveData.normalisedValue1;
     }
     
 protected:
