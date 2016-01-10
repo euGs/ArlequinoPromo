@@ -24,12 +24,20 @@ public:
 
 class SpriteVisualisationSource : public VisualisationSource {
 public:
+    void setImageFilename(string imageFilename){
+        this->imageFilename = imageFilename;
+    }
+    
+    void setGridDimensions(int cols, int rows){
+        this->cols = cols;
+        this->rows = rows;
+    }
+    
     virtual void setup(){
         ofImage source;
         
-        source.load("Cover01.jpg");
+        source.load(imageFilename);
         
-        cols = 20, rows = 15;
         colWidth = source.getWidth() / cols;
         rowHeight = source.getHeight() / rows;
         planeResolution = 4;
@@ -41,6 +49,8 @@ public:
                 createSprite(source, col, row);
             }
         }
+        
+        index = 0;
     }
     
     void createSprite(ofImage & source, int col, int row){
@@ -90,6 +100,7 @@ public:
     
 protected:
     int index;
+    string imageFilename;
     int cols, rows, colWidth, rowHeight;
     int planeResolution;
     
