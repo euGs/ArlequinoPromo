@@ -34,6 +34,13 @@ public:
     }
     
     virtual void setup(){
+        if (imageFilename.empty()){
+            ofLogWarning() << "SpriteVisualisationSource::setup()"
+            << "Can't set up because imageFilename hasn't been set by client code"
+            << endl;
+            return;
+        }
+        
         ofImage source;
         
         source.load(imageFilename);
@@ -61,6 +68,14 @@ public:
         return index < visualisations.size();
     }
     
+    virtual float getColWidth() const{
+        return colWidth;
+    }
+    
+    virtual float getRowHeight() const{
+        return rowHeight;
+    }
+        
 protected:
     int index;
     string imageFilename;
@@ -109,6 +124,7 @@ protected:
 };
 
 class TornPaperVisualisationSource : public SpriteVisualisationSource {
+protected:
     virtual void addVisualisation(ofPlanePrimitive & plane, ofImage & texture) override{
         unique_ptr<TornPaperVisualisation> visualisation = make_unique<TornPaperVisualisation>();
         visualisation->setup(plane, texture);
@@ -118,6 +134,7 @@ class TornPaperVisualisationSource : public SpriteVisualisationSource {
 };
 
 class TornPaperWithParticlesVisualisationSource : public TornPaperVisualisationSource {
+protected:
     virtual void addVisualisation(ofPlanePrimitive & plane, ofImage & texture) override{
         unique_ptr<TornPaperWithParticlesVisualisation> visualisation = make_unique<TornPaperWithParticlesVisualisation>();
         visualisation->setup(plane, texture);

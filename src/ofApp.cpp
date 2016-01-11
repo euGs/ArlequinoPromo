@@ -55,7 +55,10 @@ ofTrueTypeFont font;
  straight. This is what we need:
  ofApp::keyReleased
  ...agents.transitionsAgents(Static...
- agents.completeVisualisations/restoreVisualisations
+    agents.completeVisualisations/restoreVisualisations
+ 
+ 2.____
+ Add easing to transitions
  
  Nicer
  
@@ -68,10 +71,10 @@ ofTrueTypeFont font;
 //--------------------------------------------------------------
 void ofApp::setup(){
     TornPaperVisualisationSource visualisationSource;
-    sphereRovingAgentSource.setup();
     visualisationSource.setImageFilename("Cover01.jpg");
     visualisationSource.setGridDimensions(20, 15);
     visualisationSource.setup();
+    sphereRovingAgentSource.setup();
     int maxAgents = 1000;
 
     agents.setup(sphereRovingAgentSource, visualisationSource, maxAgents);
