@@ -224,3 +224,22 @@ protected:
     ofVec3f endPosition;
     float startTime, endTime;
 };
+
+class StaticAgent : public Agent {
+    void setPosition(ofVec3f position){
+        this->position = position;
+    }
+    
+    void setOrientationEuler(ofVec3f orientationEuler){
+        this->orientationEuler = orientationEuler;
+    }
+    
+    virtual void setup() override{
+    }
+    
+    virtual void update(MoveData &moveData) override{
+    }
+    
+    virtual void draw() override{
+    }
+};

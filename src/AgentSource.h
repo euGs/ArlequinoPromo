@@ -8,8 +8,6 @@ public:
     virtual unique_ptr<Agent> getAgent() = 0;
 };
 
-// class PlaneRovingAgentSource
-
 class SphereRovingAgentSource : public AgentSource {
 public:
     void setup(){
