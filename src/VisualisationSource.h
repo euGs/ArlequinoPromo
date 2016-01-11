@@ -53,6 +53,23 @@ public:
         index = 0;
     }
     
+    virtual unique_ptr<Visualisation> getVisualisation() override{
+        return move(visualisations[index++]);
+    }
+    
+    virtual bool hasMoreVisualisations() override{
+        return index < visualisations.size();
+    }
+    
+protected:
+    int index;
+    string imageFilename;
+    int cols, rows;
+    float colWidth, rowHeight;
+    int planeResolution;
+    
+    vector< unique_ptr<SpriteVisualisation> > visualisations;
+        
     void createSprite(ofImage & source, int col, int row){
         ofImage texture;
         setUpTexture(texture, source, col, row);
@@ -89,23 +106,6 @@ public:
         
         visualisations.push_back(move(visualisation));
     }
-    
-    virtual unique_ptr<Visualisation> getVisualisation() override{
-        return move(visualisations[index++]);
-    }
-    
-    virtual bool hasMoreVisualisations() override{
-        return index < visualisations.size();
-    }
-    
-protected:
-    int index;
-    string imageFilename;
-    int cols, rows;
-    float colWidth, rowHeight;
-    int planeResolution;
-    
-    vector< unique_ptr<SpriteVisualisation> > visualisations;
 };
 
 class TornPaperVisualisationSource : public SpriteVisualisationSource {
