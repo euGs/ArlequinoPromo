@@ -51,8 +51,8 @@ public:
         
         visualisations.reserve(cols * rows);
 
-        for (int col=0; col<cols; col++){
-            for (int row=0; row<rows; row++){
+        for (int row=0; row<rows; row++){
+            for (int col=0; col<cols; col++){
                 createSprite(source, col, row);
             }
         }

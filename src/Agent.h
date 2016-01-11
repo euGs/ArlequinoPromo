@@ -10,9 +10,9 @@ struct MoveData {
     float globalScaling = 1.f;
 };
 
-// Agent base class. Owns a visualisation and position, orientation and speed values.
-// Derived classes define calculations for position and orientation based on
-// values input to update function.
+// Agent base class. Responsible for calculating its position and orientation.
+// Derived classes are free to specialise positioning/orientation rules.
+// Owns a visualisation.
 class Agent {
 public:
     virtual void setup(){
@@ -226,6 +226,7 @@ protected:
 };
 
 class StaticAgent : public Agent {
+public:
     void setPosition(ofVec3f position){
         this->position = position;
     }
@@ -238,8 +239,5 @@ class StaticAgent : public Agent {
     }
     
     virtual void update(MoveData &moveData) override{
-    }
-    
-    virtual void draw() override{
     }
 };

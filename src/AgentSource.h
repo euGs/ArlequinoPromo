@@ -5,6 +5,7 @@
 class AgentSource {
 public:
     virtual void setup() = 0;
+    virtual void reset() {};
     virtual unique_ptr<Agent> getAgent() = 0;
 };
 
@@ -63,11 +64,44 @@ protected:
 class GridAgentSource : public AgentSource {
 public:
     void setDimensions(int cols, int rows, float colWidth, float rowHeight){
+        this->cols = cols;
+        this->rows = rows;
+        this->colWidth = colWidth;
+        this->rowHeight = rowHeight;
+        this->colIndex = 0;
+        this->rowIndex = 0;
     }
     
     virtual void setup() override{
     }
     
-    virtual unique_ptr<Agent> getAgent() override{
+    virtual void reset() override{
+        this->colIndex = 0;
+        this->rowIndex = 0;
     }
+    
+    virtual unique_ptr<Agent> getAgent() override{
+        if (rowIndex >= rows){
+            ofLogWarning() << "GridAgentSource::getAgent() Can't return any more Agents. "
+            << "Have done the whole grid. (rowIndex >= rows)" << endl;
+        }
+
+        unique_ptr<StaticAgent> agent = make_unique<StaticAgent>();
+        ofVec3f position(colIndex * colWidth, rowIndex * rowHeight, 0);
+        agent->setPosition(position);
+        
+        colIndex++;
+        
+        if (colIndex >= cols){
+            colIndex = 0;
+            rowIndex++;
+        }
+        
+        return move(agent);
+    }
+    
+protected:
+    int cols, rows;
+    float colWidth, rowHeight;
+    int colIndex, rowIndex;
 };

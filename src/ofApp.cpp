@@ -129,6 +129,7 @@ void ofApp::keyReleased(int key){
     }else if (key == 's'){
         agents.transitionAgents(sphereRovingAgentSource, 1);
     }else if (key == 'p'){
+        gridAgentSource.reset();
         agents.transitionAgents(gridAgentSource, 1);
     }
 }
