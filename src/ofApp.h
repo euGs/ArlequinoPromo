@@ -32,6 +32,7 @@ public:
     Agents agents;
     SphereRovingAgentSource sphereRovingAgentSource;
     TextRovingAgentSource textRovingAgentSource;
+    GridAgentSource gridAgentSource;
     Music music;
     unique_ptr<Blur> blur;
 };

@@ -57,3 +57,17 @@ public:
 protected:
     vector< shared_ptr<ofMesh> > letterMeshes;
 };
+
+// Agents that are positioned in a flat grid of rows and columns. setDimensions must be called
+// before setup.
+class GridAgentSource : public AgentSource {
+public:
+    void setDimensions(int cols, int rows, float colWidth, float rowHeight){
+    }
+    
+    virtual void setup() override{
+    }
+    
+    virtual unique_ptr<Agent> getAgent() override{
+    }
+};

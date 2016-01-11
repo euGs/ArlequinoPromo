@@ -55,10 +55,14 @@ ofTrueTypeFont font;
  straight. This is what we need:
  ofApp::keyReleased
  ...agents.transitionsAgents(Static...
-    agents.completeVisualisations/restoreVisualisations
+ agents.completeVisualisations/restoreVisualisations
  
  2.____
  Add easing to transitions
+ 
+ 3.____
+ Make it explicit that transitions are non-interruptable. Interrupting one now will 
+ result in a null pointer exception.
  
  Nicer
  
@@ -70,17 +74,22 @@ ofTrueTypeFont font;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    int cols = 20;
+    int rows = 15;
+    
     TornPaperVisualisationSource visualisationSource;
     visualisationSource.setImageFilename("Cover01.jpg");
-    visualisationSource.setGridDimensions(20, 15);
+    visualisationSource.setGridDimensions(cols, rows);
     visualisationSource.setup();
     sphereRovingAgentSource.setup();
     int maxAgents = 1000;
 
     agents.setup(sphereRovingAgentSource, visualisationSource, maxAgents);
-//    music.setup("ArTeaser_Edit04.wav");
+    music.setup("ArTeaser_Edit04.wav");
     
     textRovingAgentSource.setup();
+    gridAgentSource.setDimensions(cols, rows, visualisationSource.getColWidth(), visualisationSource.getRowHeight());
+    gridAgentSource.setup();
     
     ofBackground(255);
     
@@ -119,6 +128,8 @@ void ofApp::keyReleased(int key){
         agents.transitionAgents(textRovingAgentSource, 1);
     }else if (key == 's'){
         agents.transitionAgents(sphereRovingAgentSource, 1);
+    }else if (key == 'p'){
+        agents.transitionAgents(gridAgentSource, 1);
     }
 }
 
