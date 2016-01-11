@@ -101,7 +101,8 @@ public:
 protected:
     int index;
     string imageFilename;
-    int cols, rows, colWidth, rowHeight;
+    int cols, rows;
+    float colWidth, rowHeight;
     int planeResolution;
     
     vector< unique_ptr<SpriteVisualisation> > visualisations;
