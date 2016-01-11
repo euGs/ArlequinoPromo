@@ -38,11 +38,11 @@ public:
         visualisation->draw(position, orientationEuler);
     }
     
-    ofVec3f getPosition(){
+    ofVec3f getPosition() const{
         return position;
     }
     
-    ofVec3f getOrientationEuler(){
+    ofVec3f getOrientationEuler() const{
         return orientationEuler;
     }
     
@@ -58,7 +58,7 @@ protected:
 // Roves around a plane.
 class PlaneRovingAgent : public Agent {
 public:
-    void setup(){
+    virtual void setup() override{
         ori = 0.f;
         float margin = 120.f;
         pos.x = ofRandom(-ofGetWidth()/2 + margin, ofGetWidth()/2 - margin);
@@ -67,7 +67,7 @@ public:
         maxSpeed = 10.f;
     }
     
-    void update(MoveData &moveData){
+    virtual void update(MoveData &moveData) override{
         // Adjust orientation to noise value
         ori += (moveData.normalisedValue1 - .5f) * PI / 32;
         speed = ofMap(moveData.normalisedValue2, 0.f, 1.f, minSpeed, maxSpeed);
@@ -85,7 +85,7 @@ public:
         }
     }
     
-    void draw(){
+    virtual void draw() overrides{
         ofPushStyle();
         float arrowLength = 30.f;
         
