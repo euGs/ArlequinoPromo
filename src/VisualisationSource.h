@@ -13,11 +13,11 @@ public:
 
 class SphereVisualisationSource : public VisualisationSource {
 public:
-    unique_ptr<Visualisation> getVisualisation(){
+    virtual unique_ptr<Visualisation> getVisualisation() override{
         return move(make_unique<SphereVisualisation>());
     }
     
-    bool hasMoreVisualisations(){
+    virtual bool hasMoreVisualisations() override{
         return true;
     }
 };
@@ -90,11 +90,11 @@ public:
         visualisations.push_back(move(visualisation));
     }
     
-    virtual unique_ptr<Visualisation> getVisualisation(){
+    virtual unique_ptr<Visualisation> getVisualisation() override{
         return move(visualisations[index++]);
     }
     
-    bool hasMoreVisualisations(){
+    virtual bool hasMoreVisualisations() override{
         return index < visualisations.size();
     }
     
@@ -109,7 +109,7 @@ protected:
 };
 
 class TornPaperVisualisationSource : public SpriteVisualisationSource {
-    virtual void addVisualisation(ofPlanePrimitive & plane, ofImage & texture){
+    virtual void addVisualisation(ofPlanePrimitive & plane, ofImage & texture) override{
         unique_ptr<TornPaperVisualisation> visualisation = make_unique<TornPaperVisualisation>();
         visualisation->setup(plane, texture);
         
@@ -118,7 +118,7 @@ class TornPaperVisualisationSource : public SpriteVisualisationSource {
 };
 
 class TornPaperWithParticlesVisualisationSource : public TornPaperVisualisationSource {
-    virtual void addVisualisation(ofPlanePrimitive & plane, ofImage & texture){
+    virtual void addVisualisation(ofPlanePrimitive & plane, ofImage & texture) override{
         unique_ptr<TornPaperWithParticlesVisualisation> visualisation = make_unique<TornPaperWithParticlesVisualisation>();
         visualisation->setup(plane, texture);
         
