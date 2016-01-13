@@ -164,7 +164,7 @@ class PivotingSphereRovingAgent : public SphereRovingAgent {
 // An agent that roves around the vertices in a mesh.
 class MeshRovingAgent : public Agent {
 public:
-    void setMinimumDistance(const float minimumDistance){
+    void setMinimumDistance(float minimumDistance){
         this->MinimumDistance = minimumDistance;
     }
     

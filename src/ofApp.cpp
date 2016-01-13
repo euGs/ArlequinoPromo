@@ -114,6 +114,7 @@ void ofApp::setText(string text){
     auto boundingBox = font.getStringBoundingBox(text, 0.f, 0.f);
     textDrawPosition.x = -(boundingBox.width)/2.f;
     textDrawPosition.y = -(boundingBox.height)/2.f;
+    textRovingAgentSource.setLetterPaths(font.getStringAsPoints(text, false), textDrawPosition);
 }
 
 //--------------------------------------------------------------

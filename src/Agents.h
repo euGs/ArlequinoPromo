@@ -70,8 +70,6 @@ public:
             if (ofGetElapsedTimef() > endVisualisationTime){
                 isBringingVisualisationsHome = false;
             }
-            
-            ofLog() << normalisedHomeness << endl;
         }
     }
     

@@ -32,13 +32,14 @@ public:
 class TextRovingAgentSource : public AgentSource {
 public:
     void setup(){
-        ofTrueTypeFont font;
-        font.load("Ubuntu-R.ttf", 600, true, false, true);
-        
-        vector<ofTTFCharacter> letterPaths = font.getStringAsPoints("ARLEQUINO", false);
+    }
+    
+    void setLetterPaths(vector<ofTTFCharacter> letterPaths, ofVec2f position){
+        letterMeshes.clear();
         
         for (auto letterPath : letterPaths){
             shared_ptr<ofMesh> mesh = make_shared<ofMesh>(letterPath.getTessellation());
+            setMeshPosition(mesh, position);
             letterMeshes.push_back(mesh);
         }
     }
@@ -57,6 +58,12 @@ public:
     
 protected:
     vector< shared_ptr<ofMesh> > letterMeshes;
+    
+    void setMeshPosition(shared_ptr<ofMesh> mesh, ofVec2f position){
+        for (int i=0; i<mesh->getNumVertices(); i++){
+            mesh->setVertex(i, mesh->getVertex(i) + position);
+        }
+    }
 };
 
 // Agents that are positioned in a flat grid of rows and columns. setDimensions must be called
