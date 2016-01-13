@@ -142,3 +142,13 @@ protected:
         visualisations.push_back(move(visualisation));
     }
 };
+
+class UncrumplingPaperVisualisationSource : public SpriteVisualisationSource {
+protected:
+    virtual void addVisualisation(ofPlanePrimitive & plane, ofImage & texture) override{
+        unique_ptr<UncrumplingPaperVisualisation> visualisation = make_unique<UncrumplingPaperVisualisation>();
+        visualisation->setup(plane, texture);
+        
+        visualisations.push_back(move(visualisation));
+    }
+};

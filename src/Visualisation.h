@@ -5,6 +5,8 @@
 class Visualisation {
 public:
     virtual void draw(ofVec3f position, ofVec3f orientationEuler) = 0;
+    virtual void bringItHome(float durationSeconds) {
+    };
 };
 
 class SphereVisualisation : public Visualisation {
@@ -65,7 +67,7 @@ public:
 
 class TornPaperWithParticlesVisualisation : public TornPaperVisualisation {
 public:
-    virtual void setup(ofPlanePrimitive plane, ofImage texture){
+    virtual void setup(ofPlanePrimitive plane, ofImage texture) override{
         TornPaperVisualisation::setup(plane, texture);
         
         color = texture.getColor(0, 0);
@@ -116,4 +118,43 @@ protected:
     vector<ofSpherePrimitive> particles;
     ofColor color;
     float upperLimit = 100;
+};
+
+// A visualisation that is like crumpled paper in its normal state but
+// can uncrumple back to flat paper on command.
+class UncrumplingPaperVisualisation : public TornPaperVisualisation {
+public:
+    virtual void setup(ofPlanePrimitive plane, ofImage texture) override{
+        // Cache the original flat mesh.
+        ofMesh & mesh = plane.getMesh();
+        flatMesh = mesh;
+        
+        for (size_t i=0; i<mesh.getNumVertices(); i++){
+            flatMesh.setVertex(i, mesh.getVertex(i));
+        }
+        
+        // Let TornPaperVisualisation do the crumpling.
+        TornPaperVisualisation::setup(plane, texture);
+        
+        // Cache the crumpled mesh.
+        mesh = this->plane.getMesh();
+        crumpledMesh = mesh;
+
+        for (size_t i=0; i<mesh.getNumVertices(); i++){
+            crumpledMesh.setVertex(i, mesh.getVertex(i));
+        }
+    }
+    
+    virtual void bringItHome(float normalisedHomeness) override{
+        ofMesh & mesh = plane.getMesh();
+        
+        for (int i=0; i<mesh.getNumVertices(); i++){
+            ofVec3f vertex = flatMesh.getVertex(i) - crumpledMesh.getVertex(i);
+
+            mesh.setVertex(i, crumpledMesh.getVertex(i) + vertex*normalisedHomeness);
+        }
+    }
+    
+protected:
+    ofMesh flatMesh, crumpledMesh;
 };

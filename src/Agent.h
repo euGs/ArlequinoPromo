@@ -38,6 +38,10 @@ public:
         visualisation->draw(position, orientationEuler);
     }
     
+    virtual void bringVisualisationHome(float normalisedHomeness){
+        visualisation->bringItHome(normalisedHomeness);
+    }
+    
     ofVec3f getPosition() const{
         return position;
     }

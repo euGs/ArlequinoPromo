@@ -30,9 +30,10 @@ public:
     
     ofEasyCam cam;
     Agents agents;
+    UncrumplingPaperVisualisationSource visualisationSource;
     SphereRovingAgentSource sphereRovingAgentSource;
     TextRovingAgentSource textRovingAgentSource;
     GridAgentSource gridAgentSource;
     Music music;
-    unique_ptr<Blur> blur;
+    Blur blur;
 };

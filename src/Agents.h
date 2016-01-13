@@ -57,6 +57,22 @@ public:
                 }
             }
         }
+        
+        if (isBringingVisualisationsHome){
+            // 0 means just starting, 1 means all the way home.
+            float normalisedHomeness = (ofGetElapsedTimef() - startVisualisationTime)
+            / (endVisualisationTime - startVisualisationTime);
+            
+            for (auto i=agents.begin(); i!=agents.end(); i++){
+                (*i)->bringVisualisationHome(normalisedHomeness);
+            }
+            
+            if (ofGetElapsedTimef() > endVisualisationTime){
+                isBringingVisualisationsHome = false;
+            }
+            
+            ofLog() << normalisedHomeness << endl;
+        }
     }
     
     void transitionAgents(AgentSource &agentSource, float durationSeconds){
@@ -77,6 +93,12 @@ public:
         isTransitioning = true;
     }
     
+    void bringVisualisationsHome(float durationSeconds){
+        startVisualisationTime = ofGetElapsedTimef();
+        endVisualisationTime = startVisualisationTime + durationSeconds;
+        isBringingVisualisationsHome = true;
+    }
+    
     void draw(){
         if (!isTransitioning){
             for (int i=0; i<agents.size(); i++){
@@ -93,5 +115,7 @@ protected:
     vector< unique_ptr<Agent> > agents;
     vector< LerpingAgent > lerpingAgents;
     bool isTransitioning;
+    bool isBringingVisualisationsHome;
     float startTransitionTime, endTransitionTime;
+    float startVisualisationTime, endVisualisationTime;
 };
