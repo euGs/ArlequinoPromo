@@ -15,6 +15,8 @@ public:
     void setup();
     void update();
     void draw();
+    void setText(string text);
+    void drawText();
     
     void keyPressed(int key);
     void keyReleased(int key);
@@ -36,4 +38,8 @@ public:
     GridAgentSource gridAgentSource;
     Music music;
     Blur blur;
+    
+    bool isDrawingText;
+    string text;
+    ofVec2f textDrawPosition;
 };
