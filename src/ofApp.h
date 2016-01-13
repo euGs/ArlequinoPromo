@@ -8,6 +8,7 @@
 #include "Visualisation.h"
 #include "Music.h"
 #include "Blur.h"
+#include "Animator.h"
 
 class ofApp : public ofBaseApp{
     
@@ -38,8 +39,9 @@ public:
     GridAgentSource gridAgentSource;
     Music music;
     Blur blur;
+    Animator textAnimator;
     
-    bool isDrawingText;
+    ofTrueTypeFont font;
     string text;
     ofVec2f textDrawPosition;
 };

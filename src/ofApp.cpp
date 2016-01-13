@@ -1,11 +1,9 @@
 #include "ofApp.h"
-ofTrueTypeFont font;
 
 /*
  Need
  1.____
- Get positions of text and poster right
- - Pull hardcoded text out of MeshRovingAgentSource and set it as text changes
+ Fade in text and blur it - at this point an animation class is needed
  
  2.____
  Get camera movements looking good, either manual or scripted
@@ -60,31 +58,35 @@ ofTrueTypeFont font;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    int cols = 20;
-    int rows = 15;
+    const int Cols = 20;
+    const int Rows = 15;
+    const int MaxAgents = 1000;
+    const float DesiredCamDistance = 1500;
+    const float DefaultCamDistance = 650;
+    const int FontSize = 250;
     
     visualisationSource.setImageFilename("Cover01.jpg");
-    visualisationSource.setGridDimensions(cols, rows);
+    visualisationSource.setGridDimensions(Cols, Rows);
     visualisationSource.setup();
     sphereRovingAgentSource.setup();
-    int maxAgents = 1000;
 
-    agents.setup(sphereRovingAgentSource, visualisationSource, maxAgents);
+    agents.setup(sphereRovingAgentSource, visualisationSource, MaxAgents);
     music.setup("ArTeaser_Edit04.wav");
     
     textRovingAgentSource.setup();
-    gridAgentSource.setDimensions(cols, rows, visualisationSource.getColWidth(), visualisationSource.getRowHeight());
+    gridAgentSource.setDimensions(Cols, Rows, visualisationSource.getColWidth(), visualisationSource.getRowHeight());
     gridAgentSource.setup();
     
     ofBackground(255);
     
-    blur.setup(ofGetWidth(), ofGetHeight());
+    blur.setup(ofGetWidth()*DesiredCamDistance/DefaultCamDistance, ofGetHeight()*DesiredCamDistance/DefaultCamDistance);
     blur.setBlurStrength(1.f);
 
-    font.load("Ubuntu-R.ttf", 250, true, false, true);
+    font.load("Ubuntu-R.ttf", FontSize, true, false, true);
     setText("ARLEQUINO");
-    isDrawingText = false;
-    cam.setDistance(1500);
+    textAnimator.setup(0.f, 1.f, 1.f);
+    
+    cam.setDistance(DesiredCamDistance);
 }
 
 //--------------------------------------------------------------
@@ -97,7 +99,7 @@ void ofApp::update(){
 void ofApp::draw(){
     cam.begin();
     agents.draw();
-    if (isDrawingText){
+    if (!textAnimator.getIsOut()){
         drawText();
     }
     cam.end();
@@ -120,12 +122,12 @@ void ofApp::setText(string text){
 //--------------------------------------------------------------
 void ofApp::drawText(){
     ofPushStyle();
-    ofSetColor(126, 46, 23, 200);
+    ofSetColor(126, 46, 23, 200*textAnimator.getValue());
 //    blur.begin();
     font.drawString(text, textDrawPosition.x, textDrawPosition.y);
     ofNoFill();
 //    blur.end();
-//    blur.draw(0, 0);
+//    blur.draw(-ofGetWidth()*1500/650/2.f, -ofGetHeight()*1500/650/2.f);
     ofPopStyle();
 }
 
@@ -136,11 +138,13 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-    isDrawingText = false;
+    if (!textAnimator.getIsOut()){
+        textAnimator.animate(Animator::Direction::Out);
+    }
     
     if (key == 't'){
         agents.transitionAgents(textRovingAgentSource, 1.f);
-        isDrawingText = true;
+        textAnimator.animate(Animator::Direction::In);
     }else if (key == 's'){
         agents.transitionAgents(sphereRovingAgentSource, 1.f);
     }else if (key == 'p'){
