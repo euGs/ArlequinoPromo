@@ -39,6 +39,9 @@ public:
         
         for (auto letterPath : letterPaths){
             shared_ptr<ofMesh> mesh = make_shared<ofMesh>(letterPath.getTessellation());
+            if (mesh->getNumVertices() == 0){
+                continue;
+            }
             setMeshPosition(mesh, position);
             letterMeshes.push_back(mesh);
         }

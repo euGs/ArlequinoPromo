@@ -2,59 +2,52 @@
 
 /*
  Need
- 1.____
- Fade in text and do prerendered blur on it
+ -----
+ Correct dimensions for HD video
  
- 2.____
+ Cycle through the final text
+ 
+ Text + sphere agents
+ 
+ Fade single-texture poster over "constructed" poster
+ 
  Get camera movements looking good, either manual or scripted
  
- 3.____
  Glitch, incl. just changing seeding on movements
  
- 4.____
- Check speed of paper tears
+ Check speed of paper tears (also on text)
  
- 5.____
  Colorisation options
  
- n-2.___
  Try export to 3D
  
- n-2.___
  Try import to Blender and render there
  
- n.____
  Get particles back in
  
- 
  Extras
+ -----
  
- 1.____
  Wind effects: Have the paper respond to wind. The strength and direction of the wind
  is driven by noise. Each tear would then need to respond to both wind and music, 
  which probably means a force-based system (which is difficult, because the response
  to music isn't so).
  
- 2.____
- Flapping paper tears, like birds. First try didn't work. Killed frame rate. But I 
+ Flapping paper tears, like birds. First try didn't work. Killed frame rate. But I
  had timing values/calculations in each of the 100 tears. With only one calculation
  leading to a normalised value (in Agents class), it might ease the load a bit. Flapping
  could also be binary-state/basic animation, i.e. only have 2 frames.
  
- 3.____
  Add easing to transitions
  
  Nicer
- 
- 1.____
+ ----
  
  Use time literals for animations: 1s or 1.s whatever C++14 will allow
  
- 2.____
  Make it explicit that transitions are non-interruptable. Interrupting one now will
  result in a null pointer exception.
  
- 3.____
  Have state on Animator instead of bool - reads better
  
  */
@@ -86,8 +79,9 @@ void ofApp::setup(){
     blur.setBlurStrength(1.f);
 
     font.load("Ubuntu-R.ttf", FontSize, true, false, true);
-    setText("ARLEQUINO");
-    textAnimator.setup(0.f, 1.f, 1.f);
+    textAnimator.setup(0.f, 200.f, 1.f);
+    texts = { "ARLEQUINO", "DEBUT EP\nOUT NOW", "WWW.ARLEQUINO.BAND" };
+    textIt = texts.cend();
     
     cam.setDistance(DesiredCamDistance);
 }
@@ -114,20 +108,29 @@ void ofApp::draw(){
 }
 
 //--------------------------------------------------------------
-void ofApp::setText(string text){
-    this->text = text;
-    auto boundingBox = font.getStringBoundingBox(text, 0.f, 0.f);
+void ofApp::cycleText(){
+    if (textIt == texts.cend()){
+        textIt = texts.cbegin();
+    } else {
+        textIt++;
+    }
+
+    auto boundingBox = font.getStringBoundingBox(*textIt, 0.f, 0.f);
     textDrawPosition.x = -(boundingBox.width)/2.f;
     textDrawPosition.y = -(boundingBox.height)/2.f;
-    textRovingAgentSource.setLetterPaths(font.getStringAsPoints(text, false), textDrawPosition);
+
+    auto numExtraLines = std::count(textIt->cbegin(), textIt->cend(), '\n');
+    textDrawPosition.y += (boundingBox.height * numExtraLines / 2.f);
+
+    textRovingAgentSource.setLetterPaths(font.getStringAsPoints(*textIt, false), textDrawPosition);
 }
 
 //--------------------------------------------------------------
 void ofApp::drawText(){
     ofPushStyle();
-    ofSetColor(126, 46, 23, 200*textAnimator.getValue());
+    ofSetColor(126, 46, 23, textAnimator.getValue());
 //    blur.begin();
-    font.drawString(text, textDrawPosition.x, textDrawPosition.y);
+    font.drawString(*textIt, textDrawPosition.x, textDrawPosition.y);
     ofNoFill();
 //    blur.end();
 //    blur.draw(-ofGetWidth()*1500/650/2.f, -ofGetHeight()*1500/650/2.f);
@@ -146,6 +149,7 @@ void ofApp::keyReleased(int key){
     }
     
     if (key == 't'){
+        cycleText();
         agents.transitionAgents(textRovingAgentSource, 1.f);
         textAnimator.animate(Animator::Direction::In);
     }else if (key == 's'){

@@ -16,7 +16,7 @@ public:
     void setup();
     void update();
     void draw();
-    void setText(string text);
+    void cycleText();
     void drawText();
     
     void keyPressed(int key);
@@ -42,6 +42,7 @@ public:
     Animator textAnimator;
     
     ofTrueTypeFont font;
-    string text;
+    vector<string> texts;
+    vector<string>::const_iterator textIt;
     ofVec2f textDrawPosition;
 };
