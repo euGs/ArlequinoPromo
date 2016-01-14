@@ -102,7 +102,7 @@ protected:
         for (int i=0; i<colWidth; i++){
             for (int j=0; j<rowHeight; j++){
                 ofColor c = sourcePixels.getColor(colWidth*col + i, rowHeight*row + j);
-                texturePixels.setColor(i, j, c);
+                texturePixels.setColor(i, rowHeight-j, c);
             }
         }
         
