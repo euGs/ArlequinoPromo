@@ -3,7 +3,7 @@
 /*
  Need
  1.____
- Fade in text and blur it - at this point an animation class is needed
+ Fade in text and do prerendered blur on it
  
  2.____
  Get camera movements looking good, either manual or scripted
@@ -54,12 +54,15 @@
  Make it explicit that transitions are non-interruptable. Interrupting one now will
  result in a null pointer exception.
  
+ 3.____
+ Have state on Animator instead of bool - reads better
+ 
  */
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    const int Cols = 20;
-    const int Rows = 15;
+    const int Cols = 40;
+    const int Rows = 30;
     const int MaxAgents = 1000;
     const float DesiredCamDistance = 1500;
     const float DefaultCamDistance = 650;

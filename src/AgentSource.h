@@ -11,27 +11,27 @@ public:
 
 class SphereRovingAgentSource : public AgentSource {
 public:
-    void setup(){
+    void setup() override{
     }
     
-    unique_ptr<Agent> getAgent(){
+    unique_ptr<Agent> getAgent() override{
         return move(make_unique<SphereRovingAgent>());
     }
 };
 
 class PivotingSphereRovingAgentSource : public AgentSource {
 public:
-    void setup(){
+    void setup() override{
     }
     
-    unique_ptr<Agent> getAgent(){
+    unique_ptr<Agent> getAgent() override{
         return move(make_unique<PivotingSphereRovingAgent>());
     }
 };
 
 class TextRovingAgentSource : public AgentSource {
 public:
-    void setup(){
+    void setup() override{
     }
     
     void setLetterPaths(vector<ofTTFCharacter> letterPaths, ofVec2f position){
@@ -44,7 +44,7 @@ public:
         }
     }
     
-    unique_ptr<Agent> getAgent(){
+    virtual unique_ptr<Agent> getAgent() override{
         if (letterMeshes.size() == 0){
             ofLogWarning() << "TextRovingAgentSource::letterMeshes.size() == 0. Probably forgot to call TextRovingAgentSource::setup()" << endl;
         }
@@ -63,6 +63,34 @@ protected:
         for (int i=0; i<mesh->getNumVertices(); i++){
             mesh->setVertex(i, mesh->getVertex(i) + position);
         }
+    }
+};
+
+// Agents that just sit around text without moving.
+class TextSittingAgentSource : public TextRovingAgentSource {
+public:
+    virtual void setup() override{
+    }
+    
+    virtual unique_ptr<Agent> getAgent() override{
+        if (letterMeshes.size() == 0){
+            ofLogWarning() << "TextRovingAgentSource::letterMeshes.size() == 0. Probably forgot to call TextRovingAgentSource::setup()" << endl;
+        }
+        
+        unique_ptr<StaticAgent> agent = make_unique<StaticAgent>();
+        ofVec3f vertex = getRandomVertexFromRandomLetter();
+        agent->setPosition(vertex);
+        
+        return move(agent);
+    }
+    
+protected:
+    ofVec3f getRandomVertexFromRandomLetter(){
+        shared_ptr<const ofMesh> mesh = letterMeshes[ofRandom(letterMeshes.size())];
+        
+        auto numVertices = mesh->getNumVertices();
+        auto randomIndex = ofRandom(numVertices);
+        return mesh->getVertex(randomIndex);
     }
 };
 
@@ -94,7 +122,7 @@ public:
         }
 
         unique_ptr<StaticAgent> agent = make_unique<StaticAgent>();
-        ofVec3f position(colIndex * colWidth, rowIndex * rowHeight, 0);
+        ofVec3f position(colIndex * colWidth - (cols * colWidth / 2.f), rowIndex * rowHeight - (rows * rowHeight / 2.f), 0);
         agent->setPosition(position);
         
         colIndex++;
