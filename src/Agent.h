@@ -177,9 +177,17 @@ public:
     
     virtual void setup() override{
         Agent::setup();
+
+        ofIndexType positionIndexIndex = ofRandom(mesh->getNumIndices());
+        position = mesh->getVertex(mesh->getIndex(positionIndexIndex));
         
-        position = getRandomVertex();
-        target = getRandomVertex();
+        targetIndexIndex = positionIndexIndex + 1;
+        
+        if (targetIndexIndex == mesh->getNumIndices()){
+            targetIndexIndex = 0;
+        }
+
+        target = mesh->getVertex(mesh->getIndex(targetIndexIndex));
     }
     
     virtual void update(MoveData &moveData) override{
@@ -192,7 +200,7 @@ public:
         float distance = position.distance(target);
         
         if (distance < MinimumDistance){
-            target = getRandomVertex();
+            nextTarget();
         }
         
         position = position + speed * (target - position).getNormalized();
@@ -205,9 +213,23 @@ protected:
         return mesh->getVertex(randomIndex);
     }
     
+    void nextTarget(){
+        auto num = mesh->getNumIndices();
+        
+        targetIndexIndex++;
+
+        if (targetIndexIndex == mesh->getNumIndices()){
+            targetIndexIndex = 0;
+        }
+        
+        target = mesh->getVertex(mesh->getIndex(targetIndexIndex));
+    }
+    
     shared_ptr<const ofMesh> mesh;
     float MinimumDistance;
     ofVec3f target;
+    ofIndexType targetIndexIndex;     // index into the indices vector of the mesh
+                                        // for the current position
 };
 
 // Linearly interpolates position from a start position to an end position.

@@ -21,8 +21,6 @@
  to a new location and the camera has to pan to follow. Finally when they 
  move into position for the poster the camera has to tilt.
  
- Get agents to properly follow letter shapes in that version
- 
  Try white text on blurred circle (particles) with the agents behind for text
  roving, and maybe try alpha-ing out the agents a bit
  
