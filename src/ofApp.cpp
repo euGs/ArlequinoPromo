@@ -23,10 +23,6 @@
  
  Get agents to properly follow letter shapes in that version
  
- Get SphereRovingAgent's to start with a random position on the sphere. It's
- very obvious that they are all at 0, 0 every time it switches from text back
- to sphere roving.
- 
  Try white text on blurred circle (particles) with the agents behind for text
  roving, and maybe try alpha-ing out the agents a bit
  

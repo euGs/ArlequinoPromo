@@ -121,6 +121,9 @@ public:
         angleZ = 0.f;
         angleY = 0.f;
         directionalAngle = ofRandom(TWO_PI);
+        // Calculate random starting angles.
+        angleZ += sin(directionalAngle) * ofRandom(TWO_PI) * 20.f;
+        angleY += cos(directionalAngle) * ofRandom(TWO_PI) * 20.f;
         sphereRadius = 200.f;
     }
     
