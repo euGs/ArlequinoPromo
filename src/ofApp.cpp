@@ -3,13 +3,34 @@
 /*
  Need
  -----
- Correct dimensions for HD video
- 
- Cycle through the final text
+ Different font size for WWW.ARLEQUINO.BAND - maintain a font sizes vector
  
  Text + sphere agents
  
  Fade single-texture poster over "constructed" poster
+ 
+ Agent type for one that gets pushed along as if by wind: can accept a force
+ that pushes it forward and up a bit, while a second force (due to gravity) is
+ pulling it down.
+ 
+ Script/control from ofApp / create a Director class / just do it live for
+ starting with one agent that gets pushed along as if by wind. It flies out
+ of frame and camera pans to follow / get back in frame. Then we see that
+ it's heading to a particular location and many other agents are going too.
+ When they all arrive they start following the music (SphereRovingAgent with
+ sphere radius set to music sound intensity). As the animation goes on and
+ agents switch from sphere roving to text roving and back, they always move
+ to a new location and the camera has to pan to follow. Finally when they 
+ move into position for the poster the camera has to tilt.
+ 
+ Get agents to properly follow letter shapes in that version
+ 
+ Get SphereRovingAgent's to start with a random position on the sphere. It's
+ very obvious that they are all at 0, 0 every time it switches from text back
+ to sphere roving.
+ 
+ Try white text on blurred circle (particles) with the agents behind for text
+ roving, and maybe try alpha-ing out the agents a bit
  
  Get camera movements looking good, either manual or scripted
  
@@ -23,7 +44,11 @@
  
  Try import to Blender and render there
  
- Get particles back in
+ Get particles back in - try outside of camera rendering (always view oriented)
+ 
+ Edit down audio
+ 
+ A second edit starting with Sunstroke
  
  Extras
  -----
@@ -59,7 +84,6 @@ void ofApp::setup(){
     const int MaxAgents = 1000;
     const float DesiredCamDistance = 1500;
     const float DefaultCamDistance = 650;
-    const int FontSize = 250;
     
     visualisationSource.setImageFilename("Cover01.jpg");
     visualisationSource.setGridDimensions(Cols, Rows);
@@ -78,10 +102,10 @@ void ofApp::setup(){
     blur.setup(ofGetWidth()*DesiredCamDistance/DefaultCamDistance, ofGetHeight()*DesiredCamDistance/DefaultCamDistance);
     blur.setBlurStrength(1.f);
 
-    font.load("Ubuntu-R.ttf", FontSize, true, false, true);
-    textAnimator.setup(0.f, 200.f, 1.f);
-    texts = { "ARLEQUINO", "DEBUT EP\nOUT NOW", "WWW.ARLEQUINO.BAND" };
-    textIt = texts.cend();
+    texts.setup();
+    texts.addText("ARLEQUINO", "Ubuntu-R.ttf", 250);
+    texts.addText("DEBUT EP\nOUT NOW", "Ubuntu-R.ttf", 250);
+    texts.addText("WWW.ARLEQUINO.BAND", "Ubuntu-R.ttf", 170);
     
     cam.setDistance(DesiredCamDistance);
 }
@@ -96,44 +120,12 @@ void ofApp::update(){
 void ofApp::draw(){
     cam.begin();
     agents.draw();
-    if (!textAnimator.getIsOut()){
-        drawText();
-    }
+    texts.draw();
     cam.end();
     
     ofPushStyle();
     ofSetColor(0, 0, 0);
     ofDrawBitmapString(ofGetFrameRate(), 20, 20);
-    ofPopStyle();
-}
-
-//--------------------------------------------------------------
-void ofApp::cycleText(){
-    if (textIt == texts.cend()){
-        textIt = texts.cbegin();
-    } else {
-        textIt++;
-    }
-
-    auto boundingBox = font.getStringBoundingBox(*textIt, 0.f, 0.f);
-    textDrawPosition.x = -(boundingBox.width)/2.f;
-    textDrawPosition.y = -(boundingBox.height)/2.f;
-
-    auto numExtraLines = std::count(textIt->cbegin(), textIt->cend(), '\n');
-    textDrawPosition.y += (boundingBox.height * numExtraLines / 2.f);
-
-    textRovingAgentSource.setLetterPaths(font.getStringAsPoints(*textIt, false), textDrawPosition);
-}
-
-//--------------------------------------------------------------
-void ofApp::drawText(){
-    ofPushStyle();
-    ofSetColor(126, 46, 23, textAnimator.getValue());
-//    blur.begin();
-    font.drawString(*textIt, textDrawPosition.x, textDrawPosition.y);
-    ofNoFill();
-//    blur.end();
-//    blur.draw(-ofGetWidth()*1500/650/2.f, -ofGetHeight()*1500/650/2.f);
     ofPopStyle();
 }
 
@@ -144,14 +136,11 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-    if (!textAnimator.getIsOut()){
-        textAnimator.animate(Animator::Direction::Out);
-    }
-    
     if (key == 't'){
-        cycleText();
+        texts.cycleText();
+        textRovingAgentSource.setLetterPaths(texts.getLetterPaths(), texts.getDrawPosition());
         agents.transitionAgents(textRovingAgentSource, 1.f);
-        textAnimator.animate(Animator::Direction::In);
+        texts.animateIn();
     }else if (key == 's'){
         agents.transitionAgents(sphereRovingAgentSource, 1.f);
     }else if (key == 'p'){
@@ -159,6 +148,10 @@ void ofApp::keyReleased(int key){
         agents.transitionAgents(gridAgentSource, 1.f);
     }else if (key == 'v'){
         agents.bringVisualisationsHome(1.f);
+    }
+    
+    if (key != 't'){
+        texts.animateOutIfVisible();
     }
 }
 

@@ -30,7 +30,7 @@ public:
         }
     }
     
-    bool getIsOut(){
+    bool isAnimatedOut(){
         return isOut;
     }
     

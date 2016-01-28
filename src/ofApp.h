@@ -9,6 +9,7 @@
 #include "Music.h"
 #include "Blur.h"
 #include "Animator.h"
+#include "Text.h"
 
 class ofApp : public ofBaseApp{
     
@@ -16,7 +17,6 @@ public:
     void setup();
     void update();
     void draw();
-    void cycleText();
     void drawText();
     
     void keyPressed(int key);
@@ -39,10 +39,5 @@ public:
     GridAgentSource gridAgentSource;
     Music music;
     Blur blur;
-    Animator textAnimator;
-    
-    ofTrueTypeFont font;
-    vector<string> texts;
-    vector<string>::const_iterator textIt;
-    ofVec2f textDrawPosition;
+    Texts texts;
 };

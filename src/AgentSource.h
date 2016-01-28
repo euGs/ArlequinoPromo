@@ -50,6 +50,7 @@ public:
     virtual unique_ptr<Agent> getAgent() override{
         if (letterMeshes.size() == 0){
             ofLogWarning() << "TextRovingAgentSource::letterMeshes.size() == 0. Probably forgot to call TextRovingAgentSource::setup()" << endl;
+            return nullptr;
         }
         
         unique_ptr<MeshRovingAgent> agent = make_unique<MeshRovingAgent>();
