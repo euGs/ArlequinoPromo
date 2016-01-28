@@ -3,11 +3,9 @@
 /*
  Need
  -----
- Different font size for WWW.ARLEQUINO.BAND - maintain a font sizes vector
+ Fade single-texture poster over "constructed" poster
  
  Text + sphere agents
- 
- Fade single-texture poster over "constructed" poster
  
  Agent type for one that gets pushed along as if by wind: can accept a force
  that pushes it forward and up a bit, while a second force (due to gravity) is
@@ -95,6 +93,7 @@ void ofApp::setup(){
     
     textRovingAgentSource.setup();
     gridAgentSource.setDimensions(Cols, Rows, visualisationSource.getColWidth(), visualisationSource.getRowHeight());
+    gridAgentSource.setPosition({10, -60, 1100});
     gridAgentSource.setup();
     
     ofBackground(255);

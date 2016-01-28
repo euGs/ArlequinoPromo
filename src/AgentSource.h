@@ -111,6 +111,10 @@ public:
         this->rowIndex = 0;
     }
     
+    void setPosition(ofVec3f position){
+        this->position = position;
+    }
+    
     virtual void setup() override{
     }
     
@@ -127,7 +131,7 @@ public:
 
         unique_ptr<StaticAgent> agent = make_unique<StaticAgent>();
         ofVec3f position(colIndex * colWidth - (cols * colWidth / 2.f), -rowIndex * rowHeight + (rows * rowHeight / 2.f), 0);
-        agent->setPosition(position);
+        agent->setPosition(position + this->position);
         
         colIndex++;
         
@@ -143,4 +147,5 @@ protected:
     int cols, rows;
     float colWidth, rowHeight;
     int colIndex, rowIndex;
+    ofVec3f position;
 };
