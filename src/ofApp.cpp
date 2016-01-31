@@ -1,11 +1,41 @@
 #include "ofApp.h"
 
 /*
- Need
- -----
+ MVP
+ ---
  Fade single-texture poster over "constructed" poster
  
+ Leave www visible at end
+ 
+ Finishing text: options
+ -----------------------
  Text + sphere agents
+ 
+ Text as mask, agents visible within the mask
+ 
+ Try white text on blurred circle (particles) with the agents behind for text
+ roving, and maybe try alpha-ing out the agents a bit
+ 
+ Audio
+ -----
+ Edit down audio
+ 
+ A second edit starting with Sunstroke
+ 
+ More impressive/professional visuals
+ ------------------------------------
+ Get particles back in - try outside of camera rendering (always view oriented)
+
+ Glitch, incl. just changing seeding on movements
+
+ Add easing to transitions
+ 
+ Wind etc
+ --------
+ Wind effects: Have the paper respond to wind. The strength and direction of the wind
+ is driven by noise. Each tear would then need to respond to both wind and music,
+ which probably means a force-based system (which is difficult, because the response
+ to music isn't so).
  
  Agent type for one that gets pushed along as if by wind: can accept a force
  that pushes it forward and up a bit, while a second force (due to gravity) is
@@ -21,45 +51,33 @@
  to a new location and the camera has to pan to follow. Finally when they 
  move into position for the poster the camera has to tilt.
  
- Try white text on blurred circle (particles) with the agents behind for text
- roving, and maybe try alpha-ing out the agents a bit
- 
+ Camera if not doing wind
+ ------------------------
  Get camera movements looking good, either manual or scripted
  
- Glitch, incl. just changing seeding on movements
- 
+ Visual test
+ -----------
  Check speed of paper tears (also on text)
  
+ Mastering
+ ---------
  Colorisation options
  
+ Rendering
+ ---------
  Try export to 3D
  
  Try import to Blender and render there
  
- Get particles back in - try outside of camera rendering (always view oriented)
- 
- Edit down audio
- 
- A second edit starting with Sunstroke
- 
  Extras
  -----
- 
- Wind effects: Have the paper respond to wind. The strength and direction of the wind
- is driven by noise. Each tear would then need to respond to both wind and music, 
- which probably means a force-based system (which is difficult, because the response
- to music isn't so).
- 
  Flapping paper tears, like birds. First try didn't work. Killed frame rate. But I
  had timing values/calculations in each of the 100 tears. With only one calculation
  leading to a normalised value (in Agents class), it might ease the load a bit. Flapping
  could also be binary-state/basic animation, i.e. only have 2 frames.
  
- Add easing to transitions
- 
  Nicer
  ----
- 
  Use time literals for animations: 1s or 1.s whatever C++14 will allow
  
  Make it explicit that transitions are non-interruptable. Interrupting one now will
@@ -90,6 +108,14 @@ void ofApp::setup(){
     gridAgentSource.setPosition({10, -60, 1100});
     gridAgentSource.setup();
     
+    ofImage posterImage;
+    posterImage.load("Cover01.jpg");
+    ofPlanePrimitive posterPlane;
+    posterPlane.set(posterImage.getWidth(), posterImage.getHeight());
+    posterPlane.mapTexCoords(0, 0, posterImage.getWidth(), posterImage.getHeight());
+    poster.setup(posterPlane, posterImage);
+    posterAnimator.setup(0.f, 255.f, 1.f);
+    
     ofBackground(255);
     
     blur.setup(ofGetWidth()*DesiredCamDistance/DefaultCamDistance, ofGetHeight()*DesiredCamDistance/DefaultCamDistance);
@@ -115,6 +141,10 @@ void ofApp::draw(){
     agents.draw();
     texts.draw();
     cam.end();
+    ofPushStyle();
+    ofSetColor(255, 255, 255, posterAnimator.getValue());
+    poster.draw({ofGetWidth()/2.f, 426.f, 250.f}, {0, 0, 0});
+    ofPopStyle();
     
     ofPushStyle();
     ofSetColor(0, 0, 0);
@@ -141,6 +171,7 @@ void ofApp::keyReleased(int key){
         agents.transitionAgents(gridAgentSource, 1.f);
     }else if (key == 'v'){
         agents.bringVisualisationsHome(1.f);
+        posterAnimator.animate(Animator::Direction::In);
     }
     
     if (key != 't'){

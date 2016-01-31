@@ -40,4 +40,6 @@ public:
     Music music;
     Blur blur;
     Texts texts;
+    SpriteVisualisation poster;
+    Animator posterAnimator;
 };
