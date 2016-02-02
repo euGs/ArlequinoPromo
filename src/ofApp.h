@@ -42,4 +42,6 @@ public:
     Texts texts;
     SpriteVisualisation poster;
     Animator posterAnimator;
+    ofTrueTypeFont finalTextFont;
+    ofVec2f finalTextDrawPosition;
 };

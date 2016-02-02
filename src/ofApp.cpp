@@ -1,12 +1,6 @@
 #include "ofApp.h"
 
 /*
- MVP
- ---
- Fade single-texture poster over "constructed" poster
- 
- Leave www visible at end
- 
  Finishing text: options
  -----------------------
  Text + sphere agents
@@ -114,7 +108,7 @@ void ofApp::setup(){
     posterPlane.set(posterImage.getWidth(), posterImage.getHeight());
     posterPlane.mapTexCoords(0, 0, posterImage.getWidth(), posterImage.getHeight());
     poster.setup(posterPlane, posterImage);
-    posterAnimator.setup(0.f, 255.f, 1.f);
+    posterAnimator.setup(0.f, 255.f, .8f);
     
     ofBackground(255);
     
@@ -126,6 +120,10 @@ void ofApp::setup(){
     texts.addText("DEBUT EP\nOUT NOW", "Ubuntu-R.ttf", 250);
     texts.addText("WWW.ARLEQUINO.BAND", "Ubuntu-R.ttf", 170);
     
+    finalTextFont.load("Ubuntu-R.ttf", 100, true, false, true);
+    finalTextDrawPosition.x = ofGetWidth()*0.00677;
+    finalTextDrawPosition.y = ofGetHeight()*.6f;
+
     cam.setDistance(DesiredCamDistance);
 }
 
@@ -138,12 +136,16 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     cam.begin();
+    ofPushStyle();
+    ofSetColor(255, 255, 255);
     agents.draw();
     texts.draw();
+    ofPopStyle();
     cam.end();
     ofPushStyle();
     ofSetColor(255, 255, 255, posterAnimator.getValue());
     poster.draw({ofGetWidth()/2.f, 426.f, 250.f}, {0, 0, 0});
+    finalTextFont.drawString("www.arlequino.band", finalTextDrawPosition.x, finalTextDrawPosition.y);
     ofPopStyle();
     
     ofPushStyle();
@@ -171,6 +173,7 @@ void ofApp::keyReleased(int key){
         agents.transitionAgents(gridAgentSource, 1.f);
     }else if (key == 'v'){
         agents.bringVisualisationsHome(1.f);
+    }else if (key == 'a'){
         posterAnimator.animate(Animator::Direction::In);
     }
     
