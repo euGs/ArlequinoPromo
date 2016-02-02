@@ -80,7 +80,7 @@ public:
     void draw(){
         if (isVisible()){
             ofPushStyle();
-            ofSetColor(126, 46, 23, animator.getValue());
+            ofSetColor(255, animator.getValue());
             (*textIt)->draw();
             ofPopStyle();
         }
@@ -99,7 +99,7 @@ public:
     }
     
 protected:
-    const float MaximumAlpha = 200;
+    const float MaximumAlpha = 255;
     const float DefaultAnimationDuration = 1.f;
     
     vector< unique_ptr<Text> > texts;

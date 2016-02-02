@@ -1,15 +1,6 @@
 #include "ofApp.h"
 
 /*
- Finishing text: options
- -----------------------
- Text + sphere agents
- 
- Text as mask, agents visible within the mask
- 
- Try white text on blurred circle (particles) with the agents behind for text
- roving, and maybe try alpha-ing out the agents a bit
- 
  Audio
  -----
  Edit down audio
