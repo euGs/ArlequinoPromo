@@ -32,7 +32,7 @@ public:
             
             md.normalisedValue1 = ofNoise(i * noiseScale, 1 * noiseScale, noiseVel);
             md.normalisedValue2 = ofNoise(i * noiseScale, 1000 * noiseScale, noiseVel);
-            md.globalScaling = .05f + scalingFactor * 8.f;
+            md.globalScaling = .05f + scalingFactor * 25.f;
             agents[i]->update(md);
         }
 

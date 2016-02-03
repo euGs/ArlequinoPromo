@@ -44,4 +44,5 @@ public:
     Animator posterAnimator;
     ofTrueTypeFont finalTextFont;
     ofVec2f finalTextDrawPosition;
+    ofSpherePrimitive sphere;
 };

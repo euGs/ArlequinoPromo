@@ -1,17 +1,25 @@
 #include "ofApp.h"
 
 /*
- Audio
- -----
- Edit down audio
- 
- A second edit starting with Sunstroke
+ Camera if not doing wind
+ ------------------------
+ As agents switch from sphere roving to text roving and back, they always move
+ to a new location and the camera has to pan to follow. Finally when they
+ move into position for the poster the camera has to tilt.
  
  More impressive/professional visuals
  ------------------------------------
+ Give agents random orientations: it looks like they are all aligned to the same plane.
+ 
+ Get agents following text even better.
+
  Get particles back in - try outside of camera rendering (always view oriented)
 
  Glitch, incl. just changing seeding on movements
+ 
+ Glitch: make it look like the camera has accidentally moved on the horizontal -
+ not an orbit but a short translation on the horizontal - and back again - gives
+ the sense of a camera actually being there
 
  Add easing to transitions
  
@@ -36,10 +44,6 @@
  to a new location and the camera has to pan to follow. Finally when they 
  move into position for the poster the camera has to tilt.
  
- Camera if not doing wind
- ------------------------
- Get camera movements looking good, either manual or scripted
- 
  Visual test
  -----------
  Check speed of paper tears (also on text)
@@ -47,6 +51,10 @@
  Mastering
  ---------
  Colorisation options
+ 
+ Fade in from white to sphere-based at start
+ 
+ Redo image so you can see his legs.
  
  Rendering
  ---------
@@ -74,10 +82,10 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    const int Cols = 40;
-    const int Rows = 30;
+    const int Cols = 32;
+    const int Rows = 18;
     const int MaxAgents = 1000;
-    const float DesiredCamDistance = 1500;
+    const float DesiredCamDistance = 2000;
     const float DefaultCamDistance = 650;
     
     visualisationSource.setImageFilename("Cover01.jpg");
@@ -90,7 +98,7 @@ void ofApp::setup(){
     
     textRovingAgentSource.setup();
     gridAgentSource.setDimensions(Cols, Rows, visualisationSource.getColWidth(), visualisationSource.getRowHeight());
-    gridAgentSource.setPosition({10, -60, 1100});
+    gridAgentSource.setPosition({35, -50, 1100});
     gridAgentSource.setup();
     
     ofImage posterImage;
@@ -99,7 +107,7 @@ void ofApp::setup(){
     posterPlane.set(posterImage.getWidth(), posterImage.getHeight());
     posterPlane.mapTexCoords(0, 0, posterImage.getWidth(), posterImage.getHeight());
     poster.setup(posterPlane, posterImage);
-    posterAnimator.setup(0.f, 255.f, .8f);
+    posterAnimator.setup(0.f, 155.f, .8f);
     
     ofBackground(255);
     
@@ -107,15 +115,17 @@ void ofApp::setup(){
     blur.setBlurStrength(1.f);
 
     texts.setup();
-    texts.addText("ARLEQUINO", "Ubuntu-R.ttf", 250);
-    texts.addText("DEBUT EP\nOUT NOW", "Ubuntu-R.ttf", 250);
-    texts.addText("WWW.ARLEQUINO.BAND", "Ubuntu-R.ttf", 170);
+    texts.addText("ARLEQUINO", "Ubuntu-R.ttf", 380);
+    texts.addText("DEBUT EP\nOUT NOW", "Ubuntu-R.ttf", 450);
+    texts.addText("WWW.ARLEQUINO.BAND", "Ubuntu-R.ttf", 200);
     
     finalTextFont.load("Ubuntu-R.ttf", 100, true, false, true);
     finalTextDrawPosition.x = ofGetWidth()*0.00677;
     finalTextDrawPosition.y = ofGetHeight()*.6f;
 
     cam.setDistance(DesiredCamDistance);
+    sphere.setRadius(50);
+    sphere.setPosition(35, -50, 1100);
 }
 
 //--------------------------------------------------------------
@@ -132,15 +142,22 @@ void ofApp::draw(){
     agents.draw();
     texts.draw();
     ofPopStyle();
+    ofPushStyle();
+    ofSetColor(0, 255, 0);
+    sphere.draw();
+    ofPopStyle();
     cam.end();
     ofPushStyle();
     ofSetColor(255, 255, 255, posterAnimator.getValue());
-    poster.draw({ofGetWidth()/2.f, 426.f, 250.f}, {0, 0, 0});
+    
+    poster.draw({ofGetWidth()/2.f, 387.f, -303.f}, {0, 0, 0});
     finalTextFont.drawString("www.arlequino.band", finalTextDrawPosition.x, finalTextDrawPosition.y);
     ofPopStyle();
     
     ofPushStyle();
     ofSetColor(0, 0, 0);
+    ofDrawBitmapString(ofGetMouseX(), 20, 40);
+    ofDrawBitmapString(ofGetMouseY(), 50, 40);
     ofDrawBitmapString(ofGetFrameRate(), 20, 20);
     ofPopStyle();
 }
