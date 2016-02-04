@@ -130,7 +130,7 @@ public:
         }
 
         unique_ptr<StaticAgent> agent = make_unique<StaticAgent>();
-        ofVec3f position(colIndex * colWidth - (cols * colWidth / 2.f), -rowIndex * rowHeight + (rows * rowHeight / 2.f), 0);
+        ofVec3f position(colIndex * colWidth - ((cols-1) * colWidth / 2.f), -rowIndex * rowHeight + ((rows-1) * rowHeight / 2.f), 0);
         agent->setPosition(position + this->position);
         
         colIndex++;

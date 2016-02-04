@@ -1,6 +1,9 @@
 #include "ofApp.h"
 
 /*
+ *** Now (Poster and final grid are not properly aligned. Calculate their positions 
+ accurately - know where both of their origins are - and position them for the moving
+ camera):
  Camera if not doing wind
  ------------------------
  As agents switch from sphere roving to text roving and back, they always move
@@ -124,8 +127,6 @@ void ofApp::setup(){
     finalTextDrawPosition.y = ofGetHeight()*.6f;
 
     cam.setDistance(DesiredCamDistance);
-    sphere.setRadius(50);
-    sphere.setPosition(35, -50, 1100);
 }
 
 //--------------------------------------------------------------
@@ -141,17 +142,10 @@ void ofApp::draw(){
     ofSetColor(255, 255, 255);
     agents.draw();
     texts.draw();
-    ofPopStyle();
-    ofPushStyle();
-    ofSetColor(0, 255, 0);
-    sphere.draw();
+    poster.draw({35, -50, 1100}, {180, 0, 0});
+    finalTextFont.drawString("www.arlequino.band", finalTextDrawPosition.x, finalTextDrawPosition.y);
     ofPopStyle();
     cam.end();
-    ofPushStyle();
-    ofSetColor(255, 255, 255, posterAnimator.getValue());
-    
-    poster.draw({ofGetWidth()/2.f, 387.f, -303.f}, {0, 0, 0});
-    finalTextFont.drawString("www.arlequino.band", finalTextDrawPosition.x, finalTextDrawPosition.y);
     ofPopStyle();
     
     ofPushStyle();
