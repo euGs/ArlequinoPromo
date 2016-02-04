@@ -106,7 +106,7 @@ void ofApp::setup(){
     gridAgentSource.setPosition(PosterPosition);
     gridAgentSource.setup();
     
-    poster.setup("Cover01.jpg", PosterPosition, PosterOrientation, "www.arlequino.com", "Ubuntu-R.ttf", 300, {0, -600, 0});
+    poster.setup("Cover01.jpg", PosterPosition, PosterOrientation);
     
     ofBackground(255);
     

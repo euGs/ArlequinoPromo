@@ -2,16 +2,7 @@
 
 class Poster {
 public:
-    void setup(string imagePath, ofVec3f position, ofVec3f orientationEuler, string text, string fontName, int fontSize, ofVec3f textOffsetPosition){
-        this->text = text;
-        this->font.load(fontName, fontSize, true, false, true);
-
-        auto boundingBox = this->font.getStringBoundingBox(this->text, 0.f, 0.f);
-        this->textPosition.x = -(boundingBox.width)/2.f;
-        this->textPosition.y = -(boundingBox.height)/2.f;
-
-        this->textPosition += position + textOffsetPosition;
-        
+    void setup(string imagePath, ofVec3f position, ofVec3f orientationEuler){
         texture.load("Cover01.jpg");
 
         plane.set(texture.getWidth(), texture.getHeight());
@@ -27,7 +18,6 @@ public:
         texture.getTexture().bind();
         plane.draw();
         texture.getTexture().unbind();
-        font.drawString(text, textPosition.x, textPosition.y);
         ofPopStyle();
     }
     
@@ -40,8 +30,6 @@ protected:
     const float AnimationTime = .8f;
     
     ofTrueTypeFont font;
-    string text;
-    ofVec2f textPosition;
     ofImage texture;
     ofPlanePrimitive plane;
     Animator animator;
