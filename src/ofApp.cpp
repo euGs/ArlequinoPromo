@@ -91,7 +91,7 @@ void ofApp::setup(){
     const float DesiredCamDistance = 2000;
     const float DefaultCamDistance = 650;
     const ofVec3f PosterPosition {35, -50, 1100};
-    const ofVec3f PosterOrientation {180, 0, 0};
+    const ofVec3f PosterOrientation {210, 0, 0};
     
     visualisationSource.setImageFilename("Cover01.jpg");
     visualisationSource.setGridDimensions(Cols, Rows);

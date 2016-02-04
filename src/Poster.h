@@ -3,8 +3,6 @@
 class Poster {
 public:
     void setup(string imagePath, ofVec3f position, ofVec3f orientationEuler, string text, string fontName, int fontSize, ofVec3f textOffsetPosition){
-        this->position = position;
-        this->orientationEuler = orientationEuler;
         this->text = text;
         this->font.load(fontName, fontSize, true, false, true);
 
@@ -12,7 +10,7 @@ public:
         this->textPosition.x = -(boundingBox.width)/2.f;
         this->textPosition.y = -(boundingBox.height)/2.f;
 
-        this->textPosition += this->position + textOffsetPosition;
+        this->textPosition += position + textOffsetPosition;
         
         texture.load("Cover01.jpg");
 
@@ -37,17 +35,10 @@ public:
         animator.animate(Animator::Direction::In);
     }
     
-    ofVec3f getPosition(){
-        return position;
-    }
-    
 protected:
     const float FinalAlpha = 255.f;
     const float AnimationTime = .8f;
     
-    SpriteVisualisation poster;
-    ofVec3f position;
-    ofVec3f orientationEuler;
     ofTrueTypeFont font;
     string text;
     ofVec2f textPosition;
