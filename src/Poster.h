@@ -2,12 +2,17 @@
 
 class Poster {
 public:
-    void setup(string imagePath, ofVec3f position, ofVec3f orientationEuler, string text, string fontName, int fontSize, ofVec3f textLocalPosition){
+    void setup(string imagePath, ofVec3f position, ofVec3f orientationEuler, string text, string fontName, int fontSize, ofVec3f textOffsetPosition){
         this->position = position;
         this->orientationEuler = orientationEuler;
         this->text = text;
         this->font.load(fontName, fontSize, true, false, true);
-        this->textLocalPosition = textLocalPosition;
+
+        auto boundingBox = this->font.getStringBoundingBox(this->text, 0.f, 0.f);
+        this->textPosition.x = -(boundingBox.width)/2.f;
+        this->textPosition.y = -(boundingBox.height)/2.f;
+
+        this->textPosition += this->position + textOffsetPosition;
         
         texture.load("Cover01.jpg");
 
@@ -24,7 +29,7 @@ public:
         texture.getTexture().bind();
         plane.draw();
         texture.getTexture().unbind();
-        font.drawString(text, position.x + textLocalPosition.x, position.y + textLocalPosition.y);
+        font.drawString(text, textPosition.x, textPosition.y);
         ofPopStyle();
     }
     
@@ -45,7 +50,7 @@ protected:
     ofVec3f orientationEuler;
     ofTrueTypeFont font;
     string text;
-    ofVec3f textLocalPosition;
+    ofVec2f textPosition;
     ofImage texture;
     ofPlanePrimitive plane;
     Animator animator;
