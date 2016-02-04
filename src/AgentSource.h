@@ -115,6 +115,10 @@ public:
         this->position = position;
     }
     
+    void setOrientationEuler(ofVec3f orientationEuler){
+        this->orientationEuler = orientationEuler;
+    }
+    
     virtual void setup() override{
     }
     
@@ -130,8 +134,10 @@ public:
         }
 
         unique_ptr<StaticAgent> agent = make_unique<StaticAgent>();
-        ofVec3f position(colIndex * colWidth - ((cols-1) * colWidth / 2.f), -rowIndex * rowHeight + ((rows-1) * rowHeight / 2.f), 0);
-        agent->setPosition(position + this->position);
+        ofVec3f agentRelativePosition(colIndex * colWidth - ((cols-1) * colWidth / 2.f), -rowIndex * rowHeight + ((rows-1) * rowHeight / 2.f), 0.f);
+        agentRelativePosition.rotate(this->orientationEuler.x, this->orientationEuler.y, this->orientationEuler.z);
+        agent->setPosition(this->position + agentRelativePosition);
+        agent->setOrientationEuler(orientationEuler);
         
         colIndex++;
         
@@ -147,5 +153,5 @@ protected:
     int cols, rows;
     float colWidth, rowHeight;
     int colIndex, rowIndex;
-    ofVec3f position;
+    ofVec3f position, orientationEuler;
 };

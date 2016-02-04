@@ -90,8 +90,8 @@ void ofApp::setup(){
     const int MaxAgents = 1000;
     const float DesiredCamDistance = 2000;
     const float DefaultCamDistance = 650;
-    const ofVec3f PosterPosition {35, -50, 1100};
-    const ofVec3f PosterOrientation {210, 0, 0};
+    const ofVec3f PosterPosition {35, 500, 1100};
+    const ofVec3f PosterOrientationEuler {270, 0, 0};
     
     visualisationSource.setImageFilename("Cover01.jpg");
     visualisationSource.setGridDimensions(Cols, Rows);
@@ -104,9 +104,10 @@ void ofApp::setup(){
     textRovingAgentSource.setup();
     gridAgentSource.setDimensions(Cols, Rows, visualisationSource.getColWidth(), visualisationSource.getRowHeight());
     gridAgentSource.setPosition(PosterPosition);
+    gridAgentSource.setOrientationEuler(PosterOrientationEuler + ofVec3f{180, 0, 0});
     gridAgentSource.setup();
     
-    poster.setup("CoverWithUrl.jpg", PosterPosition, PosterOrientation);
+    poster.setup("CoverWithUrl.jpg", PosterPosition, PosterOrientationEuler);
     
     ofBackground(255);
     
