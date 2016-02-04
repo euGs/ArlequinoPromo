@@ -3,7 +3,7 @@
 class Poster {
 public:
     void setup(string imagePath, ofVec3f position, ofVec3f orientationEuler){
-        texture.load("Cover01.jpg");
+        texture.load(imagePath);
 
         plane.set(texture.getWidth(), texture.getHeight());
         plane.mapTexCoords(0, 0, texture.getWidth(), texture.getHeight());

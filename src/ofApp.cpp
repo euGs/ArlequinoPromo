@@ -106,7 +106,7 @@ void ofApp::setup(){
     gridAgentSource.setPosition(PosterPosition);
     gridAgentSource.setup();
     
-    poster.setup("Cover01.jpg", PosterPosition, PosterOrientation);
+    poster.setup("CoverWithUrl.jpg", PosterPosition, PosterOrientation);
     
     ofBackground(255);
     
