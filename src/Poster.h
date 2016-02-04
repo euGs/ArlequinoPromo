@@ -25,6 +25,10 @@ public:
         animator.animate(Animator::Direction::In);
     }
     
+    ofVec3f getPosition(){
+        return plane.getPosition();
+    }
+    
 protected:
     const float FinalAlpha = 255.f;
     const float AnimationTime = .8f;

@@ -1,9 +1,6 @@
 #include "ofApp.h"
 
 /*
- *** Now (Poster and final grid are not properly aligned. Calculate their positions 
- accurately - know where both of their origins are - and position them for the moving
- camera):
  Camera if not doing wind
  ------------------------
  As agents switch from sphere roving to text roving and back, they always move
@@ -119,13 +116,14 @@ void ofApp::setup(){
     texts.addText("DEBUT EP\nOUT NOW", "Ubuntu-R.ttf", 450);
     texts.addText("WWW.ARLEQUINO.BAND", "Ubuntu-R.ttf", 200);
 
-    cam.setDistance(DesiredCamDistance);
+    cam.setPosition(0.f, 0.f, DesiredCamDistance);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     music.update();
     agents.update(music.getLevel());
+    cam.update();
 }
 
 //--------------------------------------------------------------
@@ -167,6 +165,8 @@ void ofApp::keyReleased(int key){
         agents.bringVisualisationsHome(1.f);
     }else if (key == 'a'){
         poster.animateIn();
+    }else if (key == 'u'){
+        cam.startRotateUp();        
     }
     
     if (key != 't'){

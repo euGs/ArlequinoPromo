@@ -11,6 +11,7 @@
 #include "Animator.h"
 #include "Text.h"
 #include "Poster.h"
+#include "Camera.h"
 
 class ofApp : public ofBaseApp{
     
@@ -32,7 +33,7 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-    ofEasyCam cam;
+    Camera cam;
     Agents agents;
     UncrumplingPaperVisualisationSource visualisationSource;
     SphereRovingAgentSource sphereRovingAgentSource;
