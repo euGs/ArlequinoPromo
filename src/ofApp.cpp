@@ -90,6 +90,8 @@ void ofApp::setup(){
     const int MaxAgents = 1000;
     const float DesiredCamDistance = 2000;
     const float DefaultCamDistance = 650;
+    const ofVec3f PosterPosition {35, -50, 1100};
+    const ofVec3f PosterOrientation {180, 0, 0};
     
     visualisationSource.setImageFilename("Cover01.jpg");
     visualisationSource.setGridDimensions(Cols, Rows);
@@ -101,16 +103,10 @@ void ofApp::setup(){
     
     textRovingAgentSource.setup();
     gridAgentSource.setDimensions(Cols, Rows, visualisationSource.getColWidth(), visualisationSource.getRowHeight());
-    gridAgentSource.setPosition({35, -50, 1100});
+    gridAgentSource.setPosition(PosterPosition);
     gridAgentSource.setup();
     
-    ofImage posterImage;
-    posterImage.load("Cover01.jpg");
-    ofPlanePrimitive posterPlane;
-    posterPlane.set(posterImage.getWidth(), posterImage.getHeight());
-    posterPlane.mapTexCoords(0, 0, posterImage.getWidth(), posterImage.getHeight());
-    poster.setup(posterPlane, posterImage);
-    posterAnimator.setup(0.f, 155.f, .8f);
+    poster.setup("Cover01.jpg", PosterPosition, PosterOrientation, "www.arlequino.com", "Ubuntu-R.ttf", 100, {0, 0, 0});
     
     ofBackground(255);
     
@@ -121,10 +117,6 @@ void ofApp::setup(){
     texts.addText("ARLEQUINO", "Ubuntu-R.ttf", 380);
     texts.addText("DEBUT EP\nOUT NOW", "Ubuntu-R.ttf", 450);
     texts.addText("WWW.ARLEQUINO.BAND", "Ubuntu-R.ttf", 200);
-    
-    finalTextFont.load("Ubuntu-R.ttf", 100, true, false, true);
-    finalTextDrawPosition.x = ofGetWidth()*0.00677;
-    finalTextDrawPosition.y = ofGetHeight()*.6f;
 
     cam.setDistance(DesiredCamDistance);
 }
@@ -142,16 +134,13 @@ void ofApp::draw(){
     ofSetColor(255, 255, 255);
     agents.draw();
     texts.draw();
-    poster.draw({35, -50, 1100}, {180, 0, 0});
-    finalTextFont.drawString("www.arlequino.band", finalTextDrawPosition.x, finalTextDrawPosition.y);
+    poster.draw();
     ofPopStyle();
     cam.end();
     ofPopStyle();
     
     ofPushStyle();
     ofSetColor(0, 0, 0);
-    ofDrawBitmapString(ofGetMouseX(), 20, 40);
-    ofDrawBitmapString(ofGetMouseY(), 50, 40);
     ofDrawBitmapString(ofGetFrameRate(), 20, 20);
     ofPopStyle();
 }
@@ -176,7 +165,7 @@ void ofApp::keyReleased(int key){
     }else if (key == 'v'){
         agents.bringVisualisationsHome(1.f);
     }else if (key == 'a'){
-        posterAnimator.animate(Animator::Direction::In);
+        poster.animateIn();
     }
     
     if (key != 't'){

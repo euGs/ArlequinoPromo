@@ -45,6 +45,7 @@
 /* Begin PBXFileReference section */
 		C3009B771C46DD2300DCA807 /* Animator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Animator.h; sourceTree = "<group>"; };
 		C31FF7A41C52875400622380 /* Text.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Text.h; sourceTree = "<group>"; };
+		C36F36F01C637ADF00CCF5A5 /* Poster.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Poster.h; sourceTree = "<group>"; };
 		C3C56DA91BDBA1EC00BB6132 /* Agent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Agent.h; sourceTree = "<group>"; };
 		C3C56DAA1BDBA60100BB6132 /* Music.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Music.h; sourceTree = "<group>"; };
 		C3C56DB11BDD031600BB6132 /* Agents.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Agents.h; sourceTree = "<group>"; };
@@ -157,6 +158,7 @@
 				C3C56DB71BDD0C0900BB6132 /* VisualisationSource.h */,
 				C3009B771C46DD2300DCA807 /* Animator.h */,
 				C31FF7A41C52875400622380 /* Text.h */,
+				C36F36F01C637ADF00CCF5A5 /* Poster.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;

@@ -10,6 +10,7 @@
 #include "Blur.h"
 #include "Animator.h"
 #include "Text.h"
+#include "Poster.h"
 
 class ofApp : public ofBaseApp{
     
@@ -40,8 +41,5 @@ public:
     Music music;
     Blur blur;
     Texts texts;
-    SpriteVisualisation poster;
-    Animator posterAnimator;
-    ofTrueTypeFont finalTextFont;
-    ofVec2f finalTextDrawPosition;
+    Poster poster;
 };
