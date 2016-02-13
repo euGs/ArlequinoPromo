@@ -58,6 +58,8 @@
 		C3E3BF7C1BE4185600F0897A /* Blur.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Blur.cpp; sourceTree = "<group>"; };
 		C3E3BF7D1BE4185600F0897A /* Blur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Blur.h; sourceTree = "<group>"; };
 		C3FDFF7E1C63B05A0044ECB5 /* Camera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
+		C3FDFF8D1C662AD80044ECB5 /* topLighting.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = topLighting.frag; sourceTree = "<group>"; };
+		C3FDFF8E1C662AD80044ECB5 /* topLighting.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = topLighting.vert; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E4B69B5B0A3A1756003C02F2 /* arlequinoPromo01Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = arlequinoPromo01Debug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B69E1D0A3A1BDC003C02F2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
@@ -117,6 +119,8 @@
 			children = (
 				C3C5B58A1BD0E67100A9326C /* gaussianBlur.frag */,
 				C3C5B58B1BD0E67100A9326C /* passThrough.vert */,
+				C3FDFF8D1C662AD80044ECB5 /* topLighting.frag */,
+				C3FDFF8E1C662AD80044ECB5 /* topLighting.vert */,
 			);
 			path = shaders_gl3;
 			sourceTree = "<group>";

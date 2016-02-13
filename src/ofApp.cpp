@@ -1,8 +1,27 @@
 #include "ofApp.h"
 
 /*
+ Have "shadows" on the "floor". I.E. blurred circles approximating positions of
+ sphere-based agents (like unnamed sound sculpture). This will give a greater
+ sense of location.
+ 
+ Lighting effects on the agents themselves. Most likely will have to do this with
+ a shader (funsies). Uniform for the light properties (position, orientation, falloff).
+ Shader has to work out how this affects the agent at hand. Even just per-face lighting
+ would be great. Light is most likely over head to match the shadow.
+ 
+ Add some light flickering as if the light source is a candle or affected by wind or whatever.
+ 
+ Simplify
+ --------
+ Start off with a single color for the agents, then start bringing the final texture in.
+ Do it via a fragment shader.
+
  Camera if not doing wind
  ------------------------
+ Do camera movements in principle like unnamed sound sculpture. Start a bit farther
+ back than the average distance to the origin and move around the origin a bit.
+ 
  As agents switch from sphere roving to text roving and back, they always move
  to a new location and the camera has to pan to follow. Finally when they
  move into position for the poster the camera has to tilt.
@@ -88,10 +107,11 @@ void ofApp::setup(){
     const float DesiredCamDistance = 2000;
     const float DefaultCamDistance = 650;
     const ofVec3f PosterPosition {35, 500, 1100};
-    const ofVec3f PosterOrientationEuler {270, 0, 0};
+    const ofVec3f PosterOrientationEuler {180, 0, 0};
     
     visualisationSource.setImageFilename("Cover01.jpg");
     visualisationSource.setGridDimensions(Cols, Rows);
+//    visualisationSource.setShader("shaders_gl3/topLighting");
     visualisationSource.setup();
     sphereRovingAgentSource.setup();
 
@@ -106,8 +126,6 @@ void ofApp::setup(){
     
     poster.setup("CoverWithUrl.jpg", PosterPosition, PosterOrientationEuler);
     
-    ofBackground(255);
-    
     blur.setup(ofGetWidth()*DesiredCamDistance/DefaultCamDistance, ofGetHeight()*DesiredCamDistance/DefaultCamDistance);
     blur.setBlurStrength(1.f);
 
@@ -117,6 +135,8 @@ void ofApp::setup(){
     texts.addText("WWW.ARLEQUINO.BAND", "Ubuntu-R.ttf", 200);
 
     cam.setPosition(0.f, 0.f, DesiredCamDistance);
+    
+    ofBackground(255.f);
 }
 
 //--------------------------------------------------------------
@@ -129,14 +149,10 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     cam.begin();
-    ofPushStyle();
-    ofSetColor(255, 255, 255);
     agents.draw();
     texts.draw();
     poster.draw();
-    ofPopStyle();
     cam.end();
-    ofPopStyle();
     
     ofPushStyle();
     ofSetColor(0, 0, 0);

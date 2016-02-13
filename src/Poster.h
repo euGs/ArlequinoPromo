@@ -15,6 +15,7 @@ public:
     void draw(){
         ofPushStyle();
         ofSetColor(255, 255, 255, animator.getValue());
+        plane.setPosition({0, static_cast<float>(ofGetMouseY()), static_cast<float>(ofGetMouseX())});
         texture.getTexture().bind();
         plane.draw();
         texture.getTexture().unbind();

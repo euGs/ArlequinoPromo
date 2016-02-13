@@ -29,28 +29,39 @@ protected:
 
 class SpriteVisualisation : public Visualisation {
 public:
-    virtual void setup(ofPlanePrimitive plane, ofImage texture){
+    virtual void setup(ofPlanePrimitive plane, ofImage texture, shared_ptr<ofShader> shader = nullptr){
         this->plane = plane;
         this->texture = texture;
+        this->shader = shader;
     }
 
     virtual void draw(ofVec3f position, ofVec3f orientationEuler){
         plane.setPosition(position);
         plane.setOrientation(orientationEuler);
-        texture.getTexture().bind();
+        
+        if (shader != nullptr && shader->isLoaded()){
+            shader->begin();
+        } else {
+            texture.getTexture().bind();
+        }
         plane.draw();
-        texture.getTexture().unbind();
+        if (shader != nullptr && shader->isLoaded()){
+            shader->end();
+        } else {
+            texture.getTexture().unbind();
+        }
     }
 
 protected:
     ofImage texture;
     ofPlanePrimitive plane;
+    shared_ptr<ofShader> shader;
 };
 
 class TornPaperVisualisation : public SpriteVisualisation {
 public:
-    virtual void setup(ofPlanePrimitive plane, ofImage texture){
-        SpriteVisualisation::setup(plane, texture);
+    virtual void setup(ofPlanePrimitive plane, ofImage texture, shared_ptr<ofShader> shader){
+        SpriteVisualisation::setup(plane, texture, shader);
         
         ofMesh & mesh = this->plane.getMesh();
         float maxDisplacement = plane.getWidth();
@@ -67,8 +78,8 @@ public:
 
 class TornPaperWithParticlesVisualisation : public TornPaperVisualisation {
 public:
-    virtual void setup(ofPlanePrimitive plane, ofImage texture) override{
-        TornPaperVisualisation::setup(plane, texture);
+    virtual void setup(ofPlanePrimitive plane, ofImage texture, shared_ptr<ofShader> shader) override{
+        TornPaperVisualisation::setup(plane, texture, shader);
         
         color = texture.getColor(0, 0);
         
@@ -124,7 +135,7 @@ protected:
 // can uncrumple back to flat paper on command.
 class UncrumplingPaperVisualisation : public TornPaperVisualisation {
 public:
-    virtual void setup(ofPlanePrimitive plane, ofImage texture) override{
+    virtual void setup(ofPlanePrimitive plane, ofImage texture, shared_ptr<ofShader> shader) override{
         // Cache the original flat mesh.
         ofMesh & mesh = plane.getMesh();
         flatMesh = mesh;
@@ -134,7 +145,7 @@ public:
         }
         
         // Let TornPaperVisualisation do the crumpling.
-        TornPaperVisualisation::setup(plane, texture);
+        TornPaperVisualisation::setup(plane, texture, shader);
         
         // Cache the crumpled mesh.
         mesh = this->plane.getMesh();
