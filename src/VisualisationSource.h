@@ -60,11 +60,6 @@ public:
         index = 0;
     }
     
-    virtual void setShader(string filename){
-        shader = make_shared<ofShader>();
-        shader->load(filename);
-    }
-    
     virtual unique_ptr<Visualisation> getVisualisation() override{
         return move(visualisations[index++]);
     }
@@ -87,7 +82,6 @@ protected:
     int cols, rows;
     float colWidth, rowHeight;
     int planeResolution;
-    shared_ptr<ofShader> shader;
     
     vector< unique_ptr<SpriteVisualisation> > visualisations;
         
@@ -123,7 +117,7 @@ protected:
     
     virtual void addVisualisation(ofPlanePrimitive & plane, ofImage & texture){
         unique_ptr<SpriteVisualisation> visualisation = make_unique<SpriteVisualisation>();
-        visualisation->setup(plane, texture, shader);
+        visualisation->setup(plane, texture);
         
         visualisations.push_back(move(visualisation));
     }
@@ -133,7 +127,7 @@ class TornPaperVisualisationSource : public SpriteVisualisationSource {
 protected:
     virtual void addVisualisation(ofPlanePrimitive & plane, ofImage & texture) override{
         unique_ptr<TornPaperVisualisation> visualisation = make_unique<TornPaperVisualisation>();
-        visualisation->setup(plane, texture, shader);
+        visualisation->setup(plane, texture);
         
         visualisations.push_back(move(visualisation));
     }
@@ -143,7 +137,7 @@ class TornPaperWithParticlesVisualisationSource : public TornPaperVisualisationS
 protected:
     virtual void addVisualisation(ofPlanePrimitive & plane, ofImage & texture) override{
         unique_ptr<TornPaperWithParticlesVisualisation> visualisation = make_unique<TornPaperWithParticlesVisualisation>();
-        visualisation->setup(plane, texture, shader);
+        visualisation->setup(plane, texture);
         
         visualisations.push_back(move(visualisation));
     }
@@ -153,7 +147,7 @@ class UncrumplingPaperVisualisationSource : public SpriteVisualisationSource {
 protected:
     virtual void addVisualisation(ofPlanePrimitive & plane, ofImage & texture) override{
         unique_ptr<UncrumplingPaperVisualisation> visualisation = make_unique<UncrumplingPaperVisualisation>();
-        visualisation->setup(plane, texture, shader);
+        visualisation->setup(plane, texture);
         
         visualisations.push_back(move(visualisation));
     }

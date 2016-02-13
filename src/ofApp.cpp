@@ -1,16 +1,19 @@
 #include "ofApp.h"
 
 /*
- Have "shadows" on the "floor". I.E. blurred circles approximating positions of
- sphere-based agents (like unnamed sound sculpture). This will give a greater
- sense of location.
- 
  Lighting effects on the agents themselves. Most likely will have to do this with
  a shader (funsies). Uniform for the light properties (position, orientation, falloff).
  Shader has to work out how this affects the agent at hand. Even just per-face lighting
- would be great. Light is most likely over head to match the shadow.
+ would be great. Light is most likely overhead to match the shadow.
  
  Add some light flickering as if the light source is a candle or affected by wind or whatever.
+ 
+ Try sub-unity alpha values on fragment shader. Looks awesome!
+ 
+ Have "shadows" on the "floor". I.E. blurred circles approximating positions of
+ sphere-based agents (like unnamed sound sculpture). This will give a greater
+ sense of location - simple algorithm choosing n points in the x-z plane with the
+ greatest clustering of agents overhead and place a shadow blob here.
  
  Simplify
  --------
@@ -111,12 +114,12 @@ void ofApp::setup(){
     
     visualisationSource.setImageFilename("Cover01.jpg");
     visualisationSource.setGridDimensions(Cols, Rows);
-//    visualisationSource.setShader("shaders_gl3/topLighting");
     visualisationSource.setup();
     sphereRovingAgentSource.setup();
 
     agents.setup(sphereRovingAgentSource, visualisationSource, MaxAgents);
     music.setup("ArTeaser_Edit04.wav");
+    shader.load("shaders_gl3/topLighting");
     
     textRovingAgentSource.setup();
     gridAgentSource.setDimensions(Cols, Rows, visualisationSource.getColWidth(), visualisationSource.getRowHeight());
@@ -149,7 +152,10 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     cam.begin();
+    shader.begin();
+    shader.setUniform1f("alpha", ofMap(music.getLevel(), 0.f, 0.15f, 0.f, 1.f, true));
     agents.draw();
+    shader.end();
     texts.draw();
     poster.draw();
     cam.end();

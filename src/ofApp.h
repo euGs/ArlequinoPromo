@@ -43,4 +43,5 @@ public:
     Blur blur;
     Texts texts;
     Poster poster;
+    ofShader shader;
 };
