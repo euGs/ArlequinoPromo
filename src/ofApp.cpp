@@ -154,10 +154,13 @@ void ofApp::draw(){
     cam.begin();
     shader.begin();
     shader.setUniform1f("alpha", ofMap(music.getLevel(), 0.f, 0.15f, 0.f, 1.f, true));
-    shader.setUniform1f("topY", static_cast<float>(ofGetMouseY()));
-    shader.setUniform1f("bottomY", -static_cast<float>(ofGetMouseY()));
+    shader.setUniform1f("toplightStartY", 800.f);
+    shader.setUniform1f("toplightIntensity", .35f);
+    shader.setUniform1f("topLightEndY", -800.f);
+    shader.setUniform1f("ambientLight", .8f);
     agents.draw();
     shader.end();
+    
     texts.draw();
     poster.draw();
     cam.end();
@@ -165,7 +168,6 @@ void ofApp::draw(){
     ofPushStyle();
     ofSetColor(0, 0, 0);
     ofDrawBitmapString(ofGetFrameRate(), 20, 20);
-    ofDrawBitmapString(static_cast<float>(ofGetMouseY()), 20, 40);
     ofPopStyle();
 }
 
