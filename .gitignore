@@ -1,2 +1,2 @@
-/bin/*
-!/bin/data/shaders_gl3
+bin/*
+!bin/data/shaders_gl3/
