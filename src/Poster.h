@@ -2,20 +2,25 @@
 
 class Poster {
 public:
-    void setup(string imagePath, ofVec3f position, ofVec3f orientationEuler){
+    void setup(string imagePath){
         texture.load(imagePath);
 
         plane.set(texture.getWidth(), texture.getHeight());
         plane.mapTexCoords(0, 0, texture.getWidth(), texture.getHeight());
-        plane.setPosition(position);
-        plane.setOrientation(orientationEuler);
         animator.setup(0.f, FinalAlpha, AnimationTime);
+    }
+    
+    void setPosition(ofVec3f position){
+        plane.setPosition(position);
+    }
+    
+    void setOrientation(ofVec3f orientationEuler){
+        plane.setOrientation(orientationEuler);
     }
     
     void draw(){
         ofPushStyle();
         ofSetColor(255, 255, 255, animator.getValue());
-        plane.setPosition({0, static_cast<float>(ofGetMouseY()), static_cast<float>(ofGetMouseX())});
         texture.getTexture().bind();
         plane.draw();
         texture.getTexture().unbind();
@@ -28,6 +33,10 @@ public:
     
     ofVec3f getPosition(){
         return plane.getPosition();
+    }
+    
+    float getWidth(){
+        return plane.getWidth();
     }
     
 protected:

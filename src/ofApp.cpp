@@ -1,52 +1,50 @@
 #include "ofApp.h"
 
 /*
- Lighting effects on the agents themselves. Most likely will have to do this with
- a shader (funsies). Uniform for the light properties (position, orientation, falloff).
- Shader has to work out how this affects the agent at hand. Even just per-face lighting
- would be great. Light is most likely overhead to match the shadow.
- 
- Add some light flickering as if the light source is a candle or affected by wind or whatever.
- 
- Try sub-unity alpha values on fragment shader. Looks awesome!
+ Definitely
+ ----------
+ Poster taking up position correctly - orientation is weird, what's going on?
  
  Have "shadows" on the "floor". I.E. blurred circles approximating positions of
  sphere-based agents (like unnamed sound sculpture). This will give a greater
  sense of location - simple algorithm choosing n points in the x-z plane with the
  greatest clustering of agents overhead and place a shadow blob here.
  
- Simplify
- --------
+ Able to go from poster back to sphere (recrumple agents)
+ 
+ Add some light flickering as if the light source is a candle or affected by wind or whatever.
+
  Start off with a single color for the agents, then start bringing the final texture in.
  Do it via a fragment shader.
 
- Camera if not doing wind
- ------------------------
  Do camera movements in principle like unnamed sound sculpture. Start a bit farther
  back than the average distance to the origin and move around the origin a bit.
- 
- As agents switch from sphere roving to text roving and back, they always move
- to a new location and the camera has to pan to follow. Finally when they
- move into position for the poster the camera has to tilt.
- 
- More impressive/professional visuals
- ------------------------------------
- Give agents random orientations: it looks like they are all aligned to the same plane.
- 
- Get agents following text even better.
-
- Get particles back in - try outside of camera rendering (always view oriented)
 
  Glitch, incl. just changing seeding on movements
  
  Glitch: make it look like the camera has accidentally moved on the horizontal -
  not an orbit but a short translation on the horizontal - and back again - gives
  the sense of a camera actually being there
-
+ 
  Add easing to transitions
  
- Wind etc
- --------
+ Background colour changing - probably responding to music. But nice and smooth. Maybe
+ with some random/noise gradations.
+
+ Maybe
+ -----
+ Give agents random orientations: it looks like they are all aligned to the same plane.
+ 
+ Get agents following text even better.
+ 
+ Get particles back in - try outside of camera rendering (always view oriented)
+ 
+ Not any more
+ ------------
+ As agents switch from sphere roving to text roving and back, they always move
+ to a new location and the camera has to pan to follow. Finally when they
+ move into position for the poster the camera has to tilt.
+ 
  Wind effects: Have the paper respond to wind. The strength and direction of the wind
  is driven by noise. Each tear would then need to respond to both wind and music,
  which probably means a force-based system (which is difficult, because the response
@@ -73,8 +71,6 @@
  Mastering
  ---------
  Colorisation options
- 
- Fade in from white to sphere-based at start
  
  Redo image so you can see his legs.
  
@@ -109,8 +105,6 @@ void ofApp::setup(){
     const int MaxAgents = 1000;
     const float DesiredCamDistance = 2000;
     const float DefaultCamDistance = 650;
-    const ofVec3f PosterPosition {35, 500, 1100};
-    const ofVec3f PosterOrientationEuler {180, 0, 0};
     
     visualisationSource.setImageFilename("Cover01.jpg");
     visualisationSource.setGridDimensions(Cols, Rows);
@@ -123,11 +117,8 @@ void ofApp::setup(){
     
     textRovingAgentSource.setup();
     gridAgentSource.setDimensions(Cols, Rows, visualisationSource.getColWidth(), visualisationSource.getRowHeight());
-    gridAgentSource.setPosition(PosterPosition);
-    gridAgentSource.setOrientationEuler(PosterOrientationEuler + ofVec3f{180, 0, 0});
-    gridAgentSource.setup();
     
-    poster.setup("CoverWithUrl.jpg", PosterPosition, PosterOrientationEuler);
+    poster.setup("CoverWithUrl.jpg");
     
     blur.setup(ofGetWidth()*DesiredCamDistance/DefaultCamDistance, ofGetHeight()*DesiredCamDistance/DefaultCamDistance);
     blur.setBlurStrength(1.f);
@@ -186,14 +177,24 @@ void ofApp::keyReleased(int key){
     }else if (key == 's'){
         agents.transitionAgents(sphereRovingAgentSource, 1.f);
     }else if (key == 'p'){
+        float posterDistanceFromCamera = poster.getWidth() / tan(ofDegToRad(cam.getFov()));
+
+        ofVec3f posterPosition = cam.getPosition() + cam.getLookAtDir() * posterDistanceFromCamera;
+        ofVec3f posterOrientationEuler = cam.getOrientationEuler();
+        
+        gridAgentSource.setPosition(posterPosition);
+        gridAgentSource.setOrientationEuler(posterOrientationEuler);
+        poster.setPosition(posterPosition);
+        poster.setOrientation(posterOrientationEuler);
         gridAgentSource.reset();
+
         agents.transitionAgents(gridAgentSource, 1.f);
     }else if (key == 'v'){
         agents.bringVisualisationsHome(1.f);
     }else if (key == 'a'){
         poster.animateIn();
     }else if (key == 'u'){
-        cam.startRotateUp();        
+        cam.startRotateUp();
     }
     
     if (key != 't'){
