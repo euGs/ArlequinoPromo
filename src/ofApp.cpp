@@ -185,7 +185,7 @@ void ofApp::keyReleased(int key){
         gridAgentSource.setPosition(posterPosition);
         gridAgentSource.setOrientationEuler(posterOrientationEuler);
         poster.setPosition(posterPosition);
-        poster.setOrientation(posterOrientationEuler);
+        poster.setOrientation(posterOrientationEuler + ofVec3f(180.f, 0, 0));
         gridAgentSource.reset();
 
         agents.transitionAgents(gridAgentSource, 1.f);
