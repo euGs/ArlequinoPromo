@@ -118,7 +118,7 @@ void ofApp::setup(){
     textRovingAgentSource.setup();
     gridAgentSource.setDimensions(Cols, Rows, visualisationSource.getColWidth(), visualisationSource.getRowHeight());
     
-    poster.setup("CoverWithUrl.jpg");
+    poster.setup("Cover01.jpg");
     
     blur.setup(ofGetWidth()*DesiredCamDistance/DefaultCamDistance, ofGetHeight()*DesiredCamDistance/DefaultCamDistance);
     blur.setBlurStrength(1.f);

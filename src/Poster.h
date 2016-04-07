@@ -39,6 +39,10 @@ public:
         return plane.getWidth();
     }
     
+    float getHeight(){
+        return plane.getHeight();
+    }
+    
 protected:
     const float FinalAlpha = 255.f;
     const float AnimationTime = .8f;
