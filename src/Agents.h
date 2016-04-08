@@ -58,17 +58,17 @@ public:
             }
         }
         
-        if (isBringingVisualisationsHome){
-            // 0 means just starting, 1 means all the way home.
-            float normalisedHomeness = (ofGetElapsedTimef() - startVisualisationTime)
+        if (isAnimatingVisualisation){
+            float animationNormalisedTime = (ofGetElapsedTimef() - startVisualisationTime)
             / (endVisualisationTime - startVisualisationTime);
+            float animationPosition = ofMap(ofGetElapsedTimef(), startVisualisationTime, endVisualisationTime, this->fromAnimationPosition, this->toAnimationPosition);
             
             for (auto i=agents.begin(); i!=agents.end(); i++){
-                (*i)->bringVisualisationHome(normalisedHomeness);
+                (*i)->bringVisualisationHome(animationPosition);
             }
             
             if (ofGetElapsedTimef() > endVisualisationTime){
-                isBringingVisualisationsHome = false;
+                isAnimatingVisualisation = false;
             }
         }
     }
@@ -91,10 +91,12 @@ public:
         isTransitioning = true;
     }
     
-    void bringVisualisationsHome(float durationSeconds){
+    void animateVisualisations(float durationSeconds, float fromAnimationPosition, float toAnimationPosition){
         startVisualisationTime = ofGetElapsedTimef();
         endVisualisationTime = startVisualisationTime + durationSeconds;
-        isBringingVisualisationsHome = true;
+        isAnimatingVisualisation = true;
+        this->fromAnimationPosition = fromAnimationPosition;
+        this->toAnimationPosition = toAnimationPosition;
     }
     
     void draw(){
@@ -113,7 +115,8 @@ protected:
     vector< unique_ptr<Agent> > agents;
     vector< LerpingAgent > lerpingAgents;
     bool isTransitioning;
-    bool isBringingVisualisationsHome;
+    bool isAnimatingVisualisation;
+    float fromAnimationPosition, toAnimationPosition;
     float startTransitionTime, endTransitionTime;
     float startVisualisationTime, endVisualisationTime;
 };

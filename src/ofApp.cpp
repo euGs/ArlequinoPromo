@@ -190,9 +190,13 @@ void ofApp::keyReleased(int key){
 
         agents.transitionAgents(gridAgentSource, 1.f);
     }else if (key == 'v'){
-        agents.bringVisualisationsHome(1.f);
-    }else if (key == 'a'){
-        poster.animateIn();
+        agents.animateVisualisations(1.f, 0.f, 1.f);
+    }else if (key == 'c'){
+        agents.animateVisualisations(1.f, 1.f, 0.f);
+    }else if (key == 'i'){
+        poster.animate(Animator::Direction::In);
+    }else if (key == 'o'){
+        poster.animate(Animator::Direction::Out);
     }else if (key == 'u'){
         cam.startRotateUp();
     }

@@ -27,10 +27,10 @@ public:
         ofPopStyle();
     }
     
-    void animateIn(){
-        animator.animate(Animator::Direction::In);
+    void animate(Animator::Direction direction){
+        animator.animate(direction);
     }
-    
+
     ofVec3f getPosition(){
         return plane.getPosition();
     }
