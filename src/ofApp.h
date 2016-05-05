@@ -56,5 +56,5 @@ protected:
     Camera shadowCam;
     ofFbo shadowFbo;
     ofPlanePrimitive shadowPlane;
-    ofShader shader;
+    ofShader agentsShader, shadowsShader;
 };
