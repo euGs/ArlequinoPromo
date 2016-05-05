@@ -5,6 +5,8 @@
 class Visualisation {
 public:
     virtual void draw(ofVec3f position, ofVec3f orientationEuler) = 0;
+    virtual void drawUntextured(ofVec3f position, ofVec3f orientationEuler) {
+    };
     virtual void bringItHome(float durationSeconds) {
     };
 };
@@ -34,12 +36,18 @@ public:
         this->texture = texture;
     }
 
-    virtual void draw(ofVec3f position, ofVec3f orientationEuler){
+    virtual void draw(ofVec3f position, ofVec3f orientationEuler) override{
         plane.setPosition(position);
         plane.setOrientation(orientationEuler);
         texture.getTexture().bind();
         plane.draw();
         texture.getTexture().unbind();
+    }
+    
+    virtual void drawUntextured(ofVec3f position, ofVec3f orientationEuler) override{
+        plane.setPosition(position);
+        plane.setOrientation(orientationEuler);
+        plane.draw();
     }
 
 protected:
@@ -49,7 +57,7 @@ protected:
 
 class TornPaperVisualisation : public SpriteVisualisation {
 public:
-    virtual void setup(ofPlanePrimitive plane, ofImage texture){
+    virtual void setup(ofPlanePrimitive plane, ofImage texture) override{
         SpriteVisualisation::setup(plane, texture);
         
         ofMesh & mesh = this->plane.getMesh();
@@ -82,7 +90,7 @@ public:
         }
     }
     
-    virtual void draw(ofVec3f position, ofVec3f orientationEuler){
+    virtual void draw(ofVec3f position, ofVec3f orientationEuler) override{
         TornPaperVisualisation::draw(position, orientationEuler);
         
         if (plane.getPosition().y > ofGetHeight()/2){

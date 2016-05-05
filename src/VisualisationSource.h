@@ -143,7 +143,7 @@ protected:
     }
 };
 
-class UncrumplingPaperVisualisationSource : public SpriteVisualisationSource {
+class CrumpledPaperVisualisationSource : public SpriteVisualisationSource {
 protected:
     virtual void addVisualisation(ofPlanePrimitive & plane, ofImage & texture) override{
         unique_ptr<UncrumplingPaperVisualisation> visualisation = make_unique<UncrumplingPaperVisualisation>();

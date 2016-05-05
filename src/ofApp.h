@@ -33,9 +33,18 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
+protected:
+    const int Cols = 32;
+    const int Rows = 18;
+    const int MaxAgents = 1000;
+    const float DesiredCamDistance = 2000;
+    const float DefaultCamDistance = 650;
+    ofVec3f shadowPosition = {0.f, -750.f, 0.f};
+    ofVec3f shadowOrientation = {90.f, 0.f, 0.f};
+    
     Camera cam;
     Agents agents;
-    UncrumplingPaperVisualisationSource visualisationSource;
+    CrumpledPaperVisualisationSource visualisationSource;
     SphereRovingAgentSource sphereRovingAgentSource;
     TextRovingAgentSource textRovingAgentSource;
     GridAgentSource gridAgentSource;
@@ -43,5 +52,8 @@ public:
     Blur blur;
     Texts texts;
     Poster poster;
+    Camera shadowCam;
+    ofFbo shadowFbo;
+    ofPlanePrimitive shadowPlane;
     ofShader shader;
 };

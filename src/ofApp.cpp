@@ -3,15 +3,6 @@
 /*
  Definitely
  ----------
- Poster taking up position correctly - orientation is weird, what's going on?
- 
- Have "shadows" on the "floor". I.E. blurred circles approximating positions of
- sphere-based agents (like unnamed sound sculpture). This will give a greater
- sense of location - simple algorithm choosing n points in the x-z plane with the
- greatest clustering of agents overhead and place a shadow blob here.
- 
- Able to go from poster back to sphere (recrumple agents)
- 
  Add some light flickering as if the light source is a candle or affected by wind or whatever.
 
  Start off with a single color for the agents, then start bringing the final texture in.
@@ -100,12 +91,6 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    const int Cols = 32;
-    const int Rows = 18;
-    const int MaxAgents = 1000;
-    const float DesiredCamDistance = 2000;
-    const float DefaultCamDistance = 650;
-    
     visualisationSource.setImageFilename("Cover01.jpg");
     visualisationSource.setGridDimensions(Cols, Rows);
     visualisationSource.setup();
@@ -129,6 +114,13 @@ void ofApp::setup(){
     texts.addText("WWW.ARLEQUINO.BAND", "Ubuntu-R.ttf", 200);
 
     cam.setPosition(0.f, 0.f, DesiredCamDistance);
+    shadowCam.setPosition(0.f, -DesiredCamDistance, 0.f);
+    shadowCam.setOrientation({90.f, 0.f, 0.f});
+    shadowFbo.allocate(1600, 1600, GL_RGBA);
+    shadowPlane.set(1600, 1600);
+    shadowPlane.setPosition(shadowPosition);
+    shadowPlane.setOrientation(shadowOrientation);
+    shadowPlane.mapTexCoords(0, 0, 1600, 1600);
     
     ofBackground(255.f);
 }
@@ -136,17 +128,31 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     music.update();
-    agents.update(music.getLevel());
+    float visualScaling = music.getLevel() * 25.f;
+    agents.update(visualScaling);
     cam.update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    // Render agents into shadow FBO.
+    shadowFbo.begin();
+    ofClear(255.f, 0.f);
+    shadowCam.begin();
+    shader.begin();
+    shader.setUniform1f("alpha", ofMap(music.getLevel(), 0.f, 0.15f, 0.f, 1.f, true));
+    agents.drawUntextured();
+    shader.end();
+    shadowCam.end();
+    shadowFbo.end();
+    
     cam.begin();
+
+    // Draw agents.
     shader.begin();
     shader.setUniform1f("alpha", ofMap(music.getLevel(), 0.f, 0.15f, 0.f, 1.f, true));
     shader.setUniform1f("toplightStartY", 800.f);
-    shader.setUniform1f("toplightIntensity", .35f);
+    shader.setUniform1f("toplightIntensity", .45f);
     shader.setUniform1f("topLightEndY", -800.f);
     shader.setUniform1f("ambientLight", .8f);
     agents.draw();
@@ -154,11 +160,20 @@ void ofApp::draw(){
     
     texts.draw();
     poster.draw();
-    cam.end();
     
+    // Draw shadow.
+    shadowFbo.getTexture().bind();
+    shadowPlane.draw();
+    shadowFbo.getTexture().unbind();
+    
+    cam.end();
+
+    // Draw debug.
     ofPushStyle();
     ofSetColor(0, 0, 0);
     ofDrawBitmapString(ofGetFrameRate(), 20, 20);
+    ofDrawBitmapString(ofGetMouseX(), 20, 40);
+    ofDrawBitmapString(ofGetMouseY(), 20, 60);
     ofPopStyle();
 }
 

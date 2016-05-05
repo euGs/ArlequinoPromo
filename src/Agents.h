@@ -32,7 +32,7 @@ public:
             
             md.normalisedValue1 = ofNoise(i * noiseScale, 1 * noiseScale, noiseVel);
             md.normalisedValue2 = ofNoise(i * noiseScale, 1000 * noiseScale, noiseVel);
-            md.globalScaling = .05f + scalingFactor * 25.f;
+            md.globalScaling = .05f + scalingFactor;
             agents[i]->update(md);
         }
 
@@ -107,6 +107,18 @@ public:
         }else{
             for (int i=0; i<lerpingAgents.size(); i++){
                 lerpingAgents[i].draw();
+            }
+        }
+    }
+    
+    void drawUntextured(){
+        if (!isTransitioning){
+            for (int i=0; i<agents.size(); i+=5){
+                agents[i]->drawUntextured();
+            }
+        }else{
+            for (int i=0; i<lerpingAgents.size(); i+=5){
+                lerpingAgents[i].drawUntextured();
             }
         }
     }
