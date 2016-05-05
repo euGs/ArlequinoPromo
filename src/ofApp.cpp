@@ -141,7 +141,7 @@ void ofApp::draw(){
     shadowCam.begin();
     shader.begin();
     shader.setUniform1f("alpha", ofMap(music.getLevel(), 0.f, 0.15f, 0.f, 1.f, true));
-    agents.drawUntextured();
+    agents.drawUntextured(ProportionOfAgentsInShadow);
     shader.end();
     shadowCam.end();
     shadowFbo.end();

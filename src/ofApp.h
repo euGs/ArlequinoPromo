@@ -41,6 +41,7 @@ protected:
     const float DefaultCamDistance = 650;
     ofVec3f shadowPosition = {0.f, -750.f, 0.f};
     ofVec3f shadowOrientation = {90.f, 0.f, 0.f};
+    const int ProportionOfAgentsInShadow = 5;   // Only every x agent is rendered.
     
     Camera cam;
     Agents agents;

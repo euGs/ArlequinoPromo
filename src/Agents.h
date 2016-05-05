@@ -111,13 +111,13 @@ public:
         }
     }
     
-    void drawUntextured(){
+    void drawUntextured(int increment){
         if (!isTransitioning){
-            for (int i=0; i<agents.size(); i+=5){
+            for (int i=0; i<agents.size(); i+=increment){
                 agents[i]->drawUntextured();
             }
         }else{
-            for (int i=0; i<lerpingAgents.size(); i+=5){
+            for (int i=0; i<lerpingAgents.size(); i+=increment){
                 lerpingAgents[i].drawUntextured();
             }
         }
