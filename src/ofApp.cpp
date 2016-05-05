@@ -10,6 +10,7 @@ void ofApp::setup(){
     agents.setup(sphereRovingAgentSource, visualisationSource, MaxAgents);
     music.setup("ArTeaser_Edit04.wav");
     agentsShader.load("shaders_gl3/topLighting");
+    shadowsShader.load("shaders_gl3/floorShadows");
     
     textRovingAgentSource.setup();
     gridAgentSource.setDimensions(Cols, Rows, visualisationSource.getColWidth(), visualisationSource.getRowHeight());
@@ -50,10 +51,10 @@ void ofApp::draw(){
     shadowFbo.begin();
     ofClear(255.f, 0.f);
     shadowCam.begin();
-    agentsShader.begin();
-    agentsShader.setUniform1f("alpha", ofMap(music.getLevel(), 0.f, 0.15f, 0.f, 1.f, true));
+    shadowsShader.begin();
+    shadowsShader.setUniform1f("alpha", ofMap(music.getLevel(), 0.f, 0.15f, 0.f, 1.f, true));
     agents.drawUntextured(ProportionOfAgentsInShadow);
-    agentsShader.end();
+    shadowsShader.end();
     shadowCam.end();
     shadowFbo.end();
     
