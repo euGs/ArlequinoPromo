@@ -17,8 +17,8 @@ void ofApp::setup(){
     
     poster.setup("Cover01.jpg");
     
-    blur.setup(ofGetWidth()*DesiredCamDistance/DefaultCamDistance, ofGetHeight()*DesiredCamDistance/DefaultCamDistance);
-    blur.setBlurStrength(1.f);
+//    blur.setup(ofGetWidth(), ofGetHeight());
+//    blur.setBlurStrength(1.f);
 
     texts.setup();
     texts.addText("ARLEQUINO", "Ubuntu-R.ttf", 380);
@@ -28,11 +28,11 @@ void ofApp::setup(){
     cam.setPosition(0.f, 0.f, DesiredCamDistance);
     shadowCam.setPosition(0.f, -DesiredCamDistance, 0.f);
     shadowCam.setOrientation({90.f, 0.f, 0.f});
-    shadowFbo.allocate(1600, 1600, GL_RGBA);
-    shadowPlane.set(1600, 1600);
+    shadowFbo.allocate(shadowWidth, shadowHeight, GL_RGBA);
+    shadowPlane.set(shadowWidth, shadowHeight);
     shadowPlane.setPosition(shadowPosition);
     shadowPlane.setOrientation(shadowOrientation);
-    shadowPlane.mapTexCoords(0, 0, 1600, 1600);
+    shadowPlane.mapTexCoords(0, 0, shadowWidth, shadowHeight);
     
     ofBackground(255.f);
 }
@@ -50,12 +50,15 @@ void ofApp::draw(){
     // Render agents into shadow FBO.
     shadowFbo.begin();
     ofClear(255.f, 0.f);
+//    blur.begin();
     shadowCam.begin();
     shadowsShader.begin();
-    shadowsShader.setUniform1f("alpha", ofMap(music.getLevel(), 0.f, 0.15f, 0.f, 1.f, true));
+    shadowsShader.setUniform1f("alpha", 1);//ofMap(music.getLevel(), 0.f, 0.15f, 0.f, 1.f, true));
     agents.drawUntextured(ProportionOfAgentsInShadow);
     shadowsShader.end();
     shadowCam.end();
+//    blur.end();
+//    blur.draw(-ofGetWidth()/2, -ofGetHeight()/2);
     shadowFbo.end();
     
     cam.begin();
