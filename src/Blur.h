@@ -13,6 +13,7 @@ public:
     virtual void draw(float x, float y);
     virtual bool isSetup();
     virtual void resize(float width, float height);
+    virtual ofTexture & getTexture();
     
 protected:
     float left, top, width, height;

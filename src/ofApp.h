@@ -12,6 +12,7 @@
 #include "Text.h"
 #include "Poster.h"
 #include "Camera.h"
+#include "Shadows.h"
 
 class ofApp : public ofBaseApp{
     
@@ -39,24 +40,16 @@ protected:
     const int MaxAgents = 1000;
     const float DesiredCamDistance = 2000;
     const float DefaultCamDistance = 650;
-    ofVec3f shadowPosition = {0.f, -750.f, 0.f};
-    ofVec3f shadowOrientation = {90.f, 0.f, 0.f};
-    float shadowWidth = 400.f;
-    float shadowHeight = 400.f;
-    const int ProportionOfAgentsInShadow = 5;   // Only every x agent is rendered.
     
     Camera cam;
-    Agents agents;
+    shared_ptr<Agents> agents;
     CrumpledPaperVisualisationSource visualisationSource;
     SphereRovingAgentSource sphereRovingAgentSource;
     TextRovingAgentSource textRovingAgentSource;
     GridAgentSource gridAgentSource;
     Music music;
-    Blur blur;
     Texts texts;
     Poster poster;
-    Camera shadowCam;
-    ofFbo shadowFbo;
-    ofPlanePrimitive shadowPlane;
-    ofShader agentsShader, shadowsShader;
+    ofShader agentsShader;
+    Shadows shadows;
 };

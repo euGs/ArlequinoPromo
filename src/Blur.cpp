@@ -55,26 +55,29 @@ void Blur::end(){
     buffer1.end();
     
     // buffer2 will store the results of the vertical pass of the blur shader.
-    buffer2.begin();
-    ofClear(0);
-    // Draw buffer1 one through the blur shader with a vertical pass.
-    blurShader.begin();
-    blurShader.setUniform2f("direction", 0.f, 1.f);
-    blurShader.setUniform1f("kernelSize", kernelSize);
-    blurShader.setUniform1f("distribution", distribution);
-    buffer1.draw(0.f, 0.f);
-    blurShader.end();
-    buffer2.end();
+//    buffer2.begin();
+//    ofClear(0);
+//    // Draw buffer1 one through the blur shader with a vertical pass.
+//    blurShader.begin();
+//    blurShader.setUniform2f("direction", 0.f, 1.f);
+//    blurShader.setUniform1f("kernelSize", kernelSize);
+//    blurShader.setUniform1f("distribution", distribution);
+//    buffer1.draw(0.f, 0.f);
+//    blurShader.end();
+//    buffer2.end();
 }
 
 void Blur::draw(float x, float y){
     // Draw buffer2 through the blur shader with a horizontal pass.
-    blurShader.begin();
-    blurShader.setUniform2f("direction", 1.f, 0.f);
-    blurShader.setUniform1f("kernelSize", kernelSize);
-    blurShader.setUniform1f("distribution", distribution);
-    buffer2.draw(x, y);
-    blurShader.end();
+//    blurShader.begin();
+//    blurShader.setUniform2f("direction", 1.f, 0.f);
+//    blurShader.setUniform1f("kernelSize", kernelSize);
+//    blurShader.setUniform1f("distribution", distribution);
+//    buffer2.draw(x, y);
+    //temp
+    buffer1.draw(x, y);
+    // end temp
+//    blurShader.end();
 }
 
 bool Blur::isSetup(){
@@ -88,6 +91,10 @@ void Blur::resize(float width, float height){
     
     buffer1.allocate(width, height);
     buffer2.allocate(width, height);
+}
+
+ofTexture & Blur::getTexture(){
+    return buffer1.getTexture();
 }
 
 void RandomBlur::setup(float width, float height){
