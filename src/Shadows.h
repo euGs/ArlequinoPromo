@@ -17,7 +17,7 @@
 class Shadows {
 public:
     void setup(shared_ptr<Agents> agents, float desiredCamDistance);
-    void draw();
+    void draw(float alpha);
     
 protected:
     ofVec3f shadowPosition = {0.f, -750.f, 0.f};
@@ -33,4 +33,5 @@ protected:
     Blur shadowBlur;
     ofPlanePrimitive shadowPlane;
     ofShader shadowsShader;
+    ofFbo fbo;
 };

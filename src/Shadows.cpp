@@ -20,26 +20,31 @@ void Shadows::setup(shared_ptr<Agents> agents, float desiredCamDistance){
     shadowPlane.setPosition(shadowPosition);
     shadowPlane.setOrientation(shadowOrientation);
     shadowPlane.mapTexCoords(0, 0, shadowWidth*shadowResolutionFactor, shadowHeight*shadowResolutionFactor);
+    fbo.allocate(shadowWidth, shadowHeight, GL_RGBA);
 }
 
-void Shadows::draw(){
+void Shadows::draw(float alpha){
     if (agents == nullptr){
         ofLogError() << "ShadowRenderer::draw - can't draw - agents == nullptr" << endl;
         return;
     }
     
-    // Render agents into shadow blur.
+    // Render agents into fbo.
+    fbo.begin();
+    ofClear(255.f, 0.f);
     shadowBlur.begin();
     shadowCam.begin();
     shadowsShader.begin();
-    shadowsShader.setUniform1f("alpha", 1);//ofMap(music.getLevel(), 0.f, 0.15f, 0.f, 1.f, true));
+    shadowsShader.setUniform1f("alpha", alpha);
     agents->drawUntextured(ProportionOfAgentsInShadow);
     shadowsShader.end();
     shadowCam.end();
     shadowBlur.end();
+    shadowBlur.draw(0.f, 0.f);
+    fbo.end();
     
     // Draw shadow from shadow blur.
-    shadowBlur.getTexture().bind();
+    fbo.getTexture().bind();
     shadowPlane.draw();
-    shadowBlur.getTexture().unbind();
+    fbo.getTexture().unbind();
 }

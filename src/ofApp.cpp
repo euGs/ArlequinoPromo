@@ -54,7 +54,7 @@ void ofApp::draw(){
     texts.draw();
     poster.draw();
 
-    shadows.draw();
+    shadows.draw(ofMap(music.getLevel(), 0.f, 0.05f, 0.3f, 1.f, true));
     
     cam.end();
 
