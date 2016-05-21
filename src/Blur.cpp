@@ -20,7 +20,7 @@ void Blur::setup(float width, float height){
     kernelSize = 5.f;
     
     minDistribution = .2f;
-    maxDistribution = 10.f;
+    maxDistribution = 5.f;
     minKernelSize = 1.f;
     maxKernelSize = 15.f;
 }

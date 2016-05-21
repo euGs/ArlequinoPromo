@@ -20,12 +20,12 @@ public:
     void draw(float alpha);
     
 protected:
-    ofVec3f shadowPosition = {0.f, -750.f, 0.f};
+    ofVec3f shadowPosition = {0.f, -1500.f, 0.f};
     ofVec3f shadowOrientation = {90.f, 0.f, 0.f};
     float shadowWidth = 1600.f;
     float shadowHeight = 1600.f;
     float shadowResolutionFactor = .25f;
-    const int ProportionOfAgentsInShadow = 5;   // Only every x agent is rendered.
+    const int ProportionOfAgentsInShadow = 3;   // Only every x agent is rendered.
     float desiredCamDistance;
     
     shared_ptr<Agents> agents;

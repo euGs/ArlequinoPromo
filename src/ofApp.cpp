@@ -9,7 +9,7 @@ void ofApp::setup(){
 
     agents = make_shared<Agents>();
     agents->setup(sphereRovingAgentSource, visualisationSource, MaxAgents);
-    music.setup("ArTeaser_Edit04.wav");
+    music.setup("ArTeaser_LoudTest.wav");
     agentsShader.load("shaders_gl3/topLighting");
     
     textRovingAgentSource.setup();
@@ -55,7 +55,7 @@ void ofApp::draw(){
     poster.draw();
 
     shadows.draw(ofMap(music.getLevel(), 0.f, 0.05f, 0.3f, 1.f, true));
-    
+
     cam.end();
 
     // Draw debug.
