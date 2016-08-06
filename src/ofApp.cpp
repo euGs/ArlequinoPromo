@@ -43,7 +43,7 @@ void ofApp::draw(){
 
     // Draw agents.
     agentsShader.begin();
-    agentsShader.setUniform1f("alpha", ofMap(music.getLevel(), 0.f, 0.15f, 0.f, 1.f, true));
+    agentsShader.setUniform1f("alpha", ofMap(music.getLevel(), 0.f, 0.15f, 0.f, .4f, true));
     agentsShader.setUniform1f("toplightStartY", 800.f);
     agentsShader.setUniform1f("toplightIntensity", .45f);
     agentsShader.setUniform1f("topLightEndY", -800.f);
