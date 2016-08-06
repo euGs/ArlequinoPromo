@@ -87,7 +87,9 @@ public:
     }
     
     vector<ofTTFCharacter> getLetterPaths(){
-        return (*textIt)->getLetterPaths();
+        auto paths = (*textIt)->getLetterPaths();
+        
+        return paths;
     }
     
     ofVec2f getDrawPosition(){

@@ -35,21 +35,24 @@ public:
     }
     
     void setLetterPaths(vector<ofTTFCharacter> letterPaths, ofVec2f position){
+        auto correctionDueToBadTessellation = 7.f;
+        
         letterMeshes.clear();
         
-        for (auto letterPath : letterPaths){
-            shared_ptr<ofMesh> mesh = make_shared<ofMesh>(letterPath.getTessellation());
+        for (auto i=0; i<letterPaths.size(); ++i){
+            shared_ptr<ofMesh> mesh = make_shared<ofMesh>(letterPaths[i].getTessellation());
             if (mesh->getNumVertices() == 0){
                 continue;
             }
-            setMeshPosition(mesh, position);
+            
+            setMeshPosition(mesh, position - ofVec2f(i * correctionDueToBadTessellation, 0));
             letterMeshes.push_back(mesh);
         }
     }
     
     virtual unique_ptr<Agent> getAgent() override{
         if (letterMeshes.size() == 0){
-            ofLogWarning() << "TextRovingAgentSource::letterMeshes.size() == 0. Probably forgot to call TextRovingAgentSource::setup()" << endl;
+            ofLogWarning() << "TextRovingAgentSource::letterMeshes.size() == 0" << endl;
             return nullptr;
         }
         
