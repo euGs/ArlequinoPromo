@@ -84,6 +84,9 @@ void ofApp::keyReleased(int key){
         agents->transitionAgents(sphereRovingAgentSource, 1.f);
     }else if (key == 'p'){
         float posterDistanceFromCamera = poster.getWidth() / tan(ofDegToRad(cam.getFov()));
+        
+        // Bring poster right up to camera without a white border.
+        posterDistanceFromCamera *= .84f;
 
         ofVec3f posterPosition = cam.getPosition() + cam.getLookAtDir() * posterDistanceFromCamera;
         ofVec3f posterOrientationEuler = cam.getOrientationEuler();
