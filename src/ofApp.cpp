@@ -9,7 +9,6 @@ void ofApp::setup(){
 
     agents = make_shared<Agents>();
     agents->setup(sphereRovingAgentSource, visualisationSource, MaxAgents);
-    music.setup("ArTeaser_LoudTest.wav");
     agentsShader.load("shaders_gl3/topLighting");
     
     textRovingAgentSource.setup();
@@ -69,12 +68,14 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-    
+
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-    if (key == 't'){
+    if (key == 'm'){
+        music.setup("ArTeaser_Edit04.wav");
+    }else if (key == 't'){
         texts.cycleText();
         textRovingAgentSource.setLetterPaths(texts.getLetterPaths(), texts.getDrawPosition());
         agents->transitionAgents(textRovingAgentSource, 1.f);
@@ -102,8 +103,6 @@ void ofApp::keyReleased(int key){
         poster.animate(Animator::Direction::In);
     }else if (key == 'o'){
         poster.animate(Animator::Direction::Out);
-    }else if (key == 'u'){
-        cam.startRotateUp();
     }
     
     if (key != 't'){

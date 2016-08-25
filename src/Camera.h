@@ -4,15 +4,11 @@
 
 class Camera : public ofCamera {
 public:
-    void startRotateUp(){
-        xAnimator.setup(0.f, 90.f, 2.f);
-        xAnimator.animate(Animator::Direction::In);
-    }
-    
     void update(){
-        setOrientation(ofVec3f(xAnimator.getValue(), yAnimator.getValue(), 0.f));
+        auto position = ofVec3f(
+            ofMap(ofGetMouseX(), 0, ofGetWidth(), 1000, -1000),
+                                0.f,
+                                2000.f + ofMap(ofGetMouseY(), 0, ofGetHeight(), 1000, -1000));
+        setPosition(position);
     }
-    
-protected:
-    Animator xAnimator, yAnimator;
 };

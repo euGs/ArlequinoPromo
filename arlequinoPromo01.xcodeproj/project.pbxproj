@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C36C2A061D55216200401DCF /* Shadows.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C36C2A041D55216200401DCF /* Shadows.cpp */; };
 		C3E3BF7E1BE4185600F0897A /* Blur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3E3BF7C1BE4185600F0897A /* Blur.cpp */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1D0A3A1BDC003C02F2 /* main.cpp */; };
@@ -45,6 +46,8 @@
 /* Begin PBXFileReference section */
 		C3009B771C46DD2300DCA807 /* Animator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Animator.h; sourceTree = "<group>"; };
 		C31FF7A41C52875400622380 /* Text.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Text.h; sourceTree = "<group>"; };
+		C36C2A041D55216200401DCF /* Shadows.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shadows.cpp; sourceTree = "<group>"; };
+		C36C2A051D55216200401DCF /* Shadows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shadows.h; sourceTree = "<group>"; };
 		C36F36F01C637ADF00CCF5A5 /* Poster.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Poster.h; sourceTree = "<group>"; };
 		C3C56DA91BDBA1EC00BB6132 /* Agent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Agent.h; sourceTree = "<group>"; };
 		C3C56DAA1BDBA60100BB6132 /* Music.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Music.h; sourceTree = "<group>"; };
@@ -150,6 +153,8 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				C36C2A041D55216200401DCF /* Shadows.cpp */,
+				C36C2A051D55216200401DCF /* Shadows.h */,
 				C3C56DA91BDBA1EC00BB6132 /* Agent.h */,
 				C3C56DB11BDD031600BB6132 /* Agents.h */,
 				C3C56DB31BDD03E400BB6132 /* AgentSource.h */,
@@ -266,6 +271,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C3E3BF7E1BE4185600F0897A /* Blur.cpp in Sources */,
+				C36C2A061D55216200401DCF /* Shadows.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 			);
