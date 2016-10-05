@@ -211,12 +211,19 @@ public:
     }
     
 protected:
-    ofVec3f getRandomVertex(){
-        auto numVertices = mesh->getNumVertices();
-        auto randomIndex = ofRandom(numVertices);
-        return mesh->getVertex(randomIndex);
+    void getRandomTarget(){
+        ofIndexType indexIndex;
+        
+        if (mesh->getNumIndices() > 10){
+            auto r = ofRandom(10);
+            indexIndex = floor(r * mesh->getNumIndices() / 10);
+        } else {
+            indexIndex = ofRandom(mesh->getNumIndices());
+        }
+        
+        target = mesh->getVertex(mesh->getIndex(indexIndex));
     }
-    
+        
     void nextTarget(){
         auto num = mesh->getNumIndices();
         
@@ -234,6 +241,46 @@ protected:
     ofVec3f target;
     ofIndexType targetIndexIndex;     // index into the indices vector of the mesh
                                         // for the current position
+};
+
+// An agent that's bound within a screen-aligned plane and moves towards randomly
+// chosen positions within that plane.
+class BasicBoundAgent : public Agent {
+public:            
+    void setMinimumDistance(float minimumDistance){
+        this->MinimumDistance = minimumDistance;
+    }
+    
+    void setBoundingBox(ofRectangle boundingBox){
+        this->boundingBox = boundingBox;
+    }
+    
+    virtual void setup() override{
+        Agent::setup();
+        position = getRandomPosition();
+        target = getRandomPosition();
+    }
+    
+    virtual void update(MoveData &moveData) override{
+        setSpeed(moveData.normalisedValue2);
+        
+        float distance = position.distance(target);
+        
+        if (distance < MinimumDistance){
+            target = getRandomPosition();
+        }
+        
+        position = position + speed * (target - position).getNormalized();
+    }
+    
+protected:
+    ofVec3f getRandomPosition(){
+        return ofVec3f(ofRandom(boundingBox.getMinX(), boundingBox.getMaxX()), ofRandom(boundingBox.getMaxY(), boundingBox.getMinY()), 0);
+    }
+    
+    ofVec3f target;
+    float MinimumDistance;
+    ofRectangle boundingBox;
 };
 
 // Linearly interpolates position from a start position to an end position.

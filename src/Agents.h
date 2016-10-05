@@ -24,7 +24,7 @@ public:
 
     void update(float scalingFactor){
         // Generate noise values for move data.
-        float noiseScale = ofMap(ofGetMouseX(), 0, ofGetWidth(), 0, 1.f);
+        float noiseScale = .5f;//ofMap(ofGetMouseX(), 0, ofGetWidth(), 0, 1.f);
         float noiseVel = ofGetElapsedTimef();
 
         for (int i=0; i<agents.size(); i++){

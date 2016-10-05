@@ -14,6 +14,14 @@ public:
         return textDrawPosition;
     }
     
+    ofRectangle getBoundingBox() const{
+        auto boundingBox = font.getStringBoundingBox(text, 0.f, 0.f);
+        boundingBox.setWidth(boundingBox.getWidth() * 1.2f);
+        boundingBox.setPosition(textDrawPosition.x - boundingBox.getWidth() * .083f, textDrawPosition.y - 90);
+        
+        return boundingBox;
+    }
+    
     vector<ofTTFCharacter> getLetterPaths() const{
         return font.getStringAsPoints(text, false);
     }
@@ -94,6 +102,10 @@ public:
     
     ofVec2f getDrawPosition(){
         return (*textIt)->getDrawPosition();
+    }
+    
+    ofRectangle getBoundingBox(){
+        return (*textIt)->getBoundingBox();
     }
     
     bool isVisible(){

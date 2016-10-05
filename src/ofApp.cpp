@@ -12,6 +12,7 @@ void ofApp::setup(){
     agentsShader.load("shaders_gl3/topLighting");
     
     textRovingAgentSource.setup();
+    basicBoundAgentSource.setup();
     gridAgentSource.setDimensions(Cols, Rows, visualisationSource.getColWidth(), visualisationSource.getRowHeight());
     
     poster.setup("Cover01.jpg");
@@ -24,6 +25,8 @@ void ofApp::setup(){
     texts.addText("WWW.ARLEQUINO.BAND", "Ubuntu-R.ttf", 200);
 
     cam.setPosition(0.f, 0.f, DesiredCamDistance);
+    
+    ofHideCursor();
     
     ofBackground(255.f);
 }
@@ -53,7 +56,7 @@ void ofApp::draw(){
     texts.draw();
     poster.draw();
 
-    shadows.draw(ofMap(music.getLevel(), 0.f, 0.05f, 0.3f, 1.f, true));
+//    shadows.draw(ofMap(music.getLevel(), 0.f, 0.05f, 0.3f, 1.f, true));
 
     cam.end();
 
@@ -74,11 +77,17 @@ void ofApp::keyPressed(int key){
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
     if (key == 'm'){
-        music.setup("ArTeaser_Edit04.wav");
+        music.setup("ArTeaser_Edit05.wav");
     }else if (key == 't'){
         texts.cycleText();
         textRovingAgentSource.setLetterPaths(texts.getLetterPaths(), texts.getDrawPosition());
         agents->transitionAgents(textRovingAgentSource, 1.f);
+        texts.animateIn();
+    }else if (key == 'b'){
+        texts.cycleText();
+        auto bb = texts.getBoundingBox();
+        basicBoundAgentSource.setBoundingBox(bb);
+        agents->transitionAgents(basicBoundAgentSource, 1.f);
         texts.animateIn();
     }else if (key == 's'){
         agents->transitionAgents(sphereRovingAgentSource, 1.f);
@@ -108,7 +117,7 @@ void ofApp::keyReleased(int key){
         poster.animate(Animator::Direction::Out);
     }
     
-    if (key != 't'){
+    if (key != 't' && key != 'b'){
         texts.animateOutIfVisible();
     }
 }

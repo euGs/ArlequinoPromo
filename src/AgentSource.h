@@ -73,6 +73,27 @@ protected:
     }
 };
 
+class BasicBoundAgentSource : public AgentSource {
+public:
+    void setup() override{
+    }
+    
+    void setBoundingBox(ofRectangle boundingBox){
+        this->boundingBox = boundingBox;
+    }
+
+    virtual unique_ptr<Agent> getAgent() override{
+        unique_ptr<BasicBoundAgent> agent = make_unique<BasicBoundAgent>();
+        agent->setMinimumDistance(10.f);
+        agent->setBoundingBox(this->boundingBox);
+        
+        return move(agent);
+    }
+    
+protected:
+    ofRectangle boundingBox;
+};
+
 // Agents that just sit around text without moving.
 class TextSittingAgentSource : public TextRovingAgentSource {
 public:

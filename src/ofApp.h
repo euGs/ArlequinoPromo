@@ -46,6 +46,7 @@ protected:
     CrumpledPaperVisualisationSource visualisationSource;
     SphereRovingAgentSource sphereRovingAgentSource;
     TextRovingAgentSource textRovingAgentSource;
+    BasicBoundAgentSource basicBoundAgentSource;
     GridAgentSource gridAgentSource;
     Music music;
     Texts texts;
