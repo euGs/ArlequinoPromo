@@ -9,6 +9,7 @@ int main( ){
     settings.height = 600;
     
     ofCreateWindow(settings);
+    ofSetFullscreen(true);
     
 	ofRunApp(new ofApp());
 }

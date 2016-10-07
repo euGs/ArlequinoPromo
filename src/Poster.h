@@ -35,6 +35,14 @@ public:
         return plane.getPosition();
     }
     
+    void setWidth(float width){
+        plane.setWidth(width);
+    }
+    
+    void setHeight(float height){
+        plane.setHeight(height);
+    }
+    
     float getWidth(){
         return plane.getWidth();
     }

@@ -22,9 +22,9 @@ void ofApp::setup(){
     shadows.setup(agents, DesiredCamDistance);
 
     texts.setup();
-    texts.addText("ARLEQUINO", "Ubuntu-R.ttf", 380);
-    texts.addText("DEBUT EP\nOUT NOW", "Ubuntu-R.ttf", 450);
-    texts.addText("WWW.ARLEQUINO.BAND", "Ubuntu-R.ttf", 200);
+    texts.addText("ARLEQUINO", "Ubuntu-R.ttf", 380, "DropShadow_ARLEQUINO.png", ofVec2f(1.09584664536741, 1.59405940594059));
+    texts.addText("DEBUT EP\nOUT NOW", "Ubuntu-R.ttf", 450, "DropShadow_DEBUT.png", ofVec2f(1.0953516090584, 2.23529411764706));
+    texts.addText("WWW.ARLEQUINO.BAND", "Ubuntu-R.ttf", 200, "DropShadow_URL.png", ofVec2f(1.05785920925747, 1.75));
 
     cam.setPosition(0.f, 0.f, DesiredCamDistance);
     
@@ -57,6 +57,10 @@ void ofApp::draw(){
     
     texts.draw();
     poster.draw();
+    ofPushStyle();
+    ofSetColor(255, 255, 0);
+    ofSetColor(0, 255, 255);
+    ofPopStyle();
 
 //    shadows.draw(ofMap(music.getLevel(), 0.f, 0.05f, 0.3f, 1.f, true));
 
