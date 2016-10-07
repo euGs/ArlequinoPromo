@@ -14,6 +14,8 @@ void ofApp::setup(){
     textRovingAgentSource.setup();
     basicBoundAgentSource.setup();
     gridAgentSource.setDimensions(Cols, Rows, visualisationSource.getColWidth(), visualisationSource.getRowHeight());
+    simplerTextRovingAgentSource.setup();
+    simplerTextRovingAgentSource.setMinimumPointDistance(10.f);
     
     poster.setup("Cover01.jpg");
     
@@ -83,6 +85,13 @@ void ofApp::keyReleased(int key){
         textRovingAgentSource.setLetterPaths(texts.getLetterPaths(), texts.getDrawPosition());
         agents->transitionAgents(textRovingAgentSource, 1.f);
         texts.animateIn();
+    }else if (key == 'r'){
+        texts.cycleText();
+        auto h = texts.getBoundingBox().getHeight()*.4f;
+        simplerTextRovingAgentSource.setMinimumPointDistance(texts.getBoundingBox().getHeight()*.4f);
+        simplerTextRovingAgentSource.setLetterPaths(texts.getLetterPaths(), texts.getDrawPosition());
+        agents->transitionAgents(simplerTextRovingAgentSource, 1.f);
+        texts.animateIn();
     }else if (key == 'b'){
         texts.cycleText();
         auto bb = texts.getBoundingBox();
@@ -117,7 +126,7 @@ void ofApp::keyReleased(int key){
         poster.animate(Animator::Direction::Out);
     }
     
-    if (key != 't' && key != 'b'){
+    if (key != 't' && key != 'b' && key != 'r'){
         texts.animateOutIfVisible();
     }
 }

@@ -47,6 +47,7 @@ protected:
     SphereRovingAgentSource sphereRovingAgentSource;
     TextRovingAgentSource textRovingAgentSource;
     BasicBoundAgentSource basicBoundAgentSource;
+    SimplerTextRovingAgentSource simplerTextRovingAgentSource;
     GridAgentSource gridAgentSource;
     Music music;
     Texts texts;

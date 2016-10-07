@@ -243,6 +243,63 @@ protected:
                                         // for the current position
 };
 
+// An agent that roves around vertices.
+class VerticesRovingAgent : public Agent {
+public:
+    void setMinimumDistance(float minimumDistance){
+        this->MinimumDistance = minimumDistance;
+    }
+    
+    void setVertices(vector<ofVec3f> points){
+        this->points = points;
+    }
+    
+    virtual void setup() override{
+        Agent::setup();
+        
+        if (points.size() == 0){
+            return;
+        }
+        
+        index = ofRandom(points.size());
+        position = points[index];
+        
+        nextTarget();
+    }
+    
+    virtual void update(MoveData &moveData) override{
+        if (points.size() == 0){
+            return;
+        }
+        
+        setSpeed(moveData.normalisedValue2);
+        
+        float distance = position.distance(target);
+        
+        if (distance < MinimumDistance){
+            nextTarget();
+        }
+        
+        position = position + speed * (target - position).getNormalized();
+    }
+    
+protected:
+    void nextTarget(){
+        index++;
+        
+        if (index == points.size()){
+            index = 0;
+        }
+        
+        target = points[index];
+    }
+    
+    vector<ofVec3f> points;
+    int index;
+    float MinimumDistance;
+    ofVec3f target;
+};
+
 // An agent that's bound within a screen-aligned plane and moves towards randomly
 // chosen positions within that plane.
 class BasicBoundAgent : public Agent {

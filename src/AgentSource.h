@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Agent.h"
+#include <vector>
 
 class AgentSource {
 public:
@@ -178,4 +179,74 @@ protected:
     float colWidth, rowHeight;
     int colIndex, rowIndex;
     ofVec3f position, orientationEuler;
+};
+
+class SimplerTextRovingAgentSource : public AgentSource {
+public:
+    virtual void setup() override{
+        
+    }
+    
+    void setMinimumPointDistance(float minPointDistance){
+        this->minPointDistance = minPointDistance;
+    }
+    
+    void setLetterPaths(vector<ofTTFCharacter> letterPaths, ofVec2f position){
+        auto correctionDueToBadTessellation = 7.f;
+        
+        for (auto i=0; i<letterPaths.size(); ++i){
+            ofMesh mesh = letterPaths[i].getTessellation();
+            if (mesh.getNumVertices() < 2){
+                continue;
+            }
+            
+            vector<ofVec3f> letterPoints;
+            
+            ofVec3f lastLetterPoint = mesh.getVertex(0);
+            letterPoints.emplace_back(lastLetterPoint);
+            
+            for (ofIndexType j=1; j<mesh.getNumVertices(); ++j){
+                auto d = lastLetterPoint.distance(mesh.getVertex(j));
+                if ( d > minPointDistance ){
+                    ofVec3f point = mesh.getVertex(j);
+
+                    letterPoints.emplace_back(point);
+                    lastLetterPoint = point;
+                }
+            }
+            
+            auto correction = position - ofVec2f(i * correctionDueToBadTessellation);
+            
+            for (auto it=letterPoints.begin(); it!=letterPoints.end(); ++it){
+                it->set(*it + correction);
+            }
+            
+            textPoints.emplace_back(letterPoints);
+        }
+    }
+    
+    virtual unique_ptr<Agent> getAgent() override{
+        if (textPoints.size() == 0){
+            ofLogWarning() << "SimplerTextRovingAgentSource::lettersPoints.size() == 0" << endl;
+            return nullptr;
+        }
+        
+        unique_ptr<VerticesRovingAgent> agent = make_unique<VerticesRovingAgent>();
+        agent->setVertices(textPoints[ofRandom(textPoints.size())]);
+        agent->setMinimumDistance(10.f);
+        
+        return move(agent);
+        
+        return nullptr;
+    }
+    
+protected:
+    vector< vector<ofVec3f> > textPoints;
+    float minPointDistance;
+    
+    void setMeshPosition(shared_ptr<ofMesh> mesh, ofVec2f position){
+        for (int i=0; i<mesh->getNumVertices(); i++){
+            mesh->setVertex(i, mesh->getVertex(i) + position);
+        }
+    }
 };
