@@ -66,12 +66,13 @@ void ofApp::draw(){
 
     cam.end();
 
-    // Draw debug.
+    // Draw options.
     ofPushStyle();
     ofSetColor(0, 0, 0);
-    ofDrawBitmapString(ofGetFrameRate(), 20, 20);
-    ofDrawBitmapString(ofGetMouseX(), 20, 40);
-    ofDrawBitmapString(ofGetMouseY(), 20, 60);
+    ofDrawBitmapString("Options:", 20, 40);
+    ofDrawBitmapString("m - (Start) music", 20, 60);
+    ofDrawBitmapString("t - Text", 20, 80);
+    ofDrawBitmapString("s - Sphere", 20, 100);
     ofPopStyle();
 }
 
@@ -95,12 +96,6 @@ void ofApp::keyReleased(int key){
         simplerTextRovingAgentSource.setMinimumPointDistance(texts.getBoundingBox().getHeight()*.4f);
         simplerTextRovingAgentSource.setLetterPaths(texts.getLetterPaths(), texts.getDrawPosition());
         agents->transitionAgents(simplerTextRovingAgentSource, 1.f);
-        texts.animateIn();
-    }else if (key == 'b'){
-        texts.cycleText();
-        auto bb = texts.getBoundingBox();
-        basicBoundAgentSource.setBoundingBox(bb);
-        agents->transitionAgents(basicBoundAgentSource, 1.f);
         texts.animateIn();
     }else if (key == 's'){
         agents->transitionAgents(sphereRovingAgentSource, 1.f);
