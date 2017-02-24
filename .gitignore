@@ -1,2 +1,1 @@
-bin/*
-!bin/data/shaders_gl3/
+*.app
