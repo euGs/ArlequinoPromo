@@ -85,48 +85,54 @@ void ofApp::keyPressed(int key){
 void ofApp::keyReleased(int key){
     if (key == 'm'){
         music.setup("ArTeaser_Edit05.wav");
-    }else if (key == 't'){
-        texts.cycleText();
-        textRovingAgentSource.setLetterPaths(texts.getLetterPaths(), texts.getDrawPosition());
-        agents->transitionAgents(textRovingAgentSource, 1.f);
-        texts.animateIn();
-    }else if (key == 'r'){
-        texts.cycleText();
-        auto h = texts.getBoundingBox().getHeight()*.4f;
-        simplerTextRovingAgentSource.setMinimumPointDistance(texts.getBoundingBox().getHeight()*.4f);
-        simplerTextRovingAgentSource.setLetterPaths(texts.getLetterPaths(), texts.getDrawPosition());
-        agents->transitionAgents(simplerTextRovingAgentSource, 1.f);
-        texts.animateIn();
-    }else if (key == 's'){
-        agents->transitionAgents(sphereRovingAgentSource, 1.f);
-    }else if (key == 'p'){
-        float posterDistanceFromCamera = poster.getWidth() / tan(ofDegToRad(cam.getFov()));
+    }else{
+        if (agents->getIsTransitioning()){
+            return;
+        }
         
-        // Bring poster right up to camera without a white border.
-        posterDistanceFromCamera *= .84f;
+        if (key == 't'){
+            texts.cycleText();
+            textRovingAgentSource.setLetterPaths(texts.getLetterPaths(), texts.getDrawPosition());
+            agents->transitionAgents(textRovingAgentSource, 1.f);
+            texts.animateIn();
+        }else if (key == 'r'){
+            texts.cycleText();
+            auto h = texts.getBoundingBox().getHeight()*.4f;
+            simplerTextRovingAgentSource.setMinimumPointDistance(texts.getBoundingBox().getHeight()*.4f);
+            simplerTextRovingAgentSource.setLetterPaths(texts.getLetterPaths(), texts.getDrawPosition());
+            agents->transitionAgents(simplerTextRovingAgentSource, 1.f);
+            texts.animateIn();
+        }else if (key == 's'){
+            agents->transitionAgents(sphereRovingAgentSource, 1.f);
+        }else if (key == 'p'){
+            float posterDistanceFromCamera = poster.getWidth() / tan(ofDegToRad(cam.getFov()));
+            
+            // Bring poster right up to camera without a white border.
+            posterDistanceFromCamera *= .84f;
 
-        ofVec3f posterPosition = cam.getPosition() + cam.getLookAtDir() * posterDistanceFromCamera;
-        ofVec3f posterOrientationEuler = cam.getOrientationEuler();
+            ofVec3f posterPosition = cam.getPosition() + cam.getLookAtDir() * posterDistanceFromCamera;
+            ofVec3f posterOrientationEuler = cam.getOrientationEuler();
+            
+            gridAgentSource.setPosition(posterPosition);
+            gridAgentSource.setOrientationEuler(posterOrientationEuler);
+            poster.setPosition(posterPosition);
+            poster.setOrientation(posterOrientationEuler + ofVec3f(180.f, 0, 0));
+            gridAgentSource.reset();
+
+            agents->transitionAgents(gridAgentSource, 1.f);
+        }else if (key == 'v'){
+            agents->animateVisualisations(1.f, 0.f, 1.f);
+        }else if (key == 'c'){
+            agents->animateVisualisations(1.f, 1.f, 0.f);
+        }else if (key == 'i'){
+            poster.animate(Animator::Direction::In);
+        }else if (key == 'o'){
+            poster.animate(Animator::Direction::Out);
+        }
         
-        gridAgentSource.setPosition(posterPosition);
-        gridAgentSource.setOrientationEuler(posterOrientationEuler);
-        poster.setPosition(posterPosition);
-        poster.setOrientation(posterOrientationEuler + ofVec3f(180.f, 0, 0));
-        gridAgentSource.reset();
-
-        agents->transitionAgents(gridAgentSource, 1.f);
-    }else if (key == 'v'){
-        agents->animateVisualisations(1.f, 0.f, 1.f);
-    }else if (key == 'c'){
-        agents->animateVisualisations(1.f, 1.f, 0.f);
-    }else if (key == 'i'){
-        poster.animate(Animator::Direction::In);
-    }else if (key == 'o'){
-        poster.animate(Animator::Direction::Out);
-    }
-    
-    if (key != 't' && key != 'b' && key != 'r'){
-        texts.animateOutIfVisible();
+        if (key != 't' && key != 'b' && key != 'r'){
+            texts.animateOutIfVisible();
+        }
     }
 }
 

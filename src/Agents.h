@@ -74,6 +74,12 @@ public:
     }
     
     void transitionAgents(AgentSource &agentSource, float durationSeconds){
+        if (isTransitioning){
+            return;
+        }
+        
+        isTransitioning = true;
+
         lerpingAgents.clear();
         
         for (size_t i = 0; i < agents.size(); i++){
@@ -88,7 +94,10 @@ public:
         
         startTransitionTime = ofGetElapsedTimef();
         endTransitionTime = startTransitionTime + durationSeconds;
-        isTransitioning = true;
+    }
+    
+    bool getIsTransitioning(){
+        return isTransitioning;
     }
     
     void animateVisualisations(float durationSeconds, float fromAnimationPosition, float toAnimationPosition){
