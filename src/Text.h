@@ -20,14 +20,14 @@ public:
     }
     
     ofRectangle getBoundingBox() const{
-        auto boundingBox = font.getStringBoundingBox(text, 0.f, 0.f);
+        ofRectangle boundingBox = font.getStringBoundingBox(text, 0.f, 0.f);
 //        boundingBox.setWidth(boundingBox.getWidth() * 1.2f);
-        boundingBox.setPosition(textDrawPosition);//.x - boundingBox.getWidth() * .083f, textDrawPosition.y - 90);
+        boundingBox.setPosition(textDrawPosition.x, textDrawPosition.y);//.x - boundingBox.getWidth() * .083f, textDrawPosition.y - 90);
         
         return boundingBox;
     }
     
-    vector<ofTTFCharacter> getLetterPaths() const{
+    vector<ofPath> getLetterPaths() const{
         return font.getStringAsPoints(text, false);
     }
     
@@ -116,7 +116,7 @@ public:
         }
     }
     
-    vector<ofTTFCharacter> getLetterPaths(){
+    vector<ofPath> getLetterPaths(){
         auto paths = (*textIt)->getLetterPaths();
         
         return paths;

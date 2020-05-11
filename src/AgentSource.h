@@ -35,7 +35,7 @@ public:
     void setup() override{
     }
     
-    void setLetterPaths(vector<ofTTFCharacter> letterPaths, ofVec2f position){
+    void setLetterPaths(vector<ofPath> letterPaths, ofVec2f position){
         auto correctionDueToBadTessellation = 7.f;
         
         letterMeshes.clear();
@@ -69,7 +69,7 @@ protected:
     
     void setMeshPosition(shared_ptr<ofMesh> mesh, ofVec2f position){
         for (int i=0; i<mesh->getNumVertices(); i++){
-            mesh->setVertex(i, mesh->getVertex(i) + position);
+            mesh->setVertex(i, mesh->getVertex(i));// + position);
         }
     }
 };
@@ -191,7 +191,7 @@ public:
         this->minPointDistance = minPointDistance;
     }
     
-    void setLetterPaths(vector<ofTTFCharacter> letterPaths, ofVec2f position){
+    void setLetterPaths(vector<ofPath> letterPaths, ofVec2f position){
         auto correctionDueToBadTessellation = 7.f;
         
         for (auto i=0; i<letterPaths.size(); ++i){
@@ -246,7 +246,7 @@ protected:
     
     void setMeshPosition(shared_ptr<ofMesh> mesh, ofVec2f position){
         for (int i=0; i<mesh->getNumVertices(); i++){
-            mesh->setVertex(i, mesh->getVertex(i) + position);
+            mesh->setVertex(i, mesh->getVertex(i));// + position);
         }
     }
 };

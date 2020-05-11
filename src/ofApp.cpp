@@ -19,7 +19,7 @@ void ofApp::setup(){
     
     poster.setup("Cover01.jpg");
     
-    shadows.setup(agents, DesiredCamDistance);
+//    shadows.setup(agents, DesiredCamDistance);
 
     texts.setup();
     texts.addText("ARLEQUINO", "Ubuntu-R.ttf", 380, "DropShadow_ARLEQUINO.png", ofVec2f(1.09584664536741, 1.59405940594059));
@@ -108,7 +108,7 @@ void ofApp::keyReleased(int key){
             float posterDistanceFromCamera = poster.getWidth() / tan(ofDegToRad(cam.getFov()));
             
             // Bring poster right up to camera without a white border.
-            posterDistanceFromCamera *= .84f;
+            posterDistanceFromCamera *= -.84f;
 
             ofVec3f posterPosition = cam.getPosition() + cam.getLookAtDir() * posterDistanceFromCamera;
             ofVec3f posterOrientationEuler = cam.getOrientationEuler();

@@ -1,18 +1,19 @@
 #pragma once
 
 #include "ofMain.h"
+
 #include "Agents.h"
 #include "AgentSource.h"
 #include "Agent.h"
 #include "VisualisationSource.h"
 #include "Visualisation.h"
 #include "Music.h"
-#include "Blur.h"
+//#include "Blur.h"
 #include "Animator.h"
 #include "Text.h"
 #include "Poster.h"
 #include "Camera.h"
-#include "Shadows.h"
+//#include "Shadows.h"
 
 class ofApp : public ofBaseApp{
     
@@ -53,5 +54,5 @@ protected:
     Texts texts;
     Poster poster;
     ofShader agentsShader;
-    Shadows shadows;
+//    Shadows shadows;
 };
